@@ -1,0 +1,7 @@
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\bin\Debug\netstandard2.0\HomeInspectorSchedule.deps.json
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\bin\Debug\netstandard2.0\HomeInspectorSchedule.dll
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.csprojAssemblyReference.cache
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\App.xaml.g.cs
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\MainPage.xaml.g.cs
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.AssemblyInfoInputs.cache
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.AssemblyInfo.cs
