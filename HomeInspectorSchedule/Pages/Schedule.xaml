@@ -6,10 +6,43 @@
              mc:Ignorable="d"
              x:Class="HomeInspectorSchedule.Pages.Schedule">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout x:Name="MainLayout">
+                <Label Text="Schedule"
+                       HorizontalOptions="Center"/>
+                <Label Text="Schedule View"
+                       HorizontalOptions="Center"/>
+                <Grid>
+                    <CheckBox x:Name="DayCheckbox"
+                              CheckedChanged="DayCheckbox_CheckedChanged"
+                              HorizontalOptions="End"/>
+                    <Label Text="Day"
+                           Grid.Column="1"/>
+                    <CheckBox x:Name="WeekCheckbox"
+                              CheckedChanged="WeekCheckbox_CheckedChanged"
+                              HorizontalOptions="End"
+                              Grid.Column="2"/>
+                    <Label Text="Week"
+                           Grid.Column="3"/>
+                    <CheckBox x:Name="MonthCheckbox"
+                              CheckedChanged="MonthCheckbox_CheckedChanged"
+                              HorizontalOptions="End"
+                              Grid.Column="4"/>
+                    <Label Text="Month"
+                           Grid.Column="5"/>
+                </Grid>
+                <Label x:Name="DayWeekMonthLabel"
+                           HorizontalOptions="Center"/>
+                <StackLayout x:Name="ScheduleLayout">
+                    
+                </StackLayout>
+                <!--<StackLayout x:Name="WeekLayout">
+                    
+                </StackLayout>
+                <StackLayout x:Name="MonthLayout">
+                    
+                </StackLayout>-->
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

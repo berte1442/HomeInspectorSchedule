@@ -248,5 +248,10 @@ namespace HomeInspectorSchedule.Pages
             RealtorPhoneEntry.Text = realtor.Phone;
             RealtorEmailEntry.Text = realtor.Email;
         }
+
+        private void RealtorPicker_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
