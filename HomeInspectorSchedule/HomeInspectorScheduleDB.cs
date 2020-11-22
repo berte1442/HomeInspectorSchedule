@@ -25,6 +25,10 @@ namespace HomeInspectorSchedule
         public Task<Address> GetAddressAsync(int id)
         {
             return database.Table<Address>().Where(i => i.ID == id).FirstOrDefaultAsync();
+        } 
+        public Task<Address> GetAddressAsync(string streetAddress, string city, string zip)
+        {
+            return database.Table<Address>().Where(i => i.StreetAddress == streetAddress && i.City == city && i.Zip == zip).FirstOrDefaultAsync();
         }
         public Task<int> SaveAddressAsync(Address address)
         {

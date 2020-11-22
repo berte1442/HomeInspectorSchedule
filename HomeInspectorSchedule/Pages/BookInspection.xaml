@@ -40,7 +40,8 @@
                 </Grid>
                 <Label Text="Realtor Information"
                        HorizontalOptions="Center"/>
-                <Picker x:Name="RealtorPicker"/>
+                <Picker x:Name="RealtorPicker"
+                        SelectedIndexChanged="RealtorPicker_SelectedIndexChanged"/>
                 <Grid>
                     <Label Text="Name"/>
                     <Entry x:Name="RealtorNameEntry"
@@ -111,6 +112,14 @@
                        HorizontalOptions="Center"/>
                 <DatePicker x:Name="InspectionDatePicker"
                             HorizontalOptions="Center"/>
+                <TimePicker x:Name="InspectionTimePicker"
+                            HorizontalOptions="Center"/>
+                <Grid>
+                    <Label Text="Paid"/>
+                    <CheckBox x:Name="PaidCheckbox"
+                              Grid.Column="1"
+                              CheckedChanged="PaidCheckbox_CheckedChanged"/>
+                </Grid>
                 <Button x:Name="ScheduleBtn"
                         BackgroundColor="Blue"
                         Text="Schedule"

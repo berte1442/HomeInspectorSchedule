@@ -13,7 +13,8 @@ namespace HomeInspectorSchedule.Pages
     public partial class BookInspection : ContentPage
     {
         int inspectorID = 0;
-        string InspectionTypeIDs = null;
+        string inspectionTypeIDs = null;
+        bool paid = false;
 
         Inspector currentUser = new Inspector();
 
@@ -103,9 +104,9 @@ namespace HomeInspectorSchedule.Pages
             {
                 double total = double.Parse(PriceTotalEntry.Text);
                 var inspectionType = await App.Database.GetInspectionTypeAsync(ServicesPicker.SelectedItem.ToString());
-                if(InspectionTypeIDs == null)
+                if(inspectionTypeIDs == null)
                 {
-                    InspectionTypeIDs = inspectionType.ID.ToString();
+                    inspectionTypeIDs = inspectionType.ID.ToString();
                     RunningTotal.Text = "\n" + inspectionType.Name + " - " + "\t $" + inspectionType.Price.ToString();
                     total = inspectionType.Price;
                     DurationTimeLabel.Text = inspectionType.DurationHours.ToString();
@@ -113,7 +114,7 @@ namespace HomeInspectorSchedule.Pages
                 else
                 {
                     double duration = double.Parse(DurationTimeLabel.Text);
-                    InspectionTypeIDs += ", " + inspectionType.ID.ToString();
+                    inspectionTypeIDs += ", " + inspectionType.ID.ToString();
                     RunningTotal.Text += "\n" + inspectionType.Name + " - " + "\t $" + inspectionType.Price.ToString();
                     total += inspectionType.Price;
                     DurationTimeLabel.Text = (duration + inspectionType.DurationHours).ToString();
@@ -143,17 +144,17 @@ namespace HomeInspectorSchedule.Pages
                 ServicesPicker.Items.Add(service);
                 
                 // removes inspection type ID from InspectionTypeIDs
-                string insIDs = InspectionTypeIDs;
+                string insIDs = inspectionTypeIDs;
                 int index3;
                 if(RunningTotal.Text != "")
                 {
                     index3 = insIDs.LastIndexOf(",");
                     string removeLast = insIDs.Substring(0, index3);
-                    InspectionTypeIDs = removeLast;
+                    inspectionTypeIDs = removeLast;
                 }
                 else
                 {
-                    InspectionTypeIDs = null;
+                    inspectionTypeIDs = null;
                 }                
 
                 // subtracts removed service price from total price
@@ -189,56 +190,63 @@ namespace HomeInspectorSchedule.Pages
                 Zip = ZipEntry.Text
             };
 
+            // save the client, realtor and address
+            // retrieve them from the databse in order to obtain ID #s
+            // plug ID numbers into appointment properties
+            // save appointment
+
+            // parse database to determine if client is already saved
+            await App.Database.SaveClientAsync(client);
+            // parse database to determine if realtor is already saved
+            await App.Database.SaveRealtorAsync(realtor);
+            // parse database to determine if client is already saved
+            await App.Database.SaveAddressAsync(address);
+            var client2 = await App.Database.GetClientAsync(client.Name);
+            var realtor2 = await App.Database.GetRealtorAsync(realtor.Name);
+            var address2= await App.Database.GetAddressAsync(address.StreetAddress, address.City, address.Zip);
+
+            DateTime startDate = InspectionDatePicker.Date;
+            TimeSpan startTime = InspectionTimePicker.Time;
+
+            DateTime startDateAndTime = startDate + startTime;
+
             Appointment appointment = new Appointment
             {
                 InspectorID = inspectorID,
-
+                ClientID = client.ID,
+                RealtorID = realtor.ID,
+                InspectionTypeIDs = inspectionTypeIDs,
+                PriceTotal = double.Parse(PriceTotalEntry.Text),
+                StartTime = startDateAndTime,
+                Duration = double.Parse(DurationTimeLabel.Text),
+                Paid = paid,
+                AddressID = address.ID,
             };
+            await App.Database.SaveAppointmentAsync(appointment);
 
-            var clients = await App.Database.GetClientsAsync();
-            bool returnClient = false;
-            foreach(var c in clients)
-            {
-                if(c.ID == client.ID)
-                {
-                    returnClient = true;
-                }
-            }
-            if(returnClient == false)
-            {
-                await App.Database.SaveClientAsync(client);
-            }
-
-            var realtors = await App.Database.GetRealtorsAsync();
-            bool save = false;
-            foreach(var r in realtors)
-            {
-                if(r.ID == realtor.ID)
-                {
-                    save = false;
-                }
-            }
-            if (save)
-            {
-                await App.Database.SaveRealtorAsync(realtor);
-            }
-
-            var addresses = await App.Database.GetAddressesAsync();
-            bool onFile = false;
-            foreach(var a in addresses)
-            {
-                if(a.ID == address.ID)
-                {
-                    onFile = true;
-                }
-            }
-            await App.Database.SaveAddressAsync(address);
         }
 
         private async void InspectorPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             var inspector = await App.Database.GetInspectorAsync(InspectorPicker.SelectedItem.ToString());
             inspectorID = inspector.ID;
+        }
+
+        private void PaidCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            if (PaidCheckbox.IsChecked)
+            {
+                paid = true;
+            }
+        }
+
+        private async void RealtorPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var realtor = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
+
+            RealtorNameEntry.Text = realtor.Name;
+            RealtorPhoneEntry.Text = realtor.Phone;
+            RealtorEmailEntry.Text = realtor.Email;
         }
     }
 }
