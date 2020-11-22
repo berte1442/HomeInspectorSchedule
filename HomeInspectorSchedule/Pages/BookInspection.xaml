@@ -24,32 +24,82 @@
                        HorizontalOptions="Center"/>
                 <Grid>
                     <Label Text="Name"/>
-                    <Entry Grid.Column="1"/>
+                    <Entry x:Name="ClientNameEntry"
+                        Grid.Column="1"/>
                     <Label Text="Phone"
                            Grid.Row="1"/>
-                    <Entry Grid.Row="1"
+                    <Entry x:Name="ClientPhoneEntry"
+                        Grid.Row="1"
                            Grid.Column="1"/>
                     <Label Text="Email"
                            Grid.Row="2"/>
-                    <Entry Grid.Row="2"
+                    <Entry x:Name="ClientEmailEntry"
+                        Grid.Row="2"
                            Grid.Column="1"/>
                 </Grid>
                 <Label Text="Realtor Information"
                        HorizontalOptions="Center"/>
+                <Picker x:Name="RealtorPicker"/>
                 <Grid>
                     <Label Text="Name"/>
                     <Entry x:Name="RealtorNameEntry"
+                           Keyboard="Text"
                         Grid.Column="1"
+                           Completed="RealtorNameEntry_Completed"
                            TextChanged="RealtorNameEntry_TextChanged"/>
                     <Label Text="Phone"
                            Grid.Row="1"/>
                     <Entry  x:Name="RealtorPhoneEntry"
+                            Keyboard="Telephone"
                         Grid.Row="1"
                            Grid.Column="1"/>
-                    <Label  x:Name="RealtorEmailEntry"
-                        Text="Email"
+                    <Label Text="Email"
                            Grid.Row="2"/>
-                    <Entry Grid.Row="2"
+                    <Entry x:Name="RealtorEmailEntry"
+                           Keyboard="Email"
+                        Grid.Row="2"
+                           Grid.Column="1"/>
+                </Grid>
+                <Label Text="Inspection Address"
+                       HorizontalOptions="Center"/>
+                <Grid>
+                    <Label Text="Street Address"/>
+                    <Entry x:Name="StreetEntry"
+                        Grid.Column="1"/>
+                    <Label Text="City"
+                           Grid.Row="1"/>
+                    <Entry x:Name="CityEntry"
+                        Grid.Row="1"
+                           Grid.Column="1"/>
+                    <Label Text="Zip"
+                           Grid.Row="2"/>
+                    <Entry x:Name="ZipEntry"
+                        Grid.Row="2"
+                           Grid.Column="1"/>
+                </Grid>
+                <Label Text="Inspection Services"
+                       HorizontalOptions="Center"/>
+                <Picker x:Name="ServicesPicker"
+                        HorizontalOptions="Center"
+                        WidthRequest="100"/>
+                <Grid>
+                    <Button x:Name="UndoServiceBtn"
+                            BackgroundColor="Yellow"
+                            Text="Undo"
+                            TextColor="Black"
+                            Clicked="UndoServiceBtn_Clicked"/>
+                    <Button x:Name="AddServiceBtn"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Text="Add"
+                        Clicked="AddServiceBtn_Clicked"
+                            Grid.Column="1"/>
+                </Grid>
+                <Label x:Name="RunningTotal"
+                       HorizontalOptions="Center"/>
+                <Grid>
+                    <Label Text="Total"/>
+                    <Entry x:Name="PriceTotalEntry"
                            Grid.Column="1"/>
                 </Grid>
             </StackLayout>
