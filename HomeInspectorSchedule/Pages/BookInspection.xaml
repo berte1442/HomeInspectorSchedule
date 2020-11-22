@@ -18,7 +18,8 @@
                            Text="Select Inspector"
                            HorizontalOptions="Center"/>
                     <Picker x:Name="InspectorPicker"
-                            HorizontalOptions="Center"/>
+                            HorizontalOptions="Center"
+                            SelectedIndexChanged="InspectorPicker_SelectedIndexChanged"/>
                 </StackLayout>
                 <Label Text="Client Information"
                        HorizontalOptions="Center"/>
@@ -106,6 +107,16 @@
                        HorizontalOptions="Center"/>
                 <Label x:Name="DurationTimeLabel"
                        HorizontalOptions="Center"/>
+                <Label Text="Select Date and Time"
+                       HorizontalOptions="Center"/>
+                <DatePicker x:Name="InspectionDatePicker"
+                            HorizontalOptions="Center"/>
+                <Button x:Name="ScheduleBtn"
+                        BackgroundColor="Blue"
+                        Text="Schedule"
+                        TextColor="White"
+                        HorizontalOptions="Center"
+                        Clicked="ScheduleBtn_Clicked"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

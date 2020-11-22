@@ -12,17 +12,15 @@ namespace HomeInspectorSchedule.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class BookInspection : ContentPage
     {
-        Client client = new Client();
-        Realtor realtor = new Realtor();
-        Appointment appointment = new Appointment();
         int inspectorID = 0;
         string InspectionTypeIDs = null;
 
         Inspector currentUser = new Inspector();
 
-        public BookInspection(Inspector user)
+        public BookInspection(Inspector user)  // add DateTime param to set inspection time datepicker from schedule page
         {
             currentUser = user;
+            inspectorID = currentUser.ID;
             InitializeComponent();
             OnStart();
         }
@@ -168,6 +166,79 @@ namespace HomeInspectorSchedule.Pages
                 double totalDuration = double.Parse(DurationTimeLabel.Text);
                 DurationTimeLabel.Text = (totalDuration - subtractDuration).ToString();
             }
+        }
+
+        private async void ScheduleBtn_Clicked(object sender, EventArgs e)
+        {
+            Client client = new Client
+            {
+                Name = ClientNameEntry.Text,
+                Phone = ClientPhoneEntry.Text,
+                Email = ClientEmailEntry.Text
+            };
+            Realtor realtor = new Realtor
+            {
+                Name = RealtorNameEntry.Text,
+                Phone = RealtorPhoneEntry.Text,
+                Email = RealtorEmailEntry.Text
+            };
+            Address address = new Address
+            {
+                StreetAddress = StreetEntry.Text,
+                City = CityEntry.Text,
+                Zip = ZipEntry.Text
+            };
+
+            Appointment appointment = new Appointment
+            {
+                InspectorID = inspectorID,
+
+            };
+
+            var clients = await App.Database.GetClientsAsync();
+            bool returnClient = false;
+            foreach(var c in clients)
+            {
+                if(c.ID == client.ID)
+                {
+                    returnClient = true;
+                }
+            }
+            if(returnClient == false)
+            {
+                await App.Database.SaveClientAsync(client);
+            }
+
+            var realtors = await App.Database.GetRealtorsAsync();
+            bool save = false;
+            foreach(var r in realtors)
+            {
+                if(r.ID == realtor.ID)
+                {
+                    save = false;
+                }
+            }
+            if (save)
+            {
+                await App.Database.SaveRealtorAsync(realtor);
+            }
+
+            var addresses = await App.Database.GetAddressesAsync();
+            bool onFile = false;
+            foreach(var a in addresses)
+            {
+                if(a.ID == address.ID)
+                {
+                    onFile = true;
+                }
+            }
+            await App.Database.SaveAddressAsync(address);
+        }
+
+        private async void InspectorPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var inspector = await App.Database.GetInspectorAsync(InspectorPicker.SelectedItem.ToString());
+            inspectorID = inspector.ID;
         }
     }
 }
