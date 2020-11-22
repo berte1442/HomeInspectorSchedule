@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="HomeInspectorSchedule.Pages.BookInspection">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout x:Name="MainLayout">
+                <Label Text="Book Inspection"
+                       HorizontalOptions="Center"/>
+                <Label x:Name="WelcomeLabel"
+                       Text="Welcome "
+                       HorizontalOptions="Center"/>
+                <StackLayout x:Name="SelectInspector">
+                    <Label x:Name="SelectInspectorLabel"
+                           Text="Select Inspector"
+                           HorizontalOptions="Center"/>
+                    <Picker x:Name="InspectorPicker"
+                            HorizontalOptions="Center"/>
+                </StackLayout>
+                <Label Text="Client Information"
+                       HorizontalOptions="Center"/>
+                <Grid>
+                    <Label Text="Name"/>
+                    <Entry Grid.Column="1"/>
+                    <Label Text="Phone"
+                           Grid.Row="1"/>
+                    <Entry Grid.Row="1"
+                           Grid.Column="1"/>
+                    <Label Text="Email"
+                           Grid.Row="2"/>
+                    <Entry Grid.Row="2"
+                           Grid.Column="1"/>
+                </Grid>
+                <Label Text="Realtor Information"
+                       HorizontalOptions="Center"/>
+                <Grid>
+                    <Label Text="Name"/>
+                    <Entry x:Name="RealtorNameEntry"
+                        Grid.Column="1"
+                           TextChanged="RealtorNameEntry_TextChanged"/>
+                    <Label Text="Phone"
+                           Grid.Row="1"/>
+                    <Entry  x:Name="RealtorPhoneEntry"
+                        Grid.Row="1"
+                           Grid.Column="1"/>
+                    <Label  x:Name="RealtorEmailEntry"
+                        Text="Email"
+                           Grid.Row="2"/>
+                    <Entry Grid.Row="2"
+                           Grid.Column="1"/>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

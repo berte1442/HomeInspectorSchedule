@@ -1,6 +1,9 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using HomeInspectorSchedule.Pages;
+using System.Threading.Tasks;
+
 
 namespace HomeInspectorSchedule
 {
@@ -11,8 +14,9 @@ namespace HomeInspectorSchedule
         public App()
         {
             InitializeComponent();
+            DataInsert.DatabaseCheck();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new Login());
         }
         public static HomeInspectorScheduleDB Database
         {

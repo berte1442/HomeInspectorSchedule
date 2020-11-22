@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="HomeInspectorSchedule.Pages.Home">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout x:Name="MainLayout">
+                <Label x:Name="WelcomeLabel"
+                       Text="Welcome "
+                       HorizontalOptions="Center"/>
+                <Button x:Name="ViewSchedule"
+                        Text="View Schedule"
+                        HorizontalOptions="Center"
+                        Clicked="ViewSchedule_Clicked"/>     
+                <Button x:Name="Metrics"
+                        Text="Metrics"
+                        HorizontalOptions="Center"
+                        Clicked="Metrics_Clicked"/>
+                <Button x:Name="BookInspection"
+                        Text="Book Inspection"
+                        HorizontalOptions="Center"
+                        Clicked="BookInspection_Clicked"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
