@@ -15,6 +15,7 @@ namespace HomeInspectorSchedule.Pages
         Client client = new Client();
         Realtor realtor = new Realtor();
         Appointment appointment = new Appointment();
+        int inspectorID = 0;
         string InspectionTypeIDs = null;
 
         Inspector currentUser = new Inspector();
@@ -23,11 +24,6 @@ namespace HomeInspectorSchedule.Pages
         {
             currentUser = user;
             InitializeComponent();
-            WelcomeLabel.Text += user.Name;
-            if(user.ID != 1)
-            {
-                MainLayout.Children.Remove(SelectInspector);
-            }
             OnStart();
         }
 
@@ -71,6 +67,7 @@ namespace HomeInspectorSchedule.Pages
         }
         private async void OnStart()
         {
+
             var realtors = await App.Database.GetRealtorsAsync();
             foreach (var r in realtors)
             {
@@ -83,12 +80,25 @@ namespace HomeInspectorSchedule.Pages
             }
 
             PriceTotalEntry.Text = "0";
+
+            WelcomeLabel.Text += currentUser.Name;
+
+            if (currentUser.Admin == false)
+            {
+                MainLayout.Children.Remove(SelectInspector);
+            }
+            else
+            {
+                var inspectors = await App.Database.GetInspectorsAsync();
+                foreach(var i in inspectors)
+                {
+                    InspectorPicker.Items.Add(i.Name);
+                }
+            }
         }
 
         private async void AddServiceBtn_Clicked(object sender, EventArgs e)
         {
-
-            // provide undo ability to remove added service
             // align running total text appropriately
             
             if(ServicesPicker.SelectedIndex != -1)
@@ -100,13 +110,17 @@ namespace HomeInspectorSchedule.Pages
                     InspectionTypeIDs = inspectionType.ID.ToString();
                     RunningTotal.Text = "\n" + inspectionType.Name + " - " + "\t $" + inspectionType.Price.ToString();
                     total = inspectionType.Price;
+                    DurationTimeLabel.Text = inspectionType.DurationHours.ToString();
                 }
                 else
                 {
+                    double duration = double.Parse(DurationTimeLabel.Text);
                     InspectionTypeIDs += ", " + inspectionType.ID.ToString();
                     RunningTotal.Text += "\n" + inspectionType.Name + " - " + "\t $" + inspectionType.Price.ToString();
                     total += inspectionType.Price;
+                    DurationTimeLabel.Text = (duration + inspectionType.DurationHours).ToString();
                 }
+                
                 ServicesPicker.Items.Remove(inspectionType.Name);
                 ServicesPicker.SelectedIndex = -1;
                 PriceTotalEntry.Text = total.ToString();
@@ -148,6 +162,11 @@ namespace HomeInspectorSchedule.Pages
                 double priceTotal = double.Parse(PriceTotalEntry.Text);
                 var inspectionType = await App.Database.GetInspectionTypeAsync(service);
                 PriceTotalEntry.Text = (priceTotal - inspectionType.Price).ToString();
+
+                // subtracts last service duration hours from total inspection estimated duration time
+                double subtractDuration = inspectionType.DurationHours;
+                double totalDuration = double.Parse(DurationTimeLabel.Text);
+                DurationTimeLabel.Text = (totalDuration - subtractDuration).ToString();
             }
         }
     }

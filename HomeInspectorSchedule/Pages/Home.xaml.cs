@@ -19,7 +19,7 @@ namespace HomeInspectorSchedule.Pages
             InitializeComponent();
             WelcomeLabel.Text += user.Name;
             
-            if(user.ID != 1)
+            if(user.Admin == false)
             {
                 MainLayout.Children.Remove(Metrics);
             }

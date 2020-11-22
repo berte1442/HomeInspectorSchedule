@@ -102,6 +102,10 @@
                     <Entry x:Name="PriceTotalEntry"
                            Grid.Column="1"/>
                 </Grid>
+                <Label Text="Estimated Duration"
+                       HorizontalOptions="Center"/>
+                <Label x:Name="DurationTimeLabel"
+                       HorizontalOptions="Center"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
