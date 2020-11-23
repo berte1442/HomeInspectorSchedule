@@ -48,6 +48,8 @@
                            Keyboard="Text"
                         Grid.Column="1"
                            Completed="RealtorNameEntry_Completed"
+                           Placeholder="Begin Typing Name To Search"
+                           
                            TextChanged="RealtorNameEntry_TextChanged"/>
                     <Label Text="Phone"
                            Grid.Row="1"/>

@@ -51,7 +51,7 @@ namespace HomeInspectorSchedule
         {
             return database.Table<Appointment>().ToListAsync();
         }
-        public Task<Appointment> Appointment(int id)
+        public Task<Appointment> GetAppointmentAsync(int id)
         {
             return database.Table<Appointment>().Where(i => i.ID == id).FirstOrDefaultAsync();
         }

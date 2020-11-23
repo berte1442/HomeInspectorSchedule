@@ -15,6 +15,7 @@ namespace HomeInspectorSchedule.Pages
         int inspectorID = 0;
         string inspectionTypeIDs = null;
         bool paid = false;
+        string search = null;
 
         Inspector currentUser = new Inspector();
 
@@ -25,35 +26,72 @@ namespace HomeInspectorSchedule.Pages
             InitializeComponent();
             OnStart();
         }
-
-        private async void RealtorNameEntry_TextChanged(object sender, TextChangedEventArgs e)
+        public bool BackSpace(string search, string lastSearch)
         {
-            RealtorNameEntry.Placeholder = "Begin Typing Name to Search";
-            string search = RealtorNameEntry.Text;
-            if(search.Length >= 3)
+            bool backspace = false;
+            if (lastSearch != null)
             {
-                var realtors = await App.Database.GetRealtorsAsync();
-
-                foreach (var r in realtors)
+                int length = lastSearch.Length;
+                string compare = lastSearch.Substring(0, length - 1);
+                if (search == compare)
                 {
-                    if (r.Name.Contains(search))
-                    {
-                        RealtorPicker.SelectedItem = r.Name;
-
-                        break;
-                    }
-                    else
-                    {
-                        RealtorPicker.SelectedIndex = -1;
-                    }
+                    backspace = true;
                 }
             }
-            if(search.Length == 0)
+            return backspace;
+        }
+        private async void RealtorNameEntry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string lastSearch = search;
+            search = RealtorNameEntry.Text;
+            if(search.Length >= 3)
             {
-                RealtorPicker.SelectedIndex = -1;
+                bool backspace = BackSpace(search, lastSearch);
+                bool found = false;
+                if(backspace == false)
+                {
+                    var realtors = await App.Database.GetRealtorsAsync();
+
+                    foreach (var r in realtors)
+                    {
+                        if (r.Name.Contains(search))
+                        {
+                            RealtorPicker.SelectedItem = r.Name;
+                            found = true;
+                            break;
+                        }
+                        //else
+                        //{
+                        //    RealtorPicker.SelectedIndex = -1;
+                        //}
+                    }
+                    
+                }
+                //if (search.Length == 0 || found == false)
+                //{
+                //    RealtorPicker.SelectedIndex = -1;
+                //}
             }
+               
         }
 
+        private async void RealtorPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var realtor = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
+
+            if(realtor != null)
+            {
+                RealtorNameEntry.Text = realtor.Name;
+                RealtorPhoneEntry.Text = realtor.Phone;
+                RealtorEmailEntry.Text = realtor.Email;
+            }
+            else
+            {
+                RealtorNameEntry.Text = "";
+                RealtorPhoneEntry.Text = "";
+                RealtorEmailEntry.Text = "";
+            }
+        }
         private async void RealtorNameEntry_Completed(object sender, EventArgs e)
         {
             if (RealtorPicker.SelectedIndex != -1)
@@ -198,7 +236,28 @@ namespace HomeInspectorSchedule.Pages
             // parse database to determine if client is already saved
             await App.Database.SaveClientAsync(client);
             // parse database to determine if realtor is already saved
-            await App.Database.SaveRealtorAsync(realtor);
+            var realtors = await App.Database.GetRealtorsAsync();
+            if(RealtorPicker.SelectedIndex == -1)
+            {
+                if (!realtors.Contains(realtor))
+                {
+                    await App.Database.SaveRealtorAsync(realtor);
+                }
+                else
+                {
+                    var realtorUpdate = await App.Database.GetRealtorAsync(realtor.Name);
+                    await App.Database.SaveRealtorAsync(realtorUpdate);
+                }
+            }
+            else
+            {
+                var editRealtor = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
+                await App.Database.DeleteRealtorAsync(editRealtor);
+                editRealtor = realtor;
+                await App.Database.SaveRealtorAsync(editRealtor);
+
+            }
+
             // parse database to determine if client is already saved
             await App.Database.SaveAddressAsync(address);
             var client2 = await App.Database.GetClientAsync(client.Name);
@@ -223,6 +282,8 @@ namespace HomeInspectorSchedule.Pages
                 AddressID = address.ID,
             };
             await App.Database.SaveAppointmentAsync(appointment);
+            Application.Current.MainPage.Navigation.PopAsync();
+
 
         }
 
@@ -238,20 +299,6 @@ namespace HomeInspectorSchedule.Pages
             {
                 paid = true;
             }
-        }
-
-        private async void RealtorPicker_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var realtor = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
-
-            RealtorNameEntry.Text = realtor.Name;
-            RealtorPhoneEntry.Text = realtor.Phone;
-            RealtorEmailEntry.Text = realtor.Email;
-        }
-
-        private void RealtorPicker_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
         }
     }
 }

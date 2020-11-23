@@ -26,12 +26,10 @@ namespace HomeInspectorSchedule.Pages
                 WeekCheckbox.IsChecked = false;
                 MonthCheckbox.IsChecked = false;
                 DayWeekMonthLabel.Text = DateTime.Now.DayOfWeek.ToString();
-                //DayLayout.IsVisible = true;
-                //WeekLayout.IsVisible = false;
-                //MonthLayout.IsVisible = false;
 
                 ScheduleLayout scheduleLayout = new ScheduleLayout();
                 var DayView = scheduleLayout.DayView(currentInspector);
+                ScheduleLayout.Children.Clear();
                 ScheduleLayout.Children.Add(DayView);
 
             }
@@ -44,9 +42,11 @@ namespace HomeInspectorSchedule.Pages
                 DayCheckbox.IsChecked = false;
                 MonthCheckbox.IsChecked = false;
                 DayWeekMonthLabel.Text = "Coming Week";
-                //DayLayout.IsVisible = false;
-                //WeekLayout.IsVisible = true;
-                //MonthLayout.IsVisible = false;
+
+                ScheduleLayout scheduleLayout = new ScheduleLayout();
+                //var WeekView = scheduleLayout.WeekView(currentInspector);
+                ScheduleLayout.Children.Clear();
+                //ScheduleLayout.Children.Add(WeekView);
             }
         }
 
@@ -57,9 +57,12 @@ namespace HomeInspectorSchedule.Pages
                 DayCheckbox.IsChecked = false;
                 WeekCheckbox.IsChecked = false;
                 DayWeekMonthLabel.Text = DateTime.Now.ToString("MMMM");
-                //DayLayout.IsVisible = false;
-                //WeekLayout.IsVisible = false;
-                //MonthLayout.IsVisible = true;
+  
+                ScheduleLayout scheduleLayout = new ScheduleLayout();
+
+                //var MonthView = scheduleLayout.MonthView(currentInspector);
+                ScheduleLayout.Children.Clear();
+                //ScheduleLayout.Children.Add(MonthView);
             }
         }
     }
