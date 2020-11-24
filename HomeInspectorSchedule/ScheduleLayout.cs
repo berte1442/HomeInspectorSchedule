@@ -100,7 +100,6 @@ namespace HomeInspectorSchedule
         }
         public async Task AddAppointments(Inspector inspector)
         {
-
             var clients = await App.Database.GetClientsAsync();
             var addresses = await App.Database.GetAddressesAsync();
             var appointments = await GetTodaysAppointments(inspector);
@@ -181,9 +180,22 @@ namespace HomeInspectorSchedule
                             Appointment.BackgroundColor = Color.Red;
                             Appointment.Text = "Canceled \n" + Appointment.Text;
                         }
-                        // find a way to place label according to inspectorID
 
-                        int row = inspector.ID - 1;
+                        int row = 0;
+                        string type = "null";
+
+                        if(GridView.Children.Count > 0)
+                        {
+                            var element = GridView.Children.First();
+                            if (element != null)
+                            {
+                                type = element.GetType().ToString();
+                            }
+                            if (element != null && type == "Xamarin.Forms.Label")
+                            {
+                                row = inspector.ID - 1;
+                            }
+                        }
                         GridView.Children.Add(Appointment, column, row);
                     }
                 }
