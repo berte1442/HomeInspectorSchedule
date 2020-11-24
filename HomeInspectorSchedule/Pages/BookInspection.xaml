@@ -38,16 +38,24 @@
                         Grid.Row="2"
                            Grid.Column="1"/>
                 </Grid>
+                <Button x:Name="SelectRealtorBtn"
+                        Text="Select Realtor"
+                        BackgroundColor="Blue"
+                        TextColor="White"
+                        IsVisible="false"
+                        Clicked="SelectRealtorBtn_Clicked"/>
                 <Label Text="Realtor Information"
                        HorizontalOptions="Center"/>
                 <Picker x:Name="RealtorPicker"
                         SelectedIndexChanged="RealtorPicker_SelectedIndexChanged"/>
+
+                <Label Text="Edit selected realtor or enter new realtor"
+                       HorizontalOptions="Center"/>
                 <Grid>
                     <Label Text="Name"/>
                     <Entry x:Name="RealtorNameEntry"
                            Keyboard="Text"
                         Grid.Column="1"
-                           Completed="RealtorNameEntry_Completed"
                            Placeholder="Begin Typing Name To Search"
                            
                            TextChanged="RealtorNameEntry_TextChanged"/>
@@ -64,6 +72,18 @@
                         Grid.Row="2"
                            Grid.Column="1"/>
                 </Grid>
+                <Grid x:Name="SaveEditGrid"
+                    IsVisible="False">
+                    <CheckBox x:Name="SaveEditCheckbox"/>
+                    <Label Text="Save Edit"
+                           Grid.Column="1"/>
+                </Grid>
+                <Button x:Name="ClearRealtorBtn"
+                        BackgroundColor="Yellow"
+                        Text="Clear Input"
+                        HorizontalOptions="Center"
+                        Clicked="ClearRealtorBtn_Clicked"/>
+                
                 <Label Text="Inspection Address"
                        HorizontalOptions="Center"/>
                 <Grid>

@@ -100,8 +100,7 @@ namespace HomeInspectorSchedule
         }
         public async Task AddAppointments(Inspector inspector)
         {
-            //var whileCount = await App.Database.GetAppointmentsAsync();
-            var test = await App.Database.GetAppointmentAsync(8);
+
             var clients = await App.Database.GetClientsAsync();
             var addresses = await App.Database.GetAddressesAsync();
             var appointments = await GetTodaysAppointments(inspector);
@@ -149,7 +148,7 @@ namespace HomeInspectorSchedule
                                 address = x.StreetAddress + " " + x.City + ", AL" + " " + x.Zip;
                             }
                         }
-                        Label Appointment = new Label
+                        Button Appointment = new Button
                         {
                             Text = startTime.ToString() + "\n" + clientName + "\n" + address,
                             HorizontalOptions = LayoutOptions.Start
