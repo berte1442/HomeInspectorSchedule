@@ -239,7 +239,31 @@ namespace HomeInspectorSchedule.Pages
             }
             else
             {
-                await App.Database.SaveRealtorAsync(realtor);
+                var realtorCheck = await App.Database.GetRealtorAsync(realtor.Name);
+
+                if (realtorCheck != null && realtorCheck.Name != realtor.Name && realtorCheck.Phone != realtor.Phone && realtorCheck.Email != realtor.Email)
+                {
+                    await App.Database.SaveRealtorAsync(realtor);
+                }
+                else
+                {
+                    var save = await DisplayAlert("Conflict", "There is a conflict in the realtor database, did you intend to update this realtor's" +
+                        " information or create a new realtor?", "Update Existing Realtor", "Create New Realtor");
+                    if(save == false)
+                    {
+                        await App.Database.SaveRealtorAsync(realtor);
+                    }
+                    else
+                    {
+                        var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
+                        realtorUpdate.Name = RealtorNameEntry.Text;
+                        realtorUpdate.Phone = RealtorPhoneEntry.Text;
+                        realtorUpdate.Email = RealtorEmailEntry.Text;
+                        await App.Database.SaveRealtorAsync(realtorUpdate);
+                    }
+
+                    //await DisplayAlert("Conflict", "There is a conflict with your realtor input", "OK");
+                }
             }
 
 
