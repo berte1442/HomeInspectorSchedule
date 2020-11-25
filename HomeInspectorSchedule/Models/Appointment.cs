@@ -10,6 +10,7 @@ namespace HomeInspectorSchedule
         public Appointment()
         {
             Canceled = false;
+            Approved = false;
         }
         [PrimaryKey, AutoIncrement]
         public int ID { get; set; }
@@ -32,5 +33,6 @@ namespace HomeInspectorSchedule
         public int AddressID { get; set; }
         public string Notes { get; set; }
         public bool Canceled { get; set; }
+        public bool Approved { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace HomeInspectorSchedule
                 UserName = "RobertHaines", 
                 Password = "Admin", 
                 Admin = true, 
-                InspectorColor = "blue"
+                InspectorColor = "blue"                
             };
             await App.Database.SaveInspectorAsync(robert);
             

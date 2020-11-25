@@ -291,7 +291,8 @@ namespace HomeInspectorSchedule
 
                         Button Appointment = new Button
                         {
-                            Text = startTime.ToShortTimeString() + "\n" + clientName + "\n" + address
+                            Text = startTime.ToShortTimeString() + "\n" + clientName + "\n" + address,
+                            Opacity = .6
                         };
 
                         string color = inspector.InspectorColor;
@@ -320,6 +321,11 @@ namespace HomeInspectorSchedule
                         {
                             Appointment.BackgroundColor = Color.Red;
                             Appointment.Text = "Canceled \n" + Appointment.Text;
+                        }
+                        if (a.Approved == false)
+                        {
+                            Appointment.BackgroundColor = Color.White;
+                            Appointment.Text = "Awaiting Approval from Admin\n" + Appointment.Text;
                         }
 
                         int row = 1;

@@ -214,21 +214,8 @@ namespace HomeInspectorSchedule.Pages
                 Zip = ZipEntry.Text
             };
 
-            // save the client, realtor and address
-            // retrieve them from the databse in order to obtain ID #s
-            // plug ID numbers into appointment properties
-            // save appointment
-
-            // parse database to determine if client is already saved
             await App.Database.SaveClientAsync(client);
-            // parse database to determine if realtor is already saved
-            //var realtors = await App.Database.GetRealtorsAsync();
 
-
-
-
-
-            // fix code below - realtor saves everytime if selected from picker
             if (SaveEditCheckbox.IsChecked)
             {
                 var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
@@ -247,57 +234,28 @@ namespace HomeInspectorSchedule.Pages
                 }
                 else
                 {
-                    var save = await DisplayAlert("Conflict", "There is a conflict in the realtor database, did you intend to update this realtor's" +
-                        " information or create a new realtor?", "Update Existing Realtor", "Create New Realtor");
-                    if(save == false)
+                    if(realtorCheck != null && (realtorCheck.Name != realtor.Name || realtorCheck.Phone != realtor.Phone || realtorCheck.Email != realtor.Email))
                     {
-                        await App.Database.SaveRealtorAsync(realtor);
-                    }
-                    else
-                    {
-                        var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
-                        realtorUpdate.Name = RealtorNameEntry.Text;
-                        realtorUpdate.Phone = RealtorPhoneEntry.Text;
-                        realtorUpdate.Email = RealtorEmailEntry.Text;
-                        await App.Database.SaveRealtorAsync(realtorUpdate);
+                        var save = await DisplayAlert("Conflict", "There is a conflict in the realtor database, did you intend to update this realtor's" +
+     " information or create a new realtor?", "Update Existing Realtor", "Create New Realtor");
+                        if (save == false)
+                        {
+                            await App.Database.SaveRealtorAsync(realtor);
+                        }
+                        else
+                        {
+                            var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
+                            realtorUpdate.Name = RealtorNameEntry.Text;
+                            realtorUpdate.Phone = RealtorPhoneEntry.Text;
+                            realtorUpdate.Email = RealtorEmailEntry.Text;
+                            await App.Database.SaveRealtorAsync(realtorUpdate);
+                        }
                     }
 
-                    //await DisplayAlert("Conflict", "There is a conflict with your realtor input", "OK");
                 }
             }
 
-
-
-
-
-
-
-            //if(RealtorPicker.SelectedIndex == -1)
-            //{
-            //    if (!realtors.Contains(realtor))
-            //    {
-            //        await App.Database.SaveRealtorAsync(realtor);
-            //    }
-            //    else
-            //    {
-            //        var realtorUpdate = await App.Database.GetRealtorAsync(realtor.Name);
-            //        await App.Database.SaveRealtorAsync(realtorUpdate);
-            //    }
-            //}
-            //else
-            //{
-            //    var editRealtor = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
-            //    await App.Database.DeleteRealtorAsync(editRealtor);
-            //    editRealtor = realtor;
-            //    await App.Database.SaveRealtorAsync(editRealtor);
-
-            //}
-
-            // parse database to determine if client is already saved
             await App.Database.SaveAddressAsync(address);
-            var client2 = await App.Database.GetClientAsync(client.Name);
-            var realtor2 = await App.Database.GetRealtorAsync(realtor.Name);
-            var address2= await App.Database.GetAddressAsync(address.StreetAddress, address.City, address.Zip);
 
             DateTime startDate = InspectionDatePicker.Date;
             TimeSpan startTime = InspectionTimePicker.Time;
@@ -316,10 +274,36 @@ namespace HomeInspectorSchedule.Pages
                 Paid = paid,
                 AddressID = address.ID,
             };
-            await App.Database.SaveAppointmentAsync(appointment);
+            if (currentUser.Admin)
+            {
+                appointment.Approved = true;
+            }
+
+            var appointments = await App.Database.GetAppointmentsAsync();
+            bool schedule = true;
+            foreach(var a in appointments)
+            {
+                if ((a.InspectorID == appointment.InspectorID) && ((appointment.StartTime >= a.StartTime && appointment.StartTime <= a.StartTime.AddHours(a.Duration)) ||
+                        (a.StartTime >= appointment.StartTime && a.StartTime <= appointment.StartTime.AddHours(appointment.Duration))))
+                {
+                    var save = await DisplayAlert("Conflict", "There is a schedule conflict. Do you still wish to schedule this appointment?", "Yes, Schedule", "No, Don't Schedule");
+                    if (save)
+                    {
+                        await App.Database.SaveAppointmentAsync(appointment);
+                        schedule = false;
+                        break;
+                    }
+                    else
+                    {
+                        schedule = false;
+                    }
+                }
+            }
+            if (schedule)
+            {
+                await App.Database.SaveAppointmentAsync(appointment);
+            }
             Application.Current.MainPage.Navigation.PopAsync();
-
-
         }
 
         private async void InspectorPicker_SelectedIndexChanged(object sender, EventArgs e)
