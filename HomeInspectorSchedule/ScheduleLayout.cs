@@ -5,11 +5,18 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.Threading.Tasks;
 using System.Linq;
+using HomeInspectorSchedule.Pages;
+using Xamarin.Forms.Core;
+
+//using Android.Content.Res;
 
 namespace HomeInspectorSchedule
 {
-    public class ScheduleLayout
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class ScheduleLayout
     {
+        //Button Appointment = new Button();
+
         Grid GridView = new Grid();
         bool loggedInAdmin = false;
 
@@ -32,7 +39,7 @@ namespace HomeInspectorSchedule
             return inspectorAppointments;
         }
         public StackLayout DayView(Inspector inspector)
-        {           
+        {
             int columnSpan = 60;
             int rowCount = 1;
             RowDefinitionCollection rowDefinitions = new RowDefinitionCollection();
@@ -292,8 +299,10 @@ namespace HomeInspectorSchedule
                         Button Appointment = new Button
                         {
                             Text = startTime.ToShortTimeString() + "\n" + clientName + "\n" + address,
-                            Opacity = .6
+                            Opacity = .6,
+                            ClassId = a.ID.ToString()
                         };
+                        Appointment.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(Appointment.ClassId));
 
                         string color = inspector.InspectorColor;
                         if (color == "blue")

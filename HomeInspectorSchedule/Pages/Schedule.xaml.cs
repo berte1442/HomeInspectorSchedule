@@ -13,12 +13,16 @@ namespace HomeInspectorSchedule.Pages
     public partial class Schedule : ContentPage
     {
         Inspector currentInspector = new Inspector();
+        public Schedule()
+        {
+
+        }
+
         public Schedule(Inspector inspector)
         {
             currentInspector = inspector;
             InitializeComponent();
         }
-
         private void DayCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
         {
             if (DayCheckbox.IsChecked)
@@ -31,6 +35,8 @@ namespace HomeInspectorSchedule.Pages
                 var DayView = scheduleLayout.DayView(currentInspector);
                 ScheduleLayout.Children.Clear();
                 ScheduleLayout.Children.Add(DayView);
+
+
 
             }
         }
@@ -62,7 +68,7 @@ namespace HomeInspectorSchedule.Pages
 
                 //var MonthView = scheduleLayout.MonthView(currentInspector);
                 ScheduleLayout.Children.Clear();
-                //ScheduleLayout.Children.Add(MonthView);
+                //ScheduleLayout.ChildreC:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\Pages\Login.xamln.Add(MonthView);
             }
         }
     }

@@ -1,6 +1,5 @@
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\bin\Debug\netstandard2.0\HomeInspectorSchedule.deps.json
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\bin\Debug\netstandard2.0\HomeInspectorSchedule.dll
-C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.csprojAssemblyReference.cache
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\App.xaml.g.cs
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\MainPage.xaml.g.cs
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.AssemblyInfoInputs.cache
@@ -16,3 +15,9 @@ C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debu
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\BookInspection.xaml.g.cs
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\Metrics.xaml.g.cs
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\Schedule.xaml.g.cs
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\bin\Debug\netstandard2.0\Mono.Android.dll
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\bin\Debug\netstandard2.0\Mono.Android.pdb
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\bin\Debug\netstandard2.0\Mono.Android.xml
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\AppointmentInfo.xaml.g.cs
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.csproj.CopyComplete
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.csprojAssemblyReference.cache
