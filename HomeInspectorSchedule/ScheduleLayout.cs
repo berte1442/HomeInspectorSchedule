@@ -12,24 +12,14 @@ namespace HomeInspectorSchedule
     {
         Grid GridView = new Grid();
         bool loggedInAdmin = false;
-        //Grid TimeGridView = new Grid();
 
-
-        public async Task<List<Inspector>> GetInspectors()
-        {
-            var inspectors = await App.Database.GetInspectorsAsync();
-            return inspectors;
-        }
         public async Task<List<Appointment>> GetTodaysAppointments(Inspector inspector)
         {
             var appointments = await App.Database.GetAppointmentsAsync();
             List<Appointment> inspectorAppointments = new List<Appointment>();
 
-            //if (inspector.Admin == false)
-            //{
             foreach (var a in appointments)
             {
-                // need to verify the below if statement works correctly - create inspection with today's date for testing
                 if (inspector.Admin == false && a.InspectorID == inspector.ID && a.StartTime.Date.ToShortDateString() == DateTime.Today.ToShortDateString())
                 {
                     inspectorAppointments.Add(a);
@@ -61,10 +51,8 @@ namespace HomeInspectorSchedule
             Grid newGrid = new Grid {
                 HorizontalOptions = LayoutOptions.Fill,
 
-                RowDefinitions =
-                {
+                RowDefinitions = rowDefinitions,
 
-                },
                 ColumnDefinitions =
                 {
                     new ColumnDefinition { Width = columnSpan },
@@ -83,7 +71,6 @@ namespace HomeInspectorSchedule
                 }
             };
 
-            newGrid.RowDefinitions = rowDefinitions;
             GridView = newGrid;
 
             StackLayout Dayview = new StackLayout
@@ -204,31 +191,6 @@ namespace HomeInspectorSchedule
                 i++;
             }
 
-
-            //int i = 0;
-            //if (inspector.Admin)
-            //{
-            //    i++;
-            //}
-
-            //foreach(var l in labels)
-            //{
-            //    TimeGridView.Children.Add(l, i, 0);
-            //    i++;
-            //}
-
-            //TimeGridView.Children.Add(Eight, 1, 0);
-            //    TimeGridView.Children.Add(Nine, 2, 0);
-            //    TimeGridView.Children.Add(Ten, 3, 0);
-            //    TimeGridView.Children.Add(Eleven, 4, 0);
-            //    TimeGridView.Children.Add(Twelve, 5, 0);
-            //    TimeGridView.Children.Add(One, 6, 0);
-            //    TimeGridView.Children.Add(Two, 7, 0);
-            //    TimeGridView.Children.Add(Three, 8, 0);
-            //    TimeGridView.Children.Add(Four, 9, 0);
-            //    TimeGridView.Children.Add(Five, 10, 0);
-
-
             if (inspector.Admin)
             {
                 Label RobertLabel = new Label
@@ -268,47 +230,20 @@ namespace HomeInspectorSchedule
             }
 
             AddAppointments(inspector);
-
-                //Grid Schedule = new Grid
-                //{
-                //    RowDefinitions =
-                //    {
-                //        new RowDefinition {Height = 40}
-                //    }
-                //};
-
-                //Schedule.Children.Add(TimeGridView, 0, 0);
-
-
-                //Schedule.Children.Add(GridView, 0, 1);
-
             
+            ScrollView Scroll = new ScrollView
+            {
+                HorizontalOptions = LayoutOptions.Fill,
+                Orientation = ScrollOrientation.Horizontal,
 
-                ScrollView Scroll = new ScrollView
+                Content = new StackLayout
                 {
-                    HorizontalOptions = LayoutOptions.Fill,
-                    Orientation = ScrollOrientation.Horizontal,
-
-                    Content = new StackLayout
-                    {
-                        //BackgroundColor = Color.Gray,
-                        //HorizontalOptions = LayoutOptions.Fill,
-                        //Orientation = StackOrientation.Horizontal,
-                        //Children = { Schedule }
-                        Children = {GridView}
-                    }
-                };
-
-                Dayview.Children.Add(Scroll);
+                    Children = {GridView}
+                }
+            };
+            Dayview.Children.Add(Scroll);
             return Dayview;
-
         }
-            //else
-            //{
-            //    AddAppointments(inspector);
-
-            //    Dayview.Children.Add(GridView);
-            //}
         
         public async Task AddAppointments(Inspector inspector)
         {
@@ -316,15 +251,9 @@ namespace HomeInspectorSchedule
             var addresses = await App.Database.GetAddressesAsync();
             var appointments = await GetTodaysAppointments(inspector);
 
-            int i = 1;
-            //int column = 0;
-            //if (inspector.Admin)
-            //{
-            //    column = 1;
-            //}
-
             var inspectors = await App.Database.GetInspectorsAsync();
-            while (i <= inspectors.Count)
+            int i = 1;
+            while(i <= inspectors.Count)
             {
 
                 foreach (var n in inspectors)
@@ -360,20 +289,10 @@ namespace HomeInspectorSchedule
                             }
                         }
 
-                        var time = startTime.TimeOfDay;
-                        var hours = time.TotalHours;
-                        var marginSize = hours - 8;
-
                         Button Appointment = new Button
                         {
                             Text = startTime.ToShortTimeString() + "\n" + clientName + "\n" + address
-                            //HorizontalOptions = LayoutOptions.Start,
-                            //WidthRequest = duration * 105
                         };
-
-                        //Thickness margin = Appointment.Margin;
-                        //margin.Left = marginSize * 100;
-                        //Appointment.Margin = margin;
 
                         string color = inspector.InspectorColor;
                         if (color == "blue")
@@ -419,24 +338,16 @@ namespace HomeInspectorSchedule
                             }
                         }
                         int column = startTime.Hour - 7;
-
-
-                        GridView.Children.Add(Appointment, column, row);
+                        if(column > 0)
+                        {
+                            GridView.Children.Add(Appointment, column, row);
+                        }
 
                         Grid.SetColumnSpan(Appointment, Convert.ToInt32(duration));
                     }
                 }
                 i++;
             }
-
-
-
-        }
-        public async Task<string> GetInspectorColor(string name)
-        {
-            var inspector = await App.Database.GetInspectorAsync(name);
-
-            return inspector.InspectorColor;
         }
     }
 }

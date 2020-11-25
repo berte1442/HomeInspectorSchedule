@@ -224,6 +224,11 @@ namespace HomeInspectorSchedule.Pages
             // parse database to determine if realtor is already saved
             //var realtors = await App.Database.GetRealtorsAsync();
 
+
+
+
+
+            // fix code below - realtor saves everytime if selected from picker
             if (SaveEditCheckbox.IsChecked)
             {
                 var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
@@ -236,6 +241,12 @@ namespace HomeInspectorSchedule.Pages
             {
                 await App.Database.SaveRealtorAsync(realtor);
             }
+
+
+
+
+
+
 
             //if(RealtorPicker.SelectedIndex == -1)
             //{
