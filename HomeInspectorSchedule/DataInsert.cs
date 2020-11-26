@@ -240,7 +240,7 @@ namespace HomeInspectorSchedule
 
             // appointments
 
-            DisplayLayout robMonMorn = new DisplayLayout
+            Appointment robMonMorn = new Appointment
             {
                 InspectorID = 1,
                 ClientID = 1,
@@ -255,7 +255,7 @@ namespace HomeInspectorSchedule
             };
             await App.Database.SaveAppointmentAsync(robMonMorn);
             
-            DisplayLayout robMonAft = new DisplayLayout
+            Appointment robMonAft = new Appointment
             {
                 InspectorID = 1,
                 ClientID = 2,
@@ -270,7 +270,7 @@ namespace HomeInspectorSchedule
             };
             await App.Database.SaveAppointmentAsync(robMonAft);
 
-            DisplayLayout tedMonAft = new DisplayLayout
+            Appointment tedMonAft = new Appointment
             {
                 InspectorID = 2,
                 ClientID = 3,
@@ -285,7 +285,7 @@ namespace HomeInspectorSchedule
             };
             await App.Database.SaveAppointmentAsync(tedMonAft);
 
-            DisplayLayout timMonMorn = new DisplayLayout
+            Appointment timMonMorn = new Appointment
             {
                 InspectorID = 3,
                 ClientID = 4,
@@ -302,7 +302,7 @@ namespace HomeInspectorSchedule
             };
             await App.Database.SaveAppointmentAsync(timMonMorn);
 
-            DisplayLayout jayMonAft = new DisplayLayout
+            Appointment jayMonAft = new Appointment
             {
                 InspectorID = 5,
                 ClientID = 5,

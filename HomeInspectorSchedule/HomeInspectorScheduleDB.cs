@@ -13,7 +13,7 @@ namespace HomeInspectorSchedule
         public HomeInspectorScheduleDB(string dbPath)
         {
             database = new SQLiteAsyncConnection(dbPath);
-            database.CreateTablesAsync<Address, DisplayLayout, Client, InspectionType, Inspector>().Wait();
+            database.CreateTablesAsync<Address, Appointment, Client, InspectionType, Inspector>().Wait();
             database.CreateTableAsync<Realtor>().Wait();
         }
 
@@ -47,15 +47,15 @@ namespace HomeInspectorSchedule
         }
 
         //Appointment
-        public Task<List<DisplayLayout>> GetAppointmentsAsync()
+        public Task<List<Appointment>> GetAppointmentsAsync()
         {
-            return database.Table<DisplayLayout>().ToListAsync();
+            return database.Table<Appointment>().ToListAsync();
         }
-        public Task<DisplayLayout> GetAppointmentAsync(int id)
+        public Task<Appointment> GetAppointmentAsync(int id)
         {
-            return database.Table<DisplayLayout>().Where(i => i.ID == id).FirstOrDefaultAsync();
+            return database.Table<Appointment>().Where(i => i.ID == id).FirstOrDefaultAsync();
         }
-        public Task<int> SaveAppointmentAsync(DisplayLayout appointment)
+        public Task<int> SaveAppointmentAsync(Appointment appointment)
         {
             if (appointment.ID != 0)
             {
@@ -66,7 +66,7 @@ namespace HomeInspectorSchedule
                 return database.InsertAsync(appointment);
             }
         }
-        public Task<int> DeleteAppointmentAsync(DisplayLayout appointment)
+        public Task<int> DeleteAppointmentAsync(Appointment appointment)
         {
             return database.DeleteAsync(appointment);
         }

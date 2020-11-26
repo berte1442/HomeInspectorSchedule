@@ -12,18 +12,18 @@ using Xamarin.Forms.Core;
 
 namespace HomeInspectorSchedule
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ScheduleLayout
+    //[XamlCompilation(XamlCompilationOptions.Compile)]
+    public /*partial*/ class ScheduleLayout
     {
         //Button Appointment = new Button();
 
         Grid GridView = new Grid();
         bool loggedInAdmin = false;
 
-        public async Task<List<DisplayLayout>> GetTodaysAppointments(Inspector inspector)
+        public async Task<List<Appointment>> GetTodaysAppointments(Inspector inspector)
         {
             var appointments = await App.Database.GetAppointmentsAsync();
-            List<DisplayLayout> inspectorAppointments = new List<DisplayLayout>();
+            List<Appointment> inspectorAppointments = new List<Appointment>();
 
             foreach (var a in appointments)
             {
@@ -307,19 +307,19 @@ namespace HomeInspectorSchedule
                         string color = inspector.InspectorColor;
                         if (color == "blue")
                         {
-                            Appointment.BackgroundColor = Color.Blue;
+                            Appointment.BackgroundColor = Color.LightBlue;
                         }
                         else if (color == "yellow")
                         {
-                            Appointment.BackgroundColor = Color.Yellow;
+                            Appointment.BackgroundColor = Color.YellowGreen;
                         }
                         else if (color == "purple")
                         {
-                            Appointment.BackgroundColor = Color.Purple;
+                            Appointment.BackgroundColor = Color.MediumPurple;
                         }
                         else if (color == "green")
                         {
-                            Appointment.BackgroundColor = Color.Green;
+                            Appointment.BackgroundColor = Color.LightGreen;
                         }
                         else if (color == "orange")
                         {

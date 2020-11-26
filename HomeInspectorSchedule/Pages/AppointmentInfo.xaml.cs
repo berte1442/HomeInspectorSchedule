@@ -13,7 +13,7 @@ namespace HomeInspectorSchedule.Pages
     public partial class AppointmentInfo : ContentPage
     {
         int id;
-        DisplayLayout appointment = new DisplayLayout();
+        Appointment appointment = new Appointment();
         Address address = new Address();
         Client client = new Client();
         Inspector inspector = new Inspector();

@@ -5,9 +5,9 @@ using SQLite;
 
 namespace HomeInspectorSchedule
 {
-    public class DisplayLayout
+    public class Appointment
     {
-        public DisplayLayout()
+        public Appointment()
         {
             Canceled = false;
             Approved = false;

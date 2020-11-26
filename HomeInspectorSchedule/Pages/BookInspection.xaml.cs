@@ -232,26 +232,30 @@ namespace HomeInspectorSchedule.Pages
                 {
                     await App.Database.SaveRealtorAsync(realtor);
                 }
-                else
+                else if(realtorCheck != null && (realtorCheck.Name != realtor.Name || realtorCheck.Phone != realtor.Phone || realtorCheck.Email != realtor.Email))
                 {
-                    if(realtorCheck != null && (realtorCheck.Name != realtor.Name || realtorCheck.Phone != realtor.Phone || realtorCheck.Email != realtor.Email))
+                    var save = await DisplayAlert("Conflict", "There is a conflict in the realtor database, did you intend to update this realtor's" +
+                         " information or create a new realtor?", "Update Existing Realtor", "Create New Realtor");
+                    if (save == false)
                     {
-                        var save = await DisplayAlert("Conflict", "There is a conflict in the realtor database, did you intend to update this realtor's" +
-     " information or create a new realtor?", "Update Existing Realtor", "Create New Realtor");
-                        if (save == false)
-                        {
-                            await App.Database.SaveRealtorAsync(realtor);
-                        }
-                        else
-                        {
-                            var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
-                            realtorUpdate.Name = RealtorNameEntry.Text;
-                            realtorUpdate.Phone = RealtorPhoneEntry.Text;
-                            realtorUpdate.Email = RealtorEmailEntry.Text;
-                            await App.Database.SaveRealtorAsync(realtorUpdate);
-                        }
+                        await App.Database.SaveRealtorAsync(realtor);
                     }
-
+                    else
+                    {
+                        var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
+                        realtorUpdate.Name = RealtorNameEntry.Text;
+                        realtorUpdate.Phone = RealtorPhoneEntry.Text;
+                        realtorUpdate.Email = RealtorEmailEntry.Text;
+                        await App.Database.SaveRealtorAsync(realtorUpdate);
+                    }
+                }
+                else if(realtorCheck == null && realtor.Name != null)
+                {
+                    await App.Database.SaveRealtorAsync(realtor);
+                }
+                else if(realtorCheck != null && realtor.Name != null)
+                {
+                    realtor = realtorCheck;
                 }
             }
 
@@ -262,7 +266,7 @@ namespace HomeInspectorSchedule.Pages
 
             DateTime startDateAndTime = startDate + startTime;
 
-            DisplayLayout appointment = new DisplayLayout
+            Appointment appointment = new Appointment
             {
                 InspectorID = inspectorID,
                 ClientID = client.ID,
