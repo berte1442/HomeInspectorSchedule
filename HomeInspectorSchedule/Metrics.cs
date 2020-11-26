@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-using HomeInspectorSchedule.Pages;
 
 namespace HomeInspectorSchedule
 {
     public class Metrics
     {
-        public async Task<List<string>> RealtorMetrics()
+        List<string> realtorMetrics = new List<string>();
+
+        public async Task<string[,]> RealtorMetrics()
         {
             var appointments = await App.Database.GetAppointmentsAsync();
             List<int> realtorIds = new List<int>();
+
+            //List<List<string>> nameAndCount = new List<List<string>>();
+             
+            //List<string> names = new List<string>();
+            //List<string> count = new List<string>();
 
             foreach (var a in appointments)
             {
@@ -38,7 +40,6 @@ namespace HomeInspectorSchedule
                 }
             }
             //creates a list of strings containing realtor names and referral count
-            List<string> realtorMetrics = new List<string>();
             for(int i = 0; i < realtorIds.Count; i++)
             {
                 int counter = 0;
@@ -62,7 +63,7 @@ namespace HomeInspectorSchedule
                     }
                 }
             }
-
+            // organizes list to put top referrals at front of list
             for(int i = 0; i < realtorMetrics.Count; i++)
             {
                 for(int n = 0; n < realtorMetrics.Count; n++)
@@ -87,11 +88,32 @@ namespace HomeInspectorSchedule
                         realtorMetrics[i] = realtorMetrics[n];
                         realtorMetrics[n] = temp;
                     }
-
                 }
             }
+            // divides names and referral counts into separate list;
+            var rows = realtorMetrics.Count;
+            string name;
+            string count;
+            string[,] nameAndCount = new string[rows, 2];
+            int x = 0;
+            foreach (var r in realtorMetrics)
+            {
+                int index = r.IndexOf(" x ");
+                name = r.Substring(0, index);
 
+                int length = r.Length;
+                int index2 = r.LastIndexOf(" ");
+                int index3 = length - index2;
+                count = r.Substring(index2 + 1, index3 - 2);
 
+                nameAndCount[x, 0] = name;
+                nameAndCount[x, 1] = count;
+                x++;
+            }
+            return nameAndCount;
+        }
+        public List<string> RealtorReportList()
+        {
             return realtorMetrics;
         }
     }

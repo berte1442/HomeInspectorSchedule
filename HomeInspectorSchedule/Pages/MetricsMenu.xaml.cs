@@ -19,12 +19,12 @@ namespace HomeInspectorSchedule.Pages
 
         private async void InspectionsBtn_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MetricsReport());
+            await Navigation.PushAsync(new MetricsReport(false));
         }
 
         private async void Realtors_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MetricsReport());
+            await Navigation.PushAsync(new MetricsReport(true));
         }
     }
 }
