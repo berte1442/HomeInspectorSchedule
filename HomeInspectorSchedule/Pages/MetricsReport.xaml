@@ -13,26 +13,41 @@
                 <Label x:Name="RealtorOrInsLabel"
                        HorizontalOptions="Center"/>
                 <StackLayout x:Name="RealtorLayout"
-                    BackgroundColor="Gray"
                              IsVisible="False">
-                    <Grid x:Name="GraphGrid">
+                    <Label Text="Top Realtors"
+                           HorizontalOptions="Center"/>
+                    <Grid x:Name="GraphGrid"
+                        BackgroundColor="Gray"
+>
                         <Label x:Name="firstRealtorLabel"/>
                         <Label x:Name="secondRealtorLabel"
                                 Grid.Row="1"/>
                         <Label x:Name="thirdRealtorLabel"
                                 Grid.Row="2"/>
-                        <BoxView x:Name = "firstRealtorBoxView"
-                                 Color="Green"
+                        <Label x:Name = "firstBarLabel"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                                 BackgroundColor="Green"
                                  Grid.Column="1"/>
-                        <BoxView x:Name = "secondRealtorBoxView"
-                                 Color="Green"
+                        <Label x:Name = "secondBarLabel"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                                 BackgroundColor="Green"
                                  Grid.Row="1"
                                  Grid.Column="1"/>  
-                        <BoxView x:Name = "thirdRealtorBoxView"
-                                 Color="Green"
+                        <Label x:Name = "thirdBarLabel"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                                 BackgroundColor="Green"
                                  Grid.Row="2"
                                  Grid.Column="1"/>
                     </Grid>
+                    <Label Text="Full Report"
+                           HorizontalOptions="Center"/>
+                    <Grid x:Name="FullReportGrid">
+                    
+                    </Grid>
+
                 </StackLayout>
             </StackLayout>
         </ScrollView>

@@ -46,14 +46,26 @@ namespace HomeInspectorSchedule.Pages
 
                 GraphGrid.ColumnDefinitions = columnDefinitions;
 
-                Grid.SetColumnSpan(firstRealtorBoxView, first);
-                Grid.SetColumnSpan(secondRealtorBoxView, second);
-                Grid.SetColumnSpan(thirdRealtorBoxView, third);
-                
+                Grid.SetColumnSpan(firstBarLabel, first);
+                Grid.SetColumnSpan(secondBarLabel, second);
+                Grid.SetColumnSpan(thirdBarLabel, third);
+
+                firstBarLabel.Text = first.ToString();
+                secondBarLabel.Text = second.ToString();
+                thirdBarLabel.Text = third.ToString();
+
+                var fullReport = metrics.RealtorReportList();
+
+                for (int i = 0; i < fullReport.Count; i++)
+                {
+                    Label label = new Label();
+                    label.Text = metricsReport[i, 0];
+                    Label label2 = new Label();
+                    label2.Text = metricsReport[i, 1];
+                    FullReportGrid.Children.Add(label, 0, i);
+                    FullReportGrid.Children.Add(label2, 1, i);
+                }                
             }
-
-
         }
-
     }
 }
