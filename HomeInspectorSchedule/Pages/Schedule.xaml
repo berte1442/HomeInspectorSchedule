@@ -33,21 +33,11 @@
                 </Grid>
                 <Label x:Name="DayWeekMonthLabel"
                            HorizontalOptions="Center"/>
-                <!--<Button x:Name="ViewAppointmentBtn"
-                        Text="Select Appointment To View"
-                        IsVisible="False"
-                        BackgroundColor="Blue"
-                        TextColor="White"
-                        Clicked="ViewAppointmentBtn_Clicked"/>-->
+                
                 <StackLayout x:Name="ScheduleLayout">
                     
                 </StackLayout>
-                <!--<StackLayout x:Name="WeekLayout">
-                    
-                </StackLayout>
-                <StackLayout x:Name="MonthLayout">
-                    
-                </StackLayout>-->
+
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

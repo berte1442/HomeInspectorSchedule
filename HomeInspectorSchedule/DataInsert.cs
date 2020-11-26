@@ -160,7 +160,7 @@ namespace HomeInspectorSchedule
                 Name = "Residential",
                 Price = 389.99,
                 Description = "Standard Residential Home Inspection",
-                DurationHours = 3.5
+                DurationHours = 3
             };
             await App.Database.SaveInspectionTypeAsync(residential);
                 
@@ -187,7 +187,7 @@ namespace HomeInspectorSchedule
                 Name = "Mold",
                 Price = 395.99,
                 Description = "Mold swab and indoor air quality testing",
-                DurationHours = .75
+                DurationHours = 1
             };
             await App.Database.SaveInspectionTypeAsync(mold);
 
@@ -240,7 +240,7 @@ namespace HomeInspectorSchedule
 
             // appointments
 
-            Appointment robMonMorn = new Appointment
+            DisplayLayout robMonMorn = new DisplayLayout
             {
                 InspectorID = 1,
                 ClientID = 1,
@@ -255,7 +255,7 @@ namespace HomeInspectorSchedule
             };
             await App.Database.SaveAppointmentAsync(robMonMorn);
             
-            Appointment robMonAft = new Appointment
+            DisplayLayout robMonAft = new DisplayLayout
             {
                 InspectorID = 1,
                 ClientID = 2,
@@ -270,7 +270,7 @@ namespace HomeInspectorSchedule
             };
             await App.Database.SaveAppointmentAsync(robMonAft);
 
-            Appointment tedMonAft = new Appointment
+            DisplayLayout tedMonAft = new DisplayLayout
             {
                 InspectorID = 2,
                 ClientID = 3,
@@ -285,7 +285,7 @@ namespace HomeInspectorSchedule
             };
             await App.Database.SaveAppointmentAsync(tedMonAft);
 
-            Appointment timMonMorn = new Appointment
+            DisplayLayout timMonMorn = new DisplayLayout
             {
                 InspectorID = 3,
                 ClientID = 4,
@@ -302,7 +302,7 @@ namespace HomeInspectorSchedule
             };
             await App.Database.SaveAppointmentAsync(timMonMorn);
 
-            Appointment jayMonAft = new Appointment
+            DisplayLayout jayMonAft = new DisplayLayout
             {
                 InspectorID = 5,
                 ClientID = 5,

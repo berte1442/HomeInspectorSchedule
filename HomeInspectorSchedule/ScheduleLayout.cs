@@ -20,10 +20,10 @@ namespace HomeInspectorSchedule
         Grid GridView = new Grid();
         bool loggedInAdmin = false;
 
-        public async Task<List<Appointment>> GetTodaysAppointments(Inspector inspector)
+        public async Task<List<DisplayLayout>> GetTodaysAppointments(Inspector inspector)
         {
             var appointments = await App.Database.GetAppointmentsAsync();
-            List<Appointment> inspectorAppointments = new List<Appointment>();
+            List<DisplayLayout> inspectorAppointments = new List<DisplayLayout>();
 
             foreach (var a in appointments)
             {

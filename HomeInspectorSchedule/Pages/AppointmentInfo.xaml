@@ -6,10 +6,76 @@
              mc:Ignorable="d"
              x:Class="HomeInspectorSchedule.Pages.AppointmentInfo">
     <ContentPage.Content>
-        <StackLayout>
-            <Label x:Name="test" Text="Appointment Info"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout>
+                <Label x:Name="AppointmentLabel" 
+                       Text="Appointment Details"
+                       HorizontalOptions="Center"/>
+                <StackLayout x:Name="DisplayLayout">
+                    <StackLayout Padding="20,0,20,0">
+                        <Picker x:Name="InspectorPicker"
+                               IsVisible="False"/>
+                        <Label x:Name="InspectorLabel"/>
+                        <Entry x:Name="ClientNameEntry"/>
+                        <Entry x:Name="ClientPhoneEntry"/>
+                        <Entry x:Name="ClientEmailEntry"/>
+                        <Entry x:Name="StreeAddressEntry"/>
+                        <Entry x:Name="CityEntry"/>
+                        <Label Text="Alabama"/>
+                        <Entry x:Name="ZipEntry"/>
+                        <Picker x:Name="InspectionTypePicker"/>
+                        <Grid>
+                            <Button x:Name="AddServicesBtn"
+                                    Text="Add Services"
+                                    BackgroundColor="Green"
+                                    Clicked="AddServicesBtn_Clicked"/>
+                            <Button x:Name="RemoveServiceBtn"
+                                    BackgroundColor="Red"
+                                    Text="Remove Service"
+                                    Clicked="RemoveServiceBtn_Clicked"
+                                    Grid.Column="1"/>
+                        </Grid>
+                        <Label x:Name="InspectionTypeLabel"/>
+                        <Label x:Name="StartTimeLabel"/>
+                        <DatePicker x:Name="StartDatePicker"/>
+                        <TimePicker x:Name="StartTimePicker"/>
+                        <Entry x:Name="DurationEntry"/>
+                        <Grid>
+                            <CheckBox x:Name="PaidCheckBox"
+                                      HorizontalOptions="End"
+                                      CheckedChanged="PaidCheckBox_CheckedChanged"/>
+                            <Label Text="Paid"
+                                   HorizontalOptions="Start"
+                                   Grid.Column="1"/>
+                        </Grid>
+                        <Entry x:Name="RealtorNameEntry"/>
+                        <Entry x:Name="RealtorPhoneEntry"/>
+                        <Entry x:Name="RealtorEmailEntry"/>
+                        <Editor x:Name="NotesEditor"/>
+                        <Button x:Name="ApproveBtn"
+                                Text="Approve Inspection"
+                                BackgroundColor="Blue"
+                                TextColor="White"
+                                IsVisible="False"
+                                Clicked="ApproveBtn_Clicked"/>
+                        <Button x:Name="SaveBtn"
+                                Text="Save Inspection"
+                                BackgroundColor="Yellow"
+                                Clicked="SaveBtn_Clicked"/>
+                        <Button x:Name="CancelBtn"
+                                Text="Cancel Inspection"
+                                BackgroundColor="Red"
+                                Clicked="CancelBtn_Clicked"/>
+                        <Label x:Name="ApprovedLabel"
+                               Text="Waiting on admin approval"/>
+                        <Label x:Name="CanceledLabel"
+                               IsVisible="False"/>
+
+                    </StackLayout>
+
+                </StackLayout>
+            
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

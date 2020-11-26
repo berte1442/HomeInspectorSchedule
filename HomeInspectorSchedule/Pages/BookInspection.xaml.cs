@@ -262,7 +262,7 @@ namespace HomeInspectorSchedule.Pages
 
             DateTime startDateAndTime = startDate + startTime;
 
-            Appointment appointment = new Appointment
+            DisplayLayout appointment = new DisplayLayout
             {
                 InspectorID = inspectorID,
                 ClientID = client.ID,

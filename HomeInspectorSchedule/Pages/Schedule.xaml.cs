@@ -35,9 +35,6 @@ namespace HomeInspectorSchedule.Pages
                 var DayView = scheduleLayout.DayView(currentInspector);
                 ScheduleLayout.Children.Clear();
                 ScheduleLayout.Children.Add(DayView);
-
-
-
             }
         }
 
