@@ -60,12 +60,34 @@ namespace HomeInspectorSchedule.Pages
                 {
                     Label label = new Label();
                     label.Text = metricsReport[i, 0];
+                    label.HorizontalTextAlignment = TextAlignment.Center;
                     Label label2 = new Label();
                     label2.Text = metricsReport[i, 1];
+                    label2.HorizontalTextAlignment = TextAlignment.Center;
                     FullReportGrid.Children.Add(label, 0, i);
                     FullReportGrid.Children.Add(label2, 1, i);
                 }                
             }
+            else
+            {
+                InspectionsLayout.IsVisible = true;
+
+            }
+        }
+
+        private void WeekCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+
+        }
+
+        private void MonthCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+
+        }
+
+        private void YearCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+
         }
     }
 }

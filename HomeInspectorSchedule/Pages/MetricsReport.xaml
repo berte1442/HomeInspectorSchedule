@@ -49,6 +49,33 @@
                     </Grid>
 
                 </StackLayout>
+                <StackLayout x:Name="InspectionsLayout"
+                             IsVisible="False">
+                    <Label Text="Top Inspectors"
+                           HorizontalOptions="Center"/>
+                    <Picker x:Name="InspectorPicker"
+                            HorizontalOptions="Center"/>
+                    <Grid>
+                        <CheckBox x:Name="WeekCheckbox"
+                                  CheckedChanged="WeekCheckbox_CheckedChanged"/>
+                        <Label Text="Week View"
+                               Grid.Column="1"/>
+                        <CheckBox x:Name="MonthCheckbox"
+                                  CheckedChanged="MonthCheckbox_CheckedChanged"
+                                  Grid.Column="2"/>
+                        <Label Text="Month View"
+                               Grid.Column="3"/>
+                        <CheckBox x:Name="YearCheckbox"
+                                  CheckedChanged="YearCheckbox_CheckedChanged"
+                                  Grid.Column="4"/>
+                        <Label Text="Year View"
+                               Grid.Column="5"/>
+                    </Grid>
+                    <Label x:Name="MetricDisplay"/>
+                    <StackLayout>
+                        
+                    </StackLayout>
+                </StackLayout>
             </StackLayout>
         </ScrollView>
 
