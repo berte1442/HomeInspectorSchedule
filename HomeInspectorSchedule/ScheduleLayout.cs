@@ -33,6 +33,26 @@ namespace HomeInspectorSchedule
             }
             return inspectorAppointments;
         }
+
+        public async Task<List<Appointment>> GetWeekAppointments(Inspector inspector)
+        {
+            var appointments = await App.Database.GetAppointmentsAsync();
+            List<Appointment> inspectorAppointments = new List<Appointment>();
+
+            foreach (var a in appointments)
+            {
+                if (inspector.Admin == false && a.InspectorID == inspector.ID && (a.StartTime >= DateTime.Today && a.StartTime < DateTime.Today.AddDays(6)))
+                {
+                    inspectorAppointments.Add(a);
+                }
+                else if (inspector.Admin == true && (a.StartTime >= DateTime.Today && a.StartTime < DateTime.Today.AddDays(6)))
+                {
+                    inspectorAppointments.Add(a);
+                }
+            }
+            return inspectorAppointments;
+        }
+
         public StackLayout DayView(Inspector inspector)
         {
             int columnSpan = 60;
@@ -231,7 +251,7 @@ namespace HomeInspectorSchedule
                 }
             }
 
-            AddAppointments(inspector);
+            AddDayAppointments(inspector);
             
             ScrollView Scroll = new ScrollView
             {
@@ -246,8 +266,125 @@ namespace HomeInspectorSchedule
             Dayview.Children.Add(Scroll);
             return Dayview;
         }
+        //public StackLayout WeekView(Inspector inspector)
+        //{
+
+        //}
+
+        public StackLayout MonthView(Inspector inspector)
+        {
+            Grid monthGrid = new Grid
+            {
+                ColumnDefinitions = {
+                    new ColumnDefinition(),
+                    new ColumnDefinition(),
+                    new ColumnDefinition(),
+                    new ColumnDefinition(),
+                    new ColumnDefinition(),
+                    new ColumnDefinition(),
+                    new ColumnDefinition()
+                },
+                RowDefinitions =
+                {
+                    new RowDefinition(),
+                    new RowDefinition(),
+                    new RowDefinition(),
+                    new RowDefinition(),
+                    new RowDefinition(),
+                    new RowDefinition(),
+                    new RowDefinition()
+                }
+            };
+            GridView = monthGrid;
+
+            StackLayout Monthview = new StackLayout
+            {
+                BackgroundColor = Color.Gray,
+            };
+            Monthview.Children.Add(GridView);
+
+            Label sunday = new Label
+            {
+                Text = "Sun"
+            };
+            Label monday = new Label
+            {
+                Text = "Mon"
+            };
+            Label tuesday = new Label
+            {
+                Text = "Tue"
+            };
+            Label wednesday = new Label
+            {
+                Text = "Wed"
+            };
+            Label thursday = new Label
+            {
+                Text = "Thu"
+            };
+            Label friday = new Label
+            {
+                Text = "Fri"
+            };
+            Label saturday = new Label
+            {
+                Text = "Sat"
+            };
+            GridView.Children.Add(sunday, 0, 0);
+            GridView.Children.Add(monday, 1, 0);
+            GridView.Children.Add(tuesday, 2, 0);
+            GridView.Children.Add(wednesday, 3, 0);
+            GridView.Children.Add(thursday, 4, 0);
+            GridView.Children.Add(friday, 5, 0);
+            GridView.Children.Add(saturday, 6, 0);
+
+            var month = DateTime.Today.Month;
+            var year = DateTime.Today.Year;
+            DateTime firstOfMonth = DateTime.Parse(month + "/" + "1" + "/" + year);
+            int dayOfWeek = Convert.ToInt32(firstOfMonth.DayOfWeek);
+            int days = 0;
+            var testAddDays = firstOfMonth.AddDays(30);
+            var testMonth = testAddDays.Month;
+            if(month == 2 && year % 4 != 0)
+            {
+                days = 28;
+            }
+            else if(month == 2 && (year % 4 == 0 || (year % 100 != 0 || year % 400 == 0)))
+            {
+                days = 29;
+            }
+            else if(month == testMonth)
+            {
+                days = 31;
+            }
+            else
+            {
+                days = 30;
+            }
+
+            var row = 1;
+            var column = dayOfWeek;
+
+            for (int i = dayOfWeek; i < days + dayOfWeek; i++)
+            {
+                if(column != 0 && column % 7 == 0)
+                {
+                    row++;
+                    column = 0;
+                }
+                Label date = new Label
+                {
+                    Text = (1+i).ToString()
+                };
+                GridView.Children.Add(date, column, row);
+                column++;
+            }
+            
+            return Monthview;
+        }
         
-        public async Task AddAppointments(Inspector inspector)
+        public async Task AddDayAppointments(Inspector inspector)
         {
             var clients = await App.Database.GetClientsAsync();
             var addresses = await App.Database.GetAddressesAsync();

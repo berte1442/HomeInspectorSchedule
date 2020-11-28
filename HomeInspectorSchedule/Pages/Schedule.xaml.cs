@@ -63,9 +63,9 @@ namespace HomeInspectorSchedule.Pages
   
                 ScheduleLayout scheduleLayout = new ScheduleLayout();
 
-                //var MonthView = scheduleLayout.MonthView(currentInspector);
+                var MonthView = scheduleLayout.MonthView(currentInspector);
                 ScheduleLayout.Children.Clear();
-                //ScheduleLayout.ChildreC:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\Pages\Login.xamln.Add(MonthView);
+                ScheduleLayout.Children.Add(MonthView);
             }
         }
     }
