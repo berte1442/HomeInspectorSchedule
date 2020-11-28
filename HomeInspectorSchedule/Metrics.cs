@@ -10,9 +10,10 @@ namespace HomeInspectorSchedule
     public class Metrics
     {
         List<string> realtorMetrics = new List<string>();
+        List<string> inspectorMetrics = new List<string>();
 
         // change this to a param and create the ability to return realtorMetrics for any year 
-        int year = DateTime.Today.Year;
+        static public int year = DateTime.Today.Year;
 
         public async Task<string[,]> RealtorMetrics()
         {
@@ -46,6 +47,24 @@ namespace HomeInspectorSchedule
             return realtorMetrics;
         }
 
+        public async Task<double> PriceTotal(int id, string type, List<Appointment> appointments)
+        {
+            double priceTotal = 0;
+            foreach(var a in appointments)
+            {
+                if (type == "realtor" && a.RealtorID == id)
+                {
+                    priceTotal += a.PriceTotal;
+                }
+                if(type == "inspector" && a.InspectorID == id)
+                {
+                    priceTotal += a.PriceTotal;
+                }
+            }
+
+            return priceTotal;
+        }
+
         public async Task<List<Appointment>> WeekAppointments()
         {
             inspectorMetrics.Clear();
@@ -58,8 +77,7 @@ namespace HomeInspectorSchedule
                 {
                     weekAppointments.Add(a);
                 }
-            }
-            
+            }         
             return weekAppointments;
         }
 
@@ -92,12 +110,9 @@ namespace HomeInspectorSchedule
                     yearAppointments.Add(a);
                 }
             }
-
             return yearAppointments;
         }
 
-
-        List<string> inspectorMetrics = new List<string>();
         public async Task<string[,]> InspectorMetrics(List<Appointment> appointments)
         {
             List<int> inspectorIds = new List<int>();
@@ -242,6 +257,35 @@ namespace HomeInspectorSchedule
                 }
             }
             return list;
+        }
+
+        public string[,,] OrganizeArray(string[,,] array, int count)
+        {
+            for(int i = 0; i < count; i++)
+            {
+                var subStr = array[i, 1, 1].Substring(1, array[i, 1, 1].Length - 1);
+                int inspectionCount = Convert.ToInt32(array[i, 1, 0]);
+                for (int n = 0; n < count; n++)
+                {
+                    var subStr2 = array[n, 1, 1].Substring(1, array[n, 1, 1].Length - 1);
+                    int inspectionCount2 = Convert.ToInt32(array[n, 1, 0]);
+                    if (inspectionCount == inspectionCount2 && Convert.ToDouble(subStr) > Convert.ToDouble(subStr2))
+                    {
+                        var temp1 = array[i, 0, 0];
+                        var temp2 = array[i, 1, 0];
+                        var temp3 = array[i, 1, 1];
+
+                        array[i, 0, 0] = array[n, 0, 0];
+                        array[i, 1, 0] = array[n, 1, 0];
+                        array[i, 1, 1] = array[n, 1, 1]; 
+                        
+                        array[n, 0, 0] = temp1;
+                        array[n, 1, 0] = temp2;
+                        array[n, 1, 1] = temp3;
+                    }
+                }
+            }
+            return array;
         }
     }
 }

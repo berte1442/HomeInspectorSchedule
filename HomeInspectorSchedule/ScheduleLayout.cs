@@ -8,15 +8,10 @@ using System.Linq;
 using HomeInspectorSchedule.Pages;
 using Xamarin.Forms.Core;
 
-//using Android.Content.Res;
-
 namespace HomeInspectorSchedule
 {
-    //[XamlCompilation(XamlCompilationOptions.Compile)]
-    public /*partial*/ class ScheduleLayout
+    public class ScheduleLayout
     {
-        //Button Appointment = new Button();
-
         Grid GridView = new Grid();
         bool loggedInAdmin = false;
 

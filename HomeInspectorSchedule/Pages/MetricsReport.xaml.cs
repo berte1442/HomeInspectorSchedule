@@ -52,32 +52,43 @@ namespace HomeInspectorSchedule.Pages
                 Grid.SetColumnSpan(thirdBarLabel, third);
 
                 firstBarLabel.Text = first.ToString();
+                firstBarLabel.IsVisible = true;
                 secondBarLabel.Text = second.ToString();
+                secondBarLabel.IsVisible = true;
                 thirdBarLabel.Text = third.ToString();
+                thirdBarLabel.IsVisible = true;
 
                 var fullReport = metrics.RealtorReportList();
+                
 
                 for (int i = 0; i < fullReport.Count; i++)
                 {
+                    double priceTotal = 0;
+                    var realtor = await App.Database.GetRealtorAsync(metricsReport[i, 0]);
+                    var appointments = await App.Database.GetAppointmentsAsync();
+                    foreach(var a in appointments)
+                    {
+                        if(a.RealtorID == realtor.ID && a.StartTime.Year == Metrics.year)
+                        {
+                            priceTotal += a.PriceTotal;
+                        }
+                    }
                     Label label = new Label();
                     label.Text = metricsReport[i, 0];
                     label.HorizontalTextAlignment = TextAlignment.Center;
                     Label label2 = new Label();
                     label2.Text = metricsReport[i, 1];
                     label2.HorizontalTextAlignment = TextAlignment.Center;
+                    Label label3 = new Label();
+                    label3.Text = priceTotal.ToString("C2");
                     FullReportGrid.Children.Add(label, 0, i);
                     FullReportGrid.Children.Add(label2, 1, i);
+                    FullReportGrid.Children.Add(label3, 2, i);
                 }                
             }
             else
             {
                 InspectionsLayout.IsVisible = true;
-                var inspectors = await App.Database.GetInspectorsAsync();
-
-                foreach(var i in inspectors)
-                {
-                    InspectorPicker.Items.Add(i.Name);
-                }
             }
         }
 
@@ -148,7 +159,7 @@ namespace HomeInspectorSchedule.Pages
         public async Task DisplaySet(string[,] metricsReport)
         {
             GraphGrid2.Children.Clear();
-
+            TopInspectorsLabel.IsVisible = true;
             Label firstInspectorLabel = new Label();
             GraphGrid2.Children.Add(firstInspectorLabel, 0, 0);
             Label secondInspectorLabel = new Label();
@@ -242,16 +253,43 @@ namespace HomeInspectorSchedule.Pages
 
             var fullReport = metrics.InspectorReportList();
             FullReportGrid2.Children.Clear();
-            for (int i = 0; i < fullReport.Count; i++)
+            var count = fullReport.Count;
+            string[,,] report = new string[count,count,count];
+            for (int i = 0; i < count; i++)
+            {
+                double priceTotal = 0;
+                var inspector = await App.Database.GetInspectorAsync(metricsReport[i, 0]);
+                var appointments = await App.Database.GetAppointmentsAsync();
+                foreach (var a in appointments)
+                {
+                    if (a.InspectorID == inspector.ID && a.StartTime.Year == Metrics.year)
+                    {
+                        priceTotal += a.PriceTotal;
+                    }
+                }
+                report[i, 0, 0] = metricsReport[i, 0];
+                report[i, 1, 0] = metricsReport[i, 1];
+                report[i, 1, 1] = priceTotal.ToString("C2");
+
+            }
+
+            report = metrics.OrganizeArray(report, count);
+
+            for (int i = 0; i < count; i++)
             {
                 Label label = new Label();
-                label.Text = metricsReport[i, 0];
+                label.Text = report[i, 0, 0];
                 label.HorizontalTextAlignment = TextAlignment.Center;
                 Label label2 = new Label();
-                label2.Text = metricsReport[i, 1];
+                label2.Text = report[i, 1, 0];
                 label2.HorizontalTextAlignment = TextAlignment.Center;
+                Label label3 = new Label();
+                label3.Text = report[i, 1, 1];
+
+
                 FullReportGrid2.Children.Add(label, 0, i);
                 FullReportGrid2.Children.Add(label2, 1, i);
+                FullReportGrid2.Children.Add(label3, 2, i);
             }
         }
     }

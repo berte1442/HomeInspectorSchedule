@@ -54,8 +54,8 @@
                 </StackLayout>
                 <StackLayout x:Name="InspectionsLayout"
                              IsVisible="False">
-                    <Picker x:Name="InspectorPicker"
-                            HorizontalOptions="Center"/>
+                    <!--<Picker x:Name="InspectorPicker"
+                            HorizontalOptions="Center"/>-->
                     <Grid>
                         <CheckBox x:Name="WeekCheckbox"
                                   CheckedChanged="WeekCheckbox_CheckedChanged"/>
@@ -74,8 +74,10 @@
                     </Grid>
                     <Label x:Name="MetricDisplay"
                            HorizontalOptions="Center"/>
-                    <Label Text="Top Inspectors"
-                           HorizontalOptions="Center"/>
+                    <Label x:Name="TopInspectorsLabel"
+                        Text="Top Inspectors"
+                           HorizontalOptions="Center"
+                           IsVisible="False"/>
                     <Grid x:Name="GraphGrid2"
                         BackgroundColor="Gray"
                           IsVisible="False">
