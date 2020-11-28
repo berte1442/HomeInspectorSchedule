@@ -30,13 +30,36 @@ namespace HomeInspectorSchedule.Pages
                 RealtorOrInsLabel.Text = "Realtor Referral Report for 2020";
                 var metricsReport = await metrics.RealtorMetrics();
 
-                firstRealtorLabel.Text = metricsReport[0, 0];
-                secondRealtorLabel.Text = metricsReport[1, 0];
-                thirdRealtorLabel.Text = metricsReport[2, 0];
+                var fullReport = metrics.RealtorReportList();
 
-                int first = int.Parse(metricsReport[0, 1]);
-                int second = int.Parse(metricsReport[1, 1]);
-                int third = int.Parse(metricsReport[2, 1]);
+                var count = fullReport.Count;
+                string[,,] report = new string[count, count, count];
+                for (int i = 0; i < fullReport.Count; i++)
+                {
+                    double priceTotal = 0;
+                    var realtor = await App.Database.GetRealtorAsync(metricsReport[i, 0]);
+                    var appointments = await App.Database.GetAppointmentsAsync();
+                    foreach (var a in appointments)
+                    {
+                        if (a.RealtorID == realtor.ID && a.StartTime.Year == Metrics.year)
+                        {
+                            priceTotal += a.PriceTotal;
+                        }
+                    }
+                    report[i, 0, 0] = metricsReport[i, 0];
+                    report[i, 1, 0] = metricsReport[i, 1];
+                    report[i, 1, 1] = priceTotal.ToString("C2");
+                }
+
+                report = metrics.OrganizeArray(report, count);
+
+                firstRealtorLabel.Text = report[0, 0, 0];
+                secondRealtorLabel.Text = report[1, 0, 0];
+                thirdRealtorLabel.Text = report[2, 0, 0];
+
+                int first = int.Parse(report[0, 1, 0]);
+                int second = int.Parse(report[1, 1, 0]);
+                int third = int.Parse(report[2, 1, 0]);
 
                 ColumnDefinitionCollection columnDefinitions = new ColumnDefinitionCollection();
                 for(int i = 0; i < first; i++)
@@ -58,34 +81,24 @@ namespace HomeInspectorSchedule.Pages
                 thirdBarLabel.Text = third.ToString();
                 thirdBarLabel.IsVisible = true;
 
-                var fullReport = metrics.RealtorReportList();
-                
-
-                for (int i = 0; i < fullReport.Count; i++)
+                for (int i = 0; i < count; i++)
                 {
-                    double priceTotal = 0;
-                    var realtor = await App.Database.GetRealtorAsync(metricsReport[i, 0]);
-                    var appointments = await App.Database.GetAppointmentsAsync();
-                    foreach(var a in appointments)
-                    {
-                        if(a.RealtorID == realtor.ID && a.StartTime.Year == Metrics.year)
-                        {
-                            priceTotal += a.PriceTotal;
-                        }
-                    }
                     Label label = new Label();
-                    label.Text = metricsReport[i, 0];
+                    label.Text = report[i, 0, 0];
                     label.HorizontalTextAlignment = TextAlignment.Center;
                     Label label2 = new Label();
-                    label2.Text = metricsReport[i, 1];
+                    label2.Text = report[i, 1, 0];
                     label2.HorizontalTextAlignment = TextAlignment.Center;
                     Label label3 = new Label();
-                    label3.Text = priceTotal.ToString("C2");
+                    label3.Text = report[i, 1, 1];
+
+
                     FullReportGrid.Children.Add(label, 0, i);
                     FullReportGrid.Children.Add(label2, 1, i);
                     FullReportGrid.Children.Add(label3, 2, i);
-                }                
-            }
+                }
+            }                
+            
             else
             {
                 InspectionsLayout.IsVisible = true;
@@ -158,6 +171,29 @@ namespace HomeInspectorSchedule.Pages
 
         public async Task DisplaySet(string[,] metricsReport)
         {
+            var fullReport = metrics.InspectorReportList();
+            FullReportGrid2.Children.Clear();
+            var count = fullReport.Count;
+            string[,,] report = new string[count, count, count];
+            for (int i = 0; i < count; i++)
+            {
+                double priceTotal = 0;
+                var inspector = await App.Database.GetInspectorAsync(metricsReport[i, 0]);
+                //var appointments = await App.Database.GetAppointmentsAsync();
+                foreach (var a in appointments)
+                {
+                    if (a.InspectorID == inspector.ID && a.StartTime.Year == Metrics.year)
+                    {
+                        priceTotal += a.PriceTotal;
+                    }
+                }
+                report[i, 0, 0] = metricsReport[i, 0];
+                report[i, 1, 0] = metricsReport[i, 1];
+                report[i, 1, 1] = priceTotal.ToString("C2");
+
+            }
+
+            report = metrics.OrganizeArray(report, count);
             GraphGrid2.Children.Clear();
             TopInspectorsLabel.IsVisible = true;
             Label firstInspectorLabel = new Label();
@@ -192,35 +228,33 @@ namespace HomeInspectorSchedule.Pages
             };
             GraphGrid2.Children.Add(thirdBarLabel2, 1, 2);
 
-            var length = metricsReport.Length;
-
-            if(length > 0 && metricsReport[0, 0] != null)
+            if(count > 0 && report[0, 0, 0] != null)
             {
-                firstInspectorLabel.Text = metricsReport[0, 0];
+                firstInspectorLabel.Text = report[0, 0, 0];
             }
-            if (length > 2 && metricsReport[1, 0] != null)
+            if (count > 1 && report[1, 0, 0] != null)
             {
-                secondInspectorLabel.Text = metricsReport[1, 0];
+                secondInspectorLabel.Text = report[1, 0, 0];
             }
-            if (length > 4 && metricsReport[2, 0] != null)
+            if (count > 2 && report[2, 0, 0] != null)
             {
-                thirdInspectorLabel.Text = metricsReport[2, 0];
+                thirdInspectorLabel.Text = report[2, 0, 0];
             }
 
             int first = 0;
             int second = 0;
             int third = 0;
-            if (length > 0 && metricsReport[0, 1] != null)
+            if (count > 0 && report[0, 1, 0] != null)
             {
-                first = int.Parse(metricsReport[0, 1]);
+                first = int.Parse(report[0, 1, 0]);
             }
-            if (length > 2 && metricsReport[1, 1] != null)
+            if (count > 1 && report[1, 1, 0] != null)
             {
-                second = int.Parse(metricsReport[1, 1]);
-            }
-            if (length > 4 && metricsReport[2, 1] != null)
+                second = int.Parse(report[1, 1, 0]);
+            } 
+            if (count > 2 && report[2, 1, 0] != null)
             {
-                third = int.Parse(metricsReport[2, 1]);
+                third = int.Parse(report[2, 1, 0]);
             }
 
             ColumnDefinitionCollection columnDefinitions = new ColumnDefinitionCollection();
@@ -250,30 +284,6 @@ namespace HomeInspectorSchedule.Pages
                 thirdBarLabel2.Text = third.ToString();
                 thirdBarLabel2.IsVisible = true;
             }
-
-            var fullReport = metrics.InspectorReportList();
-            FullReportGrid2.Children.Clear();
-            var count = fullReport.Count;
-            string[,,] report = new string[count,count,count];
-            for (int i = 0; i < count; i++)
-            {
-                double priceTotal = 0;
-                var inspector = await App.Database.GetInspectorAsync(metricsReport[i, 0]);
-                var appointments = await App.Database.GetAppointmentsAsync();
-                foreach (var a in appointments)
-                {
-                    if (a.InspectorID == inspector.ID && a.StartTime.Year == Metrics.year)
-                    {
-                        priceTotal += a.PriceTotal;
-                    }
-                }
-                report[i, 0, 0] = metricsReport[i, 0];
-                report[i, 1, 0] = metricsReport[i, 1];
-                report[i, 1, 1] = priceTotal.ToString("C2");
-
-            }
-
-            report = metrics.OrganizeArray(report, count);
 
             for (int i = 0; i < count; i++)
             {
