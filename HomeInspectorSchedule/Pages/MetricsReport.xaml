@@ -28,19 +28,22 @@
                                HorizontalTextAlignment="Center"
                                VerticalTextAlignment="Center"
                                  BackgroundColor="Green"
-                                 Grid.Column="1"/>
+                                 Grid.Column="1"
+                               IsVisible="False"/>
                         <Label x:Name = "secondBarLabel"
                                HorizontalTextAlignment="Center"
                                VerticalTextAlignment="Center"
                                  BackgroundColor="Green"
                                  Grid.Row="1"
-                                 Grid.Column="1"/>  
+                                 Grid.Column="1"
+                               IsVisible="False"/>  
                         <Label x:Name = "thirdBarLabel"
                                HorizontalTextAlignment="Center"
                                VerticalTextAlignment="Center"
                                  BackgroundColor="Green"
                                  Grid.Row="2"
-                                 Grid.Column="1"/>
+                                 Grid.Column="1"
+                               IsVisible="False"/>
                     </Grid>
                     <Label Text="Full Report"
                            HorizontalOptions="Center"/>
@@ -51,8 +54,6 @@
                 </StackLayout>
                 <StackLayout x:Name="InspectionsLayout"
                              IsVisible="False">
-                    <Label Text="Top Inspectors"
-                           HorizontalOptions="Center"/>
                     <Picker x:Name="InspectorPicker"
                             HorizontalOptions="Center"/>
                     <Grid>
@@ -71,10 +72,43 @@
                         <Label Text="Year View"
                                Grid.Column="5"/>
                     </Grid>
-                    <Label x:Name="MetricDisplay"/>
-                    <StackLayout>
+                    <Label x:Name="MetricDisplay"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Top Inspectors"
+                           HorizontalOptions="Center"/>
+                    <Grid x:Name="GraphGrid2"
+                        BackgroundColor="Gray"
+                          IsVisible="False">
                         
-                    </StackLayout>
+                        <!--<Label x:Name="firstInspectorLabel"/>
+                        <Label x:Name="secondInspectorLabel"
+                                Grid.Row="1"/>
+                        <Label x:Name="thirdInspectorLabel"
+                                Grid.Row="2"/>
+                        <Label x:Name = "firstBarLabel2"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                                 BackgroundColor="Green"
+                                 Grid.Column="1"
+                               IsVisible="False"/>
+                        <Label x:Name = "secondBarLabel2"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                                 BackgroundColor="Green"
+                                 Grid.Row="1"
+                                 Grid.Column="1"
+                               IsVisible="False"/>
+                        <Label x:Name = "thirdBarLabel2"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                                 BackgroundColor="Green"
+                                 Grid.Row="2"
+                                 Grid.Column="1"
+                               IsVisible="False"/>-->
+                    </Grid>
+                    <Grid x:Name="FullReportGrid2">
+                        
+                    </Grid>
                 </StackLayout>
             </StackLayout>
         </ScrollView>
