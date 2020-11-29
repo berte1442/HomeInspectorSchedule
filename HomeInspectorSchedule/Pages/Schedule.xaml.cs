@@ -53,7 +53,7 @@ namespace HomeInspectorSchedule.Pages
             }
         }
 
-        private void MonthCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        private async void MonthCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
         {
             if (MonthCheckbox.IsChecked)
             {
@@ -63,7 +63,7 @@ namespace HomeInspectorSchedule.Pages
   
                 ScheduleLayout scheduleLayout = new ScheduleLayout();
 
-                var MonthView = scheduleLayout.MonthView(currentInspector);
+                var MonthView = await scheduleLayout.MonthView(currentInspector);
                 ScheduleLayout.Children.Clear();
                 ScheduleLayout.Children.Add(MonthView);
             }

@@ -271,38 +271,30 @@ namespace HomeInspectorSchedule
 
         //}
 
-        public StackLayout MonthView(Inspector inspector)
+        public async Task<StackLayout> MonthView(Inspector inspector)
         {
             Grid monthGrid = new Grid
             {
                 ColumnDefinitions = {
-                    new ColumnDefinition(),
-                    new ColumnDefinition(),
-                    new ColumnDefinition(),
-                    new ColumnDefinition(),
-                    new ColumnDefinition(),
-                    new ColumnDefinition(),
-                    new ColumnDefinition()
+                    new ColumnDefinition{ Width = 100 },
+                    new ColumnDefinition{ Width = 100 },
+                    new ColumnDefinition{ Width = 100 },
+                    new ColumnDefinition{ Width = 100 },
+                    new ColumnDefinition{ Width = 100 },
+                    new ColumnDefinition{ Width = 100 },
+                    new ColumnDefinition{ Width = 100 }
                 },
                 RowDefinitions =
                 {
-                    new RowDefinition(),
-                    new RowDefinition(),
-                    new RowDefinition(),
-                    new RowDefinition(),
-                    new RowDefinition(),
-                    new RowDefinition(),
-                    new RowDefinition()
+                    new RowDefinition{ Height = 20 },
+                    new RowDefinition{ Height = 100 },
+                    new RowDefinition{ Height = 100 },
+                    new RowDefinition{ Height = 100 },
+                    new RowDefinition{ Height = 100 },
+                    new RowDefinition{ Height = 100 },
+                    new RowDefinition{ Height = 100 }     
                 }
             };
-            GridView = monthGrid;
-
-            StackLayout Monthview = new StackLayout
-            {
-                BackgroundColor = Color.Gray,
-            };
-            Monthview.Children.Add(GridView);
-
             Label sunday = new Label
             {
                 Text = "Sun"
@@ -331,13 +323,13 @@ namespace HomeInspectorSchedule
             {
                 Text = "Sat"
             };
-            GridView.Children.Add(sunday, 0, 0);
-            GridView.Children.Add(monday, 1, 0);
-            GridView.Children.Add(tuesday, 2, 0);
-            GridView.Children.Add(wednesday, 3, 0);
-            GridView.Children.Add(thursday, 4, 0);
-            GridView.Children.Add(friday, 5, 0);
-            GridView.Children.Add(saturday, 6, 0);
+            monthGrid.Children.Add(sunday, 0, 0);
+            monthGrid.Children.Add(monday, 1, 0);
+            monthGrid.Children.Add(tuesday, 2, 0);
+            monthGrid.Children.Add(wednesday, 3, 0);
+            monthGrid.Children.Add(thursday, 4, 0);
+            monthGrid.Children.Add(friday, 5, 0);
+            monthGrid.Children.Add(saturday, 6, 0);
 
             var month = DateTime.Today.Month;
             var year = DateTime.Today.Year;
@@ -365,6 +357,7 @@ namespace HomeInspectorSchedule
 
             var row = 1;
             var column = dayOfWeek;
+            var appointments = await AddMonthAppointments(inspector);
 
             for (int i = dayOfWeek; i < days + dayOfWeek; i++)
             {
@@ -373,17 +366,99 @@ namespace HomeInspectorSchedule
                     row++;
                     column = 0;
                 }
+                StackLayout stack = new StackLayout
+                {
+                    ClassId = (1 + i).ToString(),
+                    StyleId = column.ToString() + " " + row.ToString()
+                };
+
                 Label date = new Label
                 {
-                    Text = (1+i).ToString()
+                    Text = (1 + i).ToString(),
+                    Padding = new Thickness(3, 0, 0, 0),
+
                 };
-                GridView.Children.Add(date, column, row);
+                stack.Children.Add(date);
+
+
+                foreach (var a in appointments)
+                {
+                    Label app = new Label
+                    {
+                        Padding = new Thickness(3, 0, 0, 0),
+                        HorizontalTextAlignment = TextAlignment.Center
+                    };
+                    if (inspector.Admin)
+                    {
+                        if(a.StartTime.Day == Convert.ToInt32(stack.ClassId))
+                        {
+                            app.Text = a.InspectorID.ToString();
+                            if (a.Canceled == false)
+                            {
+                                app.BackgroundColor = Metrics.GetInspectorColor(await App.Database.GetInspectorAsync(a.InspectorID));
+                            }
+                            else
+                            {
+                                app.BackgroundColor = Color.Red;
+                            }
+                            stack.Children.Add(app);
+                        }
+                    }
+                    else if(a.StartTime.Day == Convert.ToInt32(stack.ClassId) && inspector.ID == a.InspectorID)
+                    {
+                        app.Text = a.InspectorID.ToString();
+                        if(a.Canceled == false)
+                        {
+                            app.BackgroundColor = Metrics.GetInspectorColor(inspector);
+                        }
+                        else
+                        {
+                            app.BackgroundColor = Color.Red;
+                        }
+                        stack.Children.Add(app);
+                    }
+                }
+
+                monthGrid.Children.Add(stack, column, row);
                 column++;
             }
-            
+
+            GridView = monthGrid;
+            ScrollView Scroll = new ScrollView
+            {
+                HorizontalOptions = LayoutOptions.Fill,
+                Orientation = ScrollOrientation.Horizontal,
+
+                Content = new StackLayout
+                {
+                    Children = { GridView }
+                }
+            };
+            StackLayout Monthview = new StackLayout
+            {
+                BackgroundColor = Color.Gray,
+            };
+            Monthview.Children.Add(Scroll);
             return Monthview;
         }
-        
+        public async Task<List<Appointment>> AddMonthAppointments(Inspector inspector)
+        {
+            var appointments = await App.Database.GetAppointmentsAsync();
+            List<Appointment> monthAppointments = new List<Appointment>();
+
+            foreach(var a in appointments)
+            {
+                if(inspector.Admin && a.StartTime.Month == DateTime.Today.Month)
+                {
+                    monthAppointments.Add(a);
+                }
+                else if(a.StartTime.Month == DateTime.Today.Month && a.InspectorID == inspector.ID)
+                {
+                    monthAppointments.Add(a);
+                }
+            }
+            return monthAppointments;
+        }
         public async Task AddDayAppointments(Inspector inspector)
         {
             var clients = await App.Database.GetClientsAsync();
@@ -436,27 +511,7 @@ namespace HomeInspectorSchedule
                         };
                         Appointment.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(Appointment.ClassId));
 
-                        string color = inspector.InspectorColor;
-                        if (color == "blue")
-                        {
-                            Appointment.BackgroundColor = Color.LightBlue;
-                        }
-                        else if (color == "yellow")
-                        {
-                            Appointment.BackgroundColor = Color.YellowGreen;
-                        }
-                        else if (color == "purple")
-                        {
-                            Appointment.BackgroundColor = Color.MediumPurple;
-                        }
-                        else if (color == "green")
-                        {
-                            Appointment.BackgroundColor = Color.LightGreen;
-                        }
-                        else if (color == "orange")
-                        {
-                            Appointment.BackgroundColor = Color.Orange;
-                        }
+                        Appointment.BackgroundColor = Metrics.GetInspectorColor(inspector);
 
                         if (a.Canceled)
                         {

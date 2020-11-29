@@ -287,5 +287,37 @@ namespace HomeInspectorSchedule
             }
             return array;
         }
+
+        static public Color GetInspectorColor(Inspector inspector)
+        {
+            Color useColor;
+            string color = inspector.InspectorColor;
+            if (color == "blue")
+            {
+                useColor = Color.LightBlue;
+            }
+            else if (color == "yellow")
+            {
+                useColor = Color.YellowGreen;
+            }
+            else if (color == "purple")
+            {
+                useColor = Color.MediumPurple;
+            }
+            else if (color == "green")
+            {
+                useColor = Color.LightGreen;
+            }
+            else if (color == "orange")
+            {
+                useColor = Color.Orange;
+            }
+            else
+            {
+                useColor = Color.White;
+            }
+
+            return useColor;
+        }
     }
 }
