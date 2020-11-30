@@ -333,43 +333,60 @@ namespace HomeInspectorSchedule
                     var dayOfWeek = Convert.ToInt32(appointments[i].StartTime.DayOfWeek);
                     var client = await App.Database.GetClientAsync(appointments[i].ClientID);
                     var clientName = client.Name;
-                    var address = await App.Database.GetAddressAsync(appointments[i].AddressID);
-                    var appAddress = address.StreetAddress + " " + address.City + ", " + address.Zip;
-                    var startTime = appointments[i].StartTime.ToShortTimeString();
+                    //var address = await App.Database.GetAddressAsync(appointments[i].AddressID);
+                    //var appAddress = address.StreetAddress + " " + address.City + ", " + address.Zip;
+                    //var startTime = appointments[i].StartTime.ToShortTimeString();
 
                     StackLayout stack = new StackLayout();
                     stack.VerticalOptions = LayoutOptions.FillAndExpand;
                     stack.StyleId = dayOfWeek.ToString();
-                    weekGrid.Children.Add(stack, dayOfWeek, 1);
 
+                    Frame frame = new Frame
+                    {
+                        BorderColor = Color.Black,
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        Padding = 0
+                    };
+                    frame.Content = stack;
+                    weekGrid.Children.Add(frame, dayOfWeek, 1);
+                    List<Button> appointments1 = new List<Button>();
                     for (int n = 0; n < appointments.Count; n++)
                     {
+                        var address = await App.Database.GetAddressAsync(appointments[n].AddressID);
+                        var appAddress = address.StreetAddress + " " + address.City + ", " + address.Zip;
+                        var startTime = appointments[n].StartTime.ToShortTimeString();
                         if (Convert.ToInt32(appointments[n].StartTime.DayOfWeek) == Convert.ToInt32(stack.StyleId))
                         {
-                            Button Appointment = new Button
+                            Button app = new Button
                             {
                                 Text = startTime + "\n" + clientName + "\n" + appAddress,
                                 Opacity = .6,
                                 ClassId = appointments[n].ID.ToString()
                             };
-                            Appointment.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(Appointment.ClassId));
+                            app.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(app.ClassId));
 
                             var appInspector = await App.Database.GetInspectorAsync(appointments[n].InspectorID);
 
-                            Appointment.BackgroundColor = Metrics.GetInspectorColor(appInspector);
+                            app.BackgroundColor = Metrics.GetInspectorColor(appInspector);
 
                             if (appointments[n].Canceled)
                             {
-                                Appointment.BackgroundColor = Color.Red;
-                                Appointment.Text = "Canceled \n" + Appointment.Text;
+                                app.BackgroundColor = Color.Red;
+                                app.Text = "Canceled \n" + app.Text;
                             }
                             if (appointments[n].Approved == false)
                             {
-                                Appointment.BackgroundColor = Color.White;
-                                Appointment.Text = "Awaiting Approval from Admin\n" + Appointment.Text;
+                                app.BackgroundColor = Color.White;
+                                app.Text = "Awaiting Approval from Admin\n" + app.Text;
                             }
-                            stack.Children.Add(Appointment);
+                            appointments1.Add(app);
+                            //stack.Children.Add(Appointment);
                         }
+                    }
+                    appointments1 = await OrganizeScheduleDisplay(appointments1);
+                    foreach(var a in appointments1)
+                    {
+                        stack.Children.Add(a);
                     }
                 }
             }
@@ -388,7 +405,8 @@ namespace HomeInspectorSchedule
             };
             StackLayout Weekview = new StackLayout
             {
-                BackgroundColor = Color.Gray,
+                Padding = new Thickness(10, 0, 10, 0),
+                BackgroundColor = Color.Gray
             };
             Weekview.Children.Add(Scroll);
 
@@ -399,9 +417,7 @@ namespace HomeInspectorSchedule
         {
             Grid monthGrid = new Grid
             {
-
-                VerticalOptions = LayoutOptions.FillAndExpand,
-
+               
                 ColumnDefinitions = {
                     new ColumnDefinition{ Width = 100 },
                     new ColumnDefinition{ Width = 100 },
@@ -412,7 +428,12 @@ namespace HomeInspectorSchedule
                     new ColumnDefinition{ Width = 100 }
                 },
                 RowDefinitions =
-                {
+                {                   
+                    new RowDefinition{ Height = GridLength.Auto },
+                    new RowDefinition{ Height = GridLength.Auto },
+                    new RowDefinition{ Height = GridLength.Auto },
+                    new RowDefinition{ Height = GridLength.Auto },
+                    new RowDefinition{ Height = GridLength.Auto },
                     new RowDefinition{ Height = GridLength.Auto }
                 }
                 
@@ -489,27 +510,37 @@ namespace HomeInspectorSchedule
                     row++;
                     column = 0;
                 }
+
                 StackLayout stack = new StackLayout
                 {
-                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    VerticalOptions = LayoutOptions.Fill,
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
 
                     ClassId = (1 + i).ToString(),
                     StyleId = column.ToString() + " " + row.ToString()
                 };
-
+                Frame frame = new Frame
+                {
+                    BorderColor = Color.Black,
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    Padding = 0
+                    //MinimumHeightRequest = 50
+                };
                 Label date = new Label
                 {
                     Text = (1 + i).ToString(),
                     Padding = new Thickness(3, 0, 0, 0),
 
                 };
-
                 stack.Children.Add(date);
+                frame.Content = stack;
 
+                List<Button> buttons = new List<Button>();
                 foreach (var a in appointments)
                 {
                     Button app = new Button
                     {
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
                         Padding = new Thickness(3, 0, 0, 0),
                         ClassId = a.ID.ToString()
                     };
@@ -529,7 +560,8 @@ namespace HomeInspectorSchedule
                             {
                                 app.BackgroundColor = Color.Red;
                             }
-                            stack.Children.Add(app);
+                            buttons.Add(app);
+                            //stack.Children.Add(app);
                         }
                     }
                     else if(a.StartTime.Day == Convert.ToInt32(stack.ClassId) && inspector.ID == a.InspectorID)
@@ -543,11 +575,18 @@ namespace HomeInspectorSchedule
                         {
                             app.BackgroundColor = Color.Red;
                         }
-                        stack.Children.Add(app);
+                        buttons.Add(app);
+                        //stack.Children.Add(app);
                     }
                 }
 
-                monthGrid.Children.Add(stack, column, row);
+                buttons = await OrganizeScheduleDisplay(buttons);
+                foreach(var b in buttons)
+                {
+                    stack.Children.Add(b);
+                }
+                //monthGrid.Children.Add(stack, column, row);
+                monthGrid.Children.Add(frame, column, row);
                 column++;
             }
 
@@ -565,6 +604,7 @@ namespace HomeInspectorSchedule
             StackLayout Monthview = new StackLayout
             {
                 BackgroundColor = Color.Gray,
+                Padding = new Thickness(10,0,10,0)
             };
             Monthview.Children.Add(Scroll);
             return Monthview;
@@ -702,12 +742,51 @@ namespace HomeInspectorSchedule
                         {
                             GridView.Children.Add(Appointment, column, row);
                         }
-
                         Grid.SetColumnSpan(Appointment, Convert.ToInt32(duration));
                     }
                 }
                 i++;
             }
+        }
+
+        public async Task<List<Button>> OrganizeScheduleDisplay(List<Button> list)
+        {
+            //first organizes by inspector ID
+            for(int i = 0; i < list.Count; i++)
+            {
+                var appointment = await App.Database.GetAppointmentAsync(Convert.ToInt32(list[i].ClassId));
+
+                for(int n = 0; n < list.Count; n++)
+                {
+                    var appointment2 = await App.Database.GetAppointmentAsync(Convert.ToInt32(list[n].ClassId));
+
+                    if(appointment.InspectorID < appointment2.InspectorID)
+                    {
+                        var temp = list[i];
+                        list[i] = list[n];
+                        list[n] = temp;
+                    }
+                }
+            }
+            
+            // second organizes by appointment time
+            for(int i = 0; i < list.Count; i++)
+            {
+                var appointment = await App.Database.GetAppointmentAsync(Convert.ToInt32(list[i].ClassId));
+
+                for(int n = 0; n < list.Count; n++)
+                {
+                    var appointment2 = await App.Database.GetAppointmentAsync(Convert.ToInt32(list[n].ClassId));
+
+                    if(appointment.InspectorID == appointment2.InspectorID && appointment.StartTime < appointment2.StartTime)
+                    {
+                        var temp = list[i];
+                        list[i] = list[n];
+                        list[n] = temp;
+                    }
+                }
+            }
+            return list.ToList();
         }
     }
 }

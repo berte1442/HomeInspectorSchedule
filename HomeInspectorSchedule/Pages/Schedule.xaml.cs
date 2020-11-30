@@ -44,7 +44,7 @@ namespace HomeInspectorSchedule.Pages
             {
                 DayCheckbox.IsChecked = false;
                 MonthCheckbox.IsChecked = false;
-                DayWeekMonthLabel.Text = "Coming Week";
+                DayWeekMonthLabel.Text = "This Week";
 
                 ScheduleLayout scheduleLayout = new ScheduleLayout();
                 var WeekView = await scheduleLayout.WeekView(currentInspector);
