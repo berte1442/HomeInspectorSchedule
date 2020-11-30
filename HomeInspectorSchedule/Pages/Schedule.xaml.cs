@@ -38,7 +38,7 @@ namespace HomeInspectorSchedule.Pages
             }
         }
 
-        private void WeekCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        private async void WeekCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
         {
             if (WeekCheckbox.IsChecked)
             {
@@ -47,9 +47,9 @@ namespace HomeInspectorSchedule.Pages
                 DayWeekMonthLabel.Text = "Coming Week";
 
                 ScheduleLayout scheduleLayout = new ScheduleLayout();
-                //var WeekView = scheduleLayout.WeekView(currentInspector);
+                var WeekView = await scheduleLayout.WeekView(currentInspector);
                 ScheduleLayout.Children.Clear();
-                //ScheduleLayout.Children.Add(WeekView);
+                ScheduleLayout.Children.Add(WeekView);
             }
         }
 
