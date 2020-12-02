@@ -31,8 +31,19 @@
                     <Label Text="Month"
                            Grid.Column="5"/>
                 </Grid>
-                <Label x:Name="DayWeekMonthLabel"
-                           HorizontalOptions="Center"/>
+                <Grid>
+                    <Button x:Name="DateBackButton"
+                            Text="Previous"
+                            Clicked="DateBackButton_Clicked"/>
+                    <Label x:Name="DayWeekMonthLabel"
+                           HorizontalOptions="Center"
+                           Grid.Column="1"/>
+                    <Button x:Name="DateForwardButton"
+                            Text="Next"
+                            Clicked="DateForwardButton_Clicked"
+                            Grid.Column="2"/>
+                </Grid>
+                
                 
                 <StackLayout x:Name="ScheduleLayout">
                     

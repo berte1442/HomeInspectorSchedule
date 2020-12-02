@@ -12,16 +12,18 @@ namespace HomeInspectorSchedule.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AppointmentInfo : ContentPage
     {
-        int id;
-        Appointment appointment = new Appointment();
+        Appointment app = new Appointment();
         Address address = new Address();
         Client client = new Client();
         Inspector inspector = new Inspector();
         Realtor realtor = new Realtor();
 
-        public AppointmentInfo(string idStr)
+        bool canceled = false;
+        bool approved = false;
+
+        public AppointmentInfo(Appointment appointment)
         {
-            id = int.Parse(idStr);
+            app = appointment;
             InitializeComponent();
         }
 
@@ -29,14 +31,16 @@ namespace HomeInspectorSchedule.Pages
         {
             base.OnAppearing();
 
-            appointment = await App.Database.GetAppointmentAsync(id);
-            address = await App.Database.GetAddressAsync(appointment.AddressID);
-            client = await App.Database.GetClientAsync(appointment.ClientID);
-            inspector = await App.Database.GetInspectorAsync(appointment.InspectorID);
-            realtor = await App.Database.GetRealtorAsync(appointment.RealtorID);
+            address = await App.Database.GetAddressAsync(app.AddressID);
+            client = await App.Database.GetClientAsync(app.ClientID);
+            inspector = await App.Database.GetInspectorAsync(app.InspectorID);
+            realtor = await App.Database.GetRealtorAsync(app.RealtorID);
+
+            InspectorNameLabel.Text = inspector.Name;
 
             if (inspector.Admin)
             {
+                SelectInspectorLabel.IsVisible = true;
                 InspectorPicker.IsVisible = true;
                 ApproveBtn.IsVisible = true;
                 InspectorLabel.IsVisible = false;
@@ -63,7 +67,11 @@ namespace HomeInspectorSchedule.Pages
                 DisplayLayout.BackgroundColor = Color.Orange;
             }
 
-            if (appointment.Canceled)
+            if(app.Approved == false)
+            {
+                DisplayLayout.BackgroundColor = Color.White;
+            }
+            if (app.Canceled)
             {
                 DisplayLayout.BackgroundColor = Color.Red;
             }
@@ -93,7 +101,7 @@ namespace HomeInspectorSchedule.Pages
                 InspectionTypePicker.Items.Add(i.Name);
             }
 
-            string insIDs = appointment.InspectionTypeIDs;
+            string insIDs = app.InspectionTypeIDs;
             int index = insIDs.LastIndexOf(",");
             int length = insIDs.Length;
             while (index != -1)
@@ -117,24 +125,22 @@ namespace HomeInspectorSchedule.Pages
                 length = insIDs.Length;
 
             }
-
             if(index == -1 && length != 0)
             {
                 var inspectionType = await App.Database.GetInspectionTypeAsync(int.Parse(insIDs));
                 InspectionTypeLabel.Text += inspectionType.Name;
-
             }
+            PriceTotalLabel.Text = app.PriceTotal.ToString("C2");
 
-            StartTimeLabel.Text = appointment.StartTime.ToShortDateString();
+            StartTimeLabel.Text = "Inspection Date: " + app.StartTime.ToShortDateString();
 
-            StartDatePicker.MinimumDate = DateTime.Today;
-            StartDatePicker.Date = appointment.StartTime;
+            StartDatePicker.Date = app.StartTime;
 
-            StartTimePicker.Time = appointment.StartTime.TimeOfDay;
+            StartTimePicker.Time = app.StartTime.TimeOfDay;
 
-            DurationEntry.Text = appointment.Duration.ToString();
+            DurationEntry.Text = app.Duration.ToString();
 
-            if (appointment.Paid)
+            if (app.Paid)
             {
                 PaidCheckBox.IsChecked = true;
             }
@@ -155,21 +161,23 @@ namespace HomeInspectorSchedule.Pages
                 }
             }
 
-            if (appointment.Notes != null)
+            if (app.Notes != null)
             {
-                NotesEditor.Text = appointment.Notes;
+                NotesEditor.Text = app.Notes;
             }
 
-            if (appointment.Approved)
+            if (app.Approved)
             {
                 ApproveBtn.IsVisible = false;
                 ApprovedLabel.Text = "Inspection has been approved";
+                approved = true;
             }
 
-            if (appointment.Canceled)
+            if (app.Canceled)
             {
                 CancelBtn.IsVisible = false;
                 CanceledLabel.Text = "This inspection has been canceled";
+                canceled = true;
             }
 
         }
@@ -179,18 +187,38 @@ namespace HomeInspectorSchedule.Pages
 
         }
 
-        private void ApproveBtn_Clicked(object sender, EventArgs e)
+        private async void ApproveBtn_Clicked(object sender, EventArgs e)
         {
+            var approve = await DisplayAlert("Canceled", "Are you sure you want to cancel this inspection?", "Yes, Cancel", "No, Don't Cancel");
 
+            if (approve)
+            {
+                approved = true;
+            }
+            else
+            {
+                approved = false;
+            }
         }
 
-        private void CancelBtn_Clicked(object sender, EventArgs e)
+        private async void CancelBtn_Clicked(object sender, EventArgs e)
         {
+            var cancel = await DisplayAlert("Canceled", "Are you sure you want to cancel this inspection?", "Yes, Cancel", "No, Don't Cancel");
 
+            if (cancel) 
+            { 
+                canceled = true; 
+            }
+            else
+            {
+                canceled = false;
+            }   
         }
 
         private void AddServicesBtn_Clicked(object sender, EventArgs e)
         {
+            var selectedType = InspectionTypePicker.SelectedItem;
+
 
         }
 
@@ -199,9 +227,71 @@ namespace HomeInspectorSchedule.Pages
 
         }
 
-        private void SaveBtn_Clicked(object sender, EventArgs e)
+        private async void SaveBtn_Clicked(object sender, EventArgs e)
         {
+            client.Name = ClientNameEntry.Text;
+            client.Phone = ClientPhoneEntry.Text;
+            client.Email = ClientEmailEntry.Text;
 
+            address.StreetAddress = StreeAddressEntry.Text;
+            address.City = CityEntry.Text;
+            address.Zip = ZipEntry.Text;
+
+            realtor.Name = RealtorNameEntry.Text;
+            realtor.Phone = RealtorPhoneEntry.Text;
+            realtor.Email = RealtorEmailEntry.Text;
+
+            var selectedInspector = await App.Database.GetInspectorAsync(InspectorPicker.SelectedItem.ToString());
+
+            //inspection type ids
+            var typeNames = InspectionTypeLabel.Text;
+
+            string inspectionTypes = null;
+
+            if (typeNames.ToLower().Contains("residential"))
+            {
+                var inspectionType = await App.Database.GetInspectionTypeAsync("Residential");
+                inspectionTypes += inspectionType.ID.ToString() + " ";
+            }
+            if (typeNames.ToLower().Contains("commercial"))
+            {
+                var inspectionType = await App.Database.GetInspectionTypeAsync("Commercial");
+                inspectionTypes += inspectionType.ID.ToString() + " ";
+            } 
+            if (typeNames.ToLower().Contains("radon"))
+            {
+                var inspectionType = await App.Database.GetInspectionTypeAsync("Radon");
+                inspectionTypes += inspectionType.ID.ToString() + " ";
+            }    
+            if (typeNames.ToLower().Contains("mold"))
+            {
+                var inspectionType = await App.Database.GetInspectionTypeAsync("Mold");
+                inspectionTypes += inspectionType.ID.ToString() + " ";
+            }
+
+            app.InspectorID = selectedInspector.ID;
+            app.ClientID = client.ID;
+            app.RealtorID = realtor.ID;
+            app.AddressID = address.ID;
+            app.InspectionTypeIDs = inspectionTypes.Trim();
+            app.PriceTotal = Convert.ToDouble(PriceTotalLabel.Text);
+            app.StartTime = StartDatePicker.Date + StartTimePicker.Time;
+            app.Duration = Convert.ToDouble(DurationEntry.Text);
+            if (PaidCheckBox.IsChecked)
+            {
+                app.Paid = true;
+            }
+            else
+            {
+                app.Paid = false;
+            }
+            if(NotesEditor.Text != null)
+            {
+                app.Notes = NotesEditor.Text;
+            }
+
+            app.Canceled = canceled;
+            app.Approved = approved;
         }
     }
 }
