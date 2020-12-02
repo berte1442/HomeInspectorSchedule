@@ -19,8 +19,12 @@
                            HorizontalOptions="Center"/>
                     <Picker x:Name="InspectorPicker"
                             HorizontalOptions="Center"
+                            WidthRequest="200"                            
                             SelectedIndexChanged="InspectorPicker_SelectedIndexChanged"/>
                 </StackLayout>
+
+                <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
+
                 <Label Text="Client Information"
                        HorizontalOptions="Center"/>
                 <Grid>
@@ -38,6 +42,9 @@
                         Grid.Row="2"
                            Grid.Column="1"/>
                 </Grid>
+
+                <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
+
                 <Button x:Name="SelectRealtorBtn"
                         Text="Select Realtor"
                         BackgroundColor="Blue"
@@ -47,8 +54,9 @@
                 <Label Text="Realtor Information"
                        HorizontalOptions="Center"/>
                 <Picker x:Name="RealtorPicker"
+                        HorizontalOptions="Center"
+                        WidthRequest="200"                            
                         SelectedIndexChanged="RealtorPicker_SelectedIndexChanged"/>
-
                 <Label Text="Edit selected realtor or enter new realtor"
                        HorizontalOptions="Center"/>
                 <Grid>
@@ -83,7 +91,9 @@
                         Text="Clear Input"
                         HorizontalOptions="Center"
                         Clicked="ClearRealtorBtn_Clicked"/>
-                
+
+                <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
+
                 <Label Text="Inspection Address"
                        HorizontalOptions="Center"/>
                 <Grid>
@@ -101,6 +111,9 @@
                         Grid.Row="2"
                            Grid.Column="1"/>
                 </Grid>
+
+                <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
+
                 <Label Text="Inspection Services"
                        HorizontalOptions="Center"/>
                 <Picker x:Name="ServicesPicker"
@@ -122,14 +135,19 @@
                 <Label x:Name="RunningTotal"
                        HorizontalOptions="Center"/>
                 <Grid>
-                    <Label Text="Total"/>
+                    <Label Text="Total Price: $"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="End"/>
                     <Entry x:Name="PriceTotalEntry"
                            Grid.Column="1"/>
                 </Grid>
-                <Label Text="Estimated Duration"
+                <Label Text="Estimated Duration (hours)"
                        HorizontalOptions="Center"/>
                 <Label x:Name="DurationTimeLabel"
                        HorizontalOptions="Center"/>
+
+                <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
+
                 <Label Text="Select Date and Time"
                        HorizontalOptions="Center"/>
                 <DatePicker x:Name="InspectionDatePicker"

@@ -115,9 +115,7 @@ namespace HomeInspectorSchedule.Pages
             int length = insIDs.Length;
             while (index != -1)
             {
-
                 int newLength = length - index;
-                //int newLength = length - index;
                 string nextUp = insIDs.Substring(0, index);
                 string singleID = insIDs.Substring(index, newLength);
                 insIDs = nextUp;
@@ -132,7 +130,6 @@ namespace HomeInspectorSchedule.Pages
                                     
                 index = nextUp.LastIndexOf(",");
                 length = insIDs.Length;
-
             }
             if(index == -1 && length != 0)
             {
@@ -203,6 +200,7 @@ namespace HomeInspectorSchedule.Pages
             if (approve)
             {
                 approved = true;
+                await DisplayAlert("Approved", "Inspection will be approved after changes are saved.", "OK");
             }
             else
             {
@@ -217,7 +215,7 @@ namespace HomeInspectorSchedule.Pages
             if (cancel) 
             { 
                 canceled = true;
-                await DisplayAlert("Canceled", "Inspection will be labeled as canceled once saved.", "OK");
+                await DisplayAlert("Canceled", "Inspection will be labeled as canceled after changes are saved.", "OK");
             }
             else
             {
@@ -227,7 +225,7 @@ namespace HomeInspectorSchedule.Pages
 
         private void AddServicesBtn_Clicked(object sender, EventArgs e)
         {
-            var selectedType = InspectionTypePicker.SelectedItem;
+            
 
 
         }
@@ -244,11 +242,9 @@ namespace HomeInspectorSchedule.Pages
             client.Phone = ClientPhoneEntry.Text;
             client.Email = ClientEmailEntry.Text;
 
-
             address.StreetAddress = StreeAddressEntry.Text;
             address.City = CityEntry.Text;
             address.Zip = ZipEntry.Text;
-
 
             realtor.Name = RealtorNameEntry.Text;
             realtor.Phone = RealtorPhoneEntry.Text;
@@ -309,12 +305,20 @@ namespace HomeInspectorSchedule.Pages
             }
 
             app.Canceled = canceled;
-            app.Approved = approved;
+            if (user.Admin)
+            {
+                app.Approved = approved;
 
+            }
+            else
+            {
+                app.Approved = false;
+            }
+            
             await App.Database.SaveAppointmentAsync(app);
-            await App.Database.SaveClientAsync(client);
+            await client.SavePersonAsync(client);
             await App.Database.SaveAddressAsync(address);
-            await App.Database.SaveRealtorAsync(realtor);
+            await realtor.SavePersonAsync(realtor);
 
             await DisplayAlert("Saved", "Appointment details saved.", "OK");
 

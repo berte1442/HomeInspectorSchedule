@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using SQLite;
 
 namespace HomeInspectorSchedule
@@ -21,5 +22,6 @@ namespace HomeInspectorSchedule
         public string State { get; set; }
         [NotNull]
         public string Zip { get; set; }
+
     }
 }

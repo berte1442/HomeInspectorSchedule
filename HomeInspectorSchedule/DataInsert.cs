@@ -27,7 +27,8 @@ namespace HomeInspectorSchedule
                 Admin = true, 
                 InspectorColor = "blue"                
             };
-            await App.Database.SaveInspectorAsync(robert);
+            //await App.Database.SaveInspectorAsync(robert);
+            await robert.SavePersonAsync(robert);
             
             Inspector ted = new Inspector 
             { 
@@ -37,7 +38,8 @@ namespace HomeInspectorSchedule
                 Admin = false, 
                 InspectorColor = "yellow"
             };
-            await App.Database.SaveInspectorAsync(ted);
+            //await App.Database.SaveInspectorAsync(ted);
+            await ted.SavePersonAsync(ted);
 
             Inspector tim = new Inspector
             {
@@ -47,7 +49,8 @@ namespace HomeInspectorSchedule
                 Admin = false,
                 InspectorColor = "purple"
             };
-            await App.Database.SaveInspectorAsync(tim);
+            //await App.Database.SaveInspectorAsync(tim);
+            await tim.SavePersonAsync(tim);
 
             Inspector bill = new Inspector
             {
@@ -57,7 +60,8 @@ namespace HomeInspectorSchedule
                 Admin = false,
                 InspectorColor = "green"
             };
-            await App.Database.SaveInspectorAsync(bill);
+            //await App.Database.SaveInspectorAsync(bill);
+            await bill.SavePersonAsync(bill);
 
             Inspector jay = new Inspector
             {
@@ -67,7 +71,8 @@ namespace HomeInspectorSchedule
                 Admin = false,
                 InspectorColor = "orange"
             };
-            await App.Database.SaveInspectorAsync(jay);
+            //await App.Database.SaveInspectorAsync(jay);
+            jay.SavePersonAsync(jay);
 
             //realtors
 
@@ -77,7 +82,8 @@ namespace HomeInspectorSchedule
                 Phone = "(555)555-5555",
                 Email = "susystricklinsells@remax.com"
             };
-            await App.Database.SaveRealtorAsync(susy);
+            //await App.Database.SaveRealtorAsync(susy);
+            susy.SavePersonAsync(susy);
             
             Realtor chris = new Realtor
             {
@@ -85,7 +91,8 @@ namespace HomeInspectorSchedule
                 Phone = "(555)555-5556",
                 Email = "chris_top_broker@coldwellbanker.com"
             };
-            await App.Database.SaveRealtorAsync(chris);
+            //await App.Database.SaveRealtorAsync(chris);
+            await chris.SavePersonAsync(chris);
 
             Realtor jan = new Realtor
             {
@@ -93,7 +100,8 @@ namespace HomeInspectorSchedule
                 Phone = "(555)555-5557",
                 Email = "JanetSparks@janetsparks.com"
             };
-            await App.Database.SaveRealtorAsync(jan);
+            //await App.Database.SaveRealtorAsync(jan);
+            await jan.SavePersonAsync(jan);
 
             Realtor brandon = new Realtor
             {
@@ -101,7 +109,8 @@ namespace HomeInspectorSchedule
                 Phone = "(555)555-5558",
                 Email = "BWrightBuyRight@yahoo.com"
             };
-            await App.Database.SaveRealtorAsync(brandon);
+            //await App.Database.SaveRealtorAsync(brandon);
+            await brandon.SavePersonAsync(brandon);
 
             Realtor sam = new Realtor
             {
@@ -109,7 +118,8 @@ namespace HomeInspectorSchedule
                 Phone = "(555)555-5559",
                 Email = "samanthaburks@kellerwilliams.com"
             };
-            await App.Database.SaveRealtorAsync(sam);
+            //await App.Database.SaveRealtorAsync(sam);
+            await sam.SavePersonAsync(sam);
 
             // clients
 
@@ -119,40 +129,41 @@ namespace HomeInspectorSchedule
                 Phone = "(555)666-6666",
                 Email = "Jim_Russell@NASA.com"
             };
-            await App.Database.SaveClientAsync(jim);
-            
+            //await App.Database.SaveClientAsync(jim);
+            await jim.SavePersonAsync(jim);
+
             Client liz = new Client
             {
                 Name = "Liz Scott",
                 Phone = "(555)666-6667",
                 Email = "actingupwithliz@livestudio.com"
             };
-            await App.Database.SaveClientAsync(liz);
-
+            //await App.Database.SaveClientAsync(liz);
+            await liz.SavePersonAsync(liz);
             Client mary = new Client
             {
                 Name = "Mary Blanch",
                 Phone = "(555)666-6668",
                 Email = "BlanchMS@gmail.com"
             };
-            await App.Database.SaveClientAsync(mary);
-            
+            //await App.Database.SaveClientAsync(mary);
+            await mary.SavePersonAsync(mary);
             Client tom = new Client
             {
                 Name = "Tom Hays",
                 Phone = "(555)666-6669",
                 Email = "tomhays1956@hotmail.com"
             };
-            await App.Database.SaveClientAsync(tom);
-            
+            //await App.Database.SaveClientAsync(tom);
+            await tom.SavePersonAsync(tom);
             Client lynn = new Client
             {
                 Name = "Lynn Larkin",
                 Phone = "(555)666-6670",
                 Email = "lynnlarkin@gmail.com"
             };
-            await App.Database.SaveClientAsync(lynn);
-
+            //await App.Database.SaveClientAsync(lynn);
+            await lynn.SavePersonAsync(lynn);
             // inspection types
 
             InspectionType residential = new InspectionType

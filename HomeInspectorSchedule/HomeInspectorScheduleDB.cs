@@ -17,7 +17,7 @@ namespace HomeInspectorSchedule
             database.CreateTableAsync<Realtor>().Wait();
         }
 
-        // Address 
+        //Address
         public Task<List<Address>> GetAddressesAsync()
         {
             return database.Table<Address>().ToListAsync();
@@ -84,21 +84,21 @@ namespace HomeInspectorSchedule
         {
             return database.Table<Client>().Where(i => i.Name == name).FirstOrDefaultAsync();
         }
-        public Task<int> SaveClientAsync(Client client)
-        {
-            if (client.ID != 0)
-            {
-                return database.UpdateAsync(client);
-            }
-            else
-            {
-                return database.InsertAsync(client);
-            }
-        }
-        public Task<int> DeleteClientAsync(Client client)
-        {
-            return database.DeleteAsync(client);
-        }
+        //public Task<int> SaveClientAsync(Client client)
+        //{
+        //    if (client.ID != 0)
+        //    {
+        //        return database.UpdateAsync(client);
+        //    }
+        //    else
+        //    {
+        //        return database.InsertAsync(client);
+        //    }
+        //}
+        //public Task<int> DeleteClientAsync(Client client)
+        //{
+        //    return database.DeleteAsync(client);
+        //}
 
         //InspectionType
         public Task<List<InspectionType>> GetInspectionTypesAsync()
@@ -142,21 +142,21 @@ namespace HomeInspectorSchedule
         {
             return database.Table<Inspector>().Where(i => i.Name == name).FirstOrDefaultAsync();
         }
-        public Task<int> SaveInspectorAsync(Inspector inspector)
-        {
-            if (inspector.ID != 0)
-            {
-                return database.UpdateAsync(inspector);
-            }
-            else
-            {
-                return database.InsertAsync(inspector);
-            }
-        }
-        public Task<int> DeleteInspectorAsync(Inspector inspector)
-        {
-            return database.DeleteAsync(inspector);
-        } 
+        //public Task<int> SaveInspectorAsync(Inspector inspector)
+        //{
+        //    if (inspector.ID != 0)
+        //    {
+        //        return database.UpdateAsync(inspector);
+        //    }
+        //    else
+        //    {
+        //        return database.InsertAsync(inspector);
+        //    }
+        //}
+        //public Task<int> DeleteInspectorAsync(Inspector inspector)
+        //{
+        //    return database.DeleteAsync(inspector);
+        //} 
         
         //Realtor
         public Task<List<Realtor>> GetRealtorsAsync()
@@ -171,20 +171,37 @@ namespace HomeInspectorSchedule
         {
             return database.Table<Realtor>().Where(i => i.Name == name).FirstOrDefaultAsync();
         }
-        public Task<int> SaveRealtorAsync(Realtor realtor)
+        //public Task<int> SaveRealtorAsync(Realtor realtor)
+        //{
+        //    if (realtor.ID != 0)
+        //    {
+        //        return database.UpdateAsync(realtor);
+        //    }
+        //    else
+        //    {
+        //        return database.InsertAsync(realtor);
+        //    }
+        //}
+        //public Task<int> DeleteRealtorAsync(Realtor realtor)
+        //{
+        //    return database.DeleteAsync(realtor);
+        //}
+        
+        //Person
+        public Task<int> SavePersonAsync(Person person)
         {
-            if (realtor.ID != 0)
+            if (person.ID != 0)
             {
-                return database.UpdateAsync(realtor);
+                return database.UpdateAsync(person);
             }
             else
             {
-                return database.InsertAsync(realtor);
+                return database.InsertAsync(person);
             }
         }
-        public Task<int> DeleteRealtorAsync(Realtor realtor)
+        public Task<int> DeletePersonAsync(Person person)
         {
-            return database.DeleteAsync(realtor);
+            return database.DeleteAsync(person);
         }
     }
 }

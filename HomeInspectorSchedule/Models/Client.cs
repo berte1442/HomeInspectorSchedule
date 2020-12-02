@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using SQLite;
+using System.Threading.Tasks;
 
 namespace HomeInspectorSchedule
 {
-    public class Client
+    public class Client : Person
     {
-        [PrimaryKey, AutoIncrement]
-        public int ID { get; set; }
-        [NotNull]
-        public string Name { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
+
+        //public async Task<int> SavePersonAsync(Client client)
+        //{
+        //    return await App.Database.SavePersonAsync(client);
+        //}
     }
 }
