@@ -20,4 +20,3 @@ C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debu
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.csproj.CopyComplete
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\MetricsReport.xaml.g.cs
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\MetricsMenu.xaml.g.cs
-C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.csprojAssemblyReference.cache

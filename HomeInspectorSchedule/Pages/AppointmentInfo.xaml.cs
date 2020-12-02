@@ -12,6 +12,7 @@ namespace HomeInspectorSchedule.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AppointmentInfo : ContentPage
     {
+        Inspector user = new Inspector();
         Appointment app = new Appointment();
         Address address = new Address();
         Client client = new Client();
@@ -21,8 +22,9 @@ namespace HomeInspectorSchedule.Pages
         bool canceled = false;
         bool approved = false;
 
-        public AppointmentInfo(Appointment appointment)
+        public AppointmentInfo(Appointment appointment, Inspector inspector)
         {
+            user = inspector;
             app = appointment;
             InitializeComponent();
         }
@@ -38,7 +40,7 @@ namespace HomeInspectorSchedule.Pages
 
             InspectorNameLabel.Text = inspector.Name;
 
-            if (inspector.Admin)
+            if (user.Admin)
             {
                 SelectInspectorLabel.IsVisible = true;
                 InspectorPicker.IsVisible = true;
@@ -74,6 +76,13 @@ namespace HomeInspectorSchedule.Pages
             if (app.Canceled)
             {
                 DisplayLayout.BackgroundColor = Color.Red;
+                ApproveBtn.IsVisible = false;
+                ApprovedLabel.Text = "Inspection has been canceled";
+                if (user.Admin)
+                {
+                    DeleteBtn.IsVisible = true;
+                    UnCancelBtn.IsVisible = true;
+                }
             }
 
             var inspectors = await App.Database.GetInspectorsAsync();
@@ -102,7 +111,7 @@ namespace HomeInspectorSchedule.Pages
             }
 
             string insIDs = app.InspectionTypeIDs;
-            int index = insIDs.LastIndexOf(",");
+            int index = insIDs.LastIndexOf(", ");
             int length = insIDs.Length;
             while (index != -1)
             {
@@ -189,7 +198,7 @@ namespace HomeInspectorSchedule.Pages
 
         private async void ApproveBtn_Clicked(object sender, EventArgs e)
         {
-            var approve = await DisplayAlert("Canceled", "Are you sure you want to cancel this inspection?", "Yes, Cancel", "No, Don't Cancel");
+            var approve = await DisplayAlert("Canceled", "Are you sure you want to approve this inspection?", "Yes, Approve", "No, Don't Approve");
 
             if (approve)
             {
@@ -207,7 +216,8 @@ namespace HomeInspectorSchedule.Pages
 
             if (cancel) 
             { 
-                canceled = true; 
+                canceled = true;
+                await DisplayAlert("Canceled", "Inspection will be labeled as canceled once saved.", "OK");
             }
             else
             {
@@ -229,17 +239,21 @@ namespace HomeInspectorSchedule.Pages
 
         private async void SaveBtn_Clicked(object sender, EventArgs e)
         {
+            
             client.Name = ClientNameEntry.Text;
             client.Phone = ClientPhoneEntry.Text;
             client.Email = ClientEmailEntry.Text;
+
 
             address.StreetAddress = StreeAddressEntry.Text;
             address.City = CityEntry.Text;
             address.Zip = ZipEntry.Text;
 
+
             realtor.Name = RealtorNameEntry.Text;
             realtor.Phone = RealtorPhoneEntry.Text;
             realtor.Email = RealtorEmailEntry.Text;
+
 
             var selectedInspector = await App.Database.GetInspectorAsync(InspectorPicker.SelectedItem.ToString());
 
@@ -251,30 +265,34 @@ namespace HomeInspectorSchedule.Pages
             if (typeNames.ToLower().Contains("residential"))
             {
                 var inspectionType = await App.Database.GetInspectionTypeAsync("Residential");
-                inspectionTypes += inspectionType.ID.ToString() + " ";
+                inspectionTypes += inspectionType.ID.ToString() + ", ";
             }
             if (typeNames.ToLower().Contains("commercial"))
             {
                 var inspectionType = await App.Database.GetInspectionTypeAsync("Commercial");
-                inspectionTypes += inspectionType.ID.ToString() + " ";
+                inspectionTypes += inspectionType.ID.ToString() + ", ";
             } 
             if (typeNames.ToLower().Contains("radon"))
             {
                 var inspectionType = await App.Database.GetInspectionTypeAsync("Radon");
-                inspectionTypes += inspectionType.ID.ToString() + " ";
+                inspectionTypes += inspectionType.ID.ToString() + ", ";
             }    
             if (typeNames.ToLower().Contains("mold"))
             {
                 var inspectionType = await App.Database.GetInspectionTypeAsync("Mold");
-                inspectionTypes += inspectionType.ID.ToString() + " ";
+                inspectionTypes += inspectionType.ID.ToString() + ", ";
             }
+
+            var types = inspectionTypes.Substring(0, inspectionTypes.Length - 2);
+
+            string price = PriceTotalLabel.Text.Substring(1, PriceTotalLabel.Text.Length - 1);
 
             app.InspectorID = selectedInspector.ID;
             app.ClientID = client.ID;
             app.RealtorID = realtor.ID;
             app.AddressID = address.ID;
-            app.InspectionTypeIDs = inspectionTypes.Trim();
-            app.PriceTotal = Convert.ToDouble(PriceTotalLabel.Text);
+            app.InspectionTypeIDs = types.Trim();
+            app.PriceTotal = Convert.ToDouble(price);
             app.StartTime = StartDatePicker.Date + StartTimePicker.Time;
             app.Duration = Convert.ToDouble(DurationEntry.Text);
             if (PaidCheckBox.IsChecked)
@@ -292,6 +310,42 @@ namespace HomeInspectorSchedule.Pages
 
             app.Canceled = canceled;
             app.Approved = approved;
+
+            await App.Database.SaveAppointmentAsync(app);
+            await App.Database.SaveClientAsync(client);
+            await App.Database.SaveAddressAsync(address);
+            await App.Database.SaveRealtorAsync(realtor);
+
+            await DisplayAlert("Saved", "Appointment details saved.", "OK");
+
+            await Application.Current.MainPage.Navigation.PopAsync();
+
+        }
+
+        private async void UnCancelBtn_Clicked(object sender, EventArgs e)
+        {
+            var unCancel = await DisplayAlert("Uncancel?", "Are you sure you want to reinstate this inspection?", "Yes, Uncancel", "No, Leave Canceled");
+
+            if (unCancel)
+            {
+                canceled = false;
+                await DisplayAlert("Uncanceled", "Inspection will be reinstated once changes are saved.", "OK");
+            }
+            else
+            {
+                canceled = true;
+            }
+        }
+
+        private async void DeleteBtn_Clicked(object sender, EventArgs e)
+        {
+            var delete = await DisplayAlert("Delete?", "Are you sure you want to delete this inspection?", "Yes, Delete", "No, Don't Delete");
+
+            if (delete)
+            {
+                await App.Database.DeleteAppointmentAsync(app);
+                await Application.Current.MainPage.Navigation.PopAsync();
+            }
         }
     }
 }

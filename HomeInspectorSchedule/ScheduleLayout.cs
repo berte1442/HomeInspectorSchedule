@@ -362,7 +362,7 @@ namespace HomeInspectorSchedule
                                 ClassId = appointments[n].ID.ToString()
                             };
                             var appointment = await App.Database.GetAppointmentAsync(appointments[n].ID);
-                            app.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(appointment));
+                            app.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(appointment, inspector));
 
                             var appInspector = await App.Database.GetInspectorAsync(appointments[n].InspectorID);
 
@@ -549,7 +549,7 @@ namespace HomeInspectorSchedule
                         ClassId = a.ID.ToString(),
                         StyleId = a.StartTime.Day.ToString()
                     };
-                    app.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(a));
+                    app.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(a, inspector));
                     var ins = await App.Database.GetInspectorAsync(a.InspectorID);
                     var address = await App.Database.GetAddressAsync(a.AddressID);
                     if (inspector.Admin)
@@ -724,7 +724,7 @@ namespace HomeInspectorSchedule
                             Opacity = .6,
                             ClassId = a.ID.ToString()
                         };
-                        Appointment.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(a));
+                        Appointment.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(a, inspector));
 
                         Appointment.BackgroundColor = Metrics.GetInspectorColor(inspector);
 

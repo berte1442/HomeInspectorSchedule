@@ -27,7 +27,7 @@ namespace HomeInspectorSchedule.Pages
             }
             else
             {
-                DisplayAlert("Incorrect", "Incorrect username or password", "OK");
+                await DisplayAlert("Incorrect", "Incorrect username or password", "OK");
             }
         }
     }

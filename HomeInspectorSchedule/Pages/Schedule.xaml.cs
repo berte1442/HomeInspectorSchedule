@@ -149,5 +149,12 @@ namespace HomeInspectorSchedule.Pages
                 ScheduleLayout.Children.Add(MonthView);
             }
         }
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            await DayCheckboxSelected();
+            await WeekCheckboxSelected();
+            await MonthCheckboxSelected();
+        }
     }
 }
