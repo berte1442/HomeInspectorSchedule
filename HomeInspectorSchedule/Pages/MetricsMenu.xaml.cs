@@ -12,8 +12,10 @@ namespace HomeInspectorSchedule.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MetricsMenu : ContentPage
     {
-        public MetricsMenu()
+        Inspector currentUser = new Inspector();
+        public MetricsMenu(Inspector user)
         {
+            currentUser = user;
             InitializeComponent();
         }
 

@@ -11,10 +11,10 @@
                 HorizontalOptions="Center" />
 
             <Button x:Name="InspectionsBtn"
-                    Text="Inspections"
+                    Text="Top Inspectors"
                     Clicked="InspectionsBtn_Clicked"/>
             <Button x:Name="Realtors"
-                    Text="Realtors"
+                    Text="Top Realtors"
                     Clicked="Realtors_Clicked"/>
         </StackLayout>
     </ContentPage.Content>

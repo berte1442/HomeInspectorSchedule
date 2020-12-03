@@ -14,7 +14,7 @@ namespace HomeInspectorSchedule
         {
             database = new SQLiteAsyncConnection(dbPath);
             database.CreateTablesAsync<Address, Appointment, Client, InspectionType, Inspector>().Wait();
-            database.CreateTableAsync<Realtor>().Wait();
+            database.CreateTablesAsync<Realtor, Report>().Wait();
         }
 
         //Address
@@ -142,22 +142,7 @@ namespace HomeInspectorSchedule
         {
             return database.Table<Inspector>().Where(i => i.Name == name).FirstOrDefaultAsync();
         }
-        //public Task<int> SaveInspectorAsync(Inspector inspector)
-        //{
-        //    if (inspector.ID != 0)
-        //    {
-        //        return database.UpdateAsync(inspector);
-        //    }
-        //    else
-        //    {
-        //        return database.InsertAsync(inspector);
-        //    }
-        //}
-        //public Task<int> DeleteInspectorAsync(Inspector inspector)
-        //{
-        //    return database.DeleteAsync(inspector);
-        //} 
-        
+
         //Realtor
         public Task<List<Realtor>> GetRealtorsAsync()
         {
@@ -171,23 +156,9 @@ namespace HomeInspectorSchedule
         {
             return database.Table<Realtor>().Where(i => i.Name == name).FirstOrDefaultAsync();
         }
-        //public Task<int> SaveRealtorAsync(Realtor realtor)
-        //{
-        //    if (realtor.ID != 0)
-        //    {
-        //        return database.UpdateAsync(realtor);
-        //    }
-        //    else
-        //    {
-        //        return database.InsertAsync(realtor);
-        //    }
-        //}
-        //public Task<int> DeleteRealtorAsync(Realtor realtor)
-        //{
-        //    return database.DeleteAsync(realtor);
-        //}
+
         
-        //Person
+        //Person - inspector / realtor / client
         public Task<int> SavePersonAsync(Person person)
         {
             if (person.ID != 0)
@@ -202,6 +173,35 @@ namespace HomeInspectorSchedule
         public Task<int> DeletePersonAsync(Person person)
         {
             return database.DeleteAsync(person);
+        }
+
+        //reports
+        public Task<int> SaveReportAsync(Report report)
+        {
+            if (report.ID != 0)
+            {
+                return database.UpdateAsync(report);
+            }
+            else
+            {
+                return database.InsertAsync(report);
+            }
+        }
+        public Task<int> DeleteReportAsync(Report report)
+        {
+            return database.DeleteAsync(report);
+        }
+        public Task<List<Report>> GetReportsAsync()
+        {
+            return database.Table<Report>().ToListAsync();
+        }
+        public Task<Report> GetReportAsync(int id)
+        {
+            return database.Table<Report>().Where(i => i.ID == id).FirstOrDefaultAsync();
+        }
+        public Task<Report> GetReportAsync(string fileName)
+        {
+            return database.Table<Report>().Where(i => i.FileName == fileName).FirstOrDefaultAsync();
         }
     }
 }

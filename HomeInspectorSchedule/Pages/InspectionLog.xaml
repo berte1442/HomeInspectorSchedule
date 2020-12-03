@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="HomeInspectorSchedule.Pages.InspectionLog">
+    <ContentPage.Content>
+        <ScrollView>
+        <StackLayout>
+            <Label Text="Search Inspections"
+                   FontSize="Large"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+                <SearchBar x:Name="searchBar"
+                           VerticalOptions="Center"
+                   Placeholder="Search.."
+                   SearchButtonPressed="searchBar_SearchButtonPressed"/>
+                <Button x:Name="SaveReportBtn"
+                    Text="Save Report"
+                    Clicked="SaveReportBtn_Clicked"
+                    IsVisible="False"/>
+                <ListView x:Name="SearchListView"
+                          ItemSelected="SearchListView_ItemSelected"/>
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

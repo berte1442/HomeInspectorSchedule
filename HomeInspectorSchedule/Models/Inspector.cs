@@ -17,10 +17,5 @@ namespace HomeInspectorSchedule
         public string Password { get; set; }
         [Unique, NotNull]
         public string InspectorColor { get; set; }
-
-        //public async Task<int> SavePersonAsync(Inspector inspector)
-        //{
-        //    return await App.Database.SavePersonAsync(person);
-        //}
     }
 }

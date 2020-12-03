@@ -10,10 +10,5 @@ namespace HomeInspectorSchedule
     {
         public string Phone { get; set; }
         public string Email { get; set; }
-
-        //public async Task<int> SavePersonAsync(Client client)
-        //{
-        //    return await App.Database.SavePersonAsync(client);
-        //}
     }
 }

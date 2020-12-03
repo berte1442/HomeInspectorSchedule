@@ -32,12 +32,22 @@ namespace HomeInspectorSchedule.Pages
 
         private async void Metrics_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MetricsMenu());
+            await Navigation.PushAsync(new MetricsMenu(currentUser));
         }
 
         private async void BookInspection_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new BookInspection(currentUser));
+        }
+
+        private async void SearchInspections_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new InspectionLog(currentUser));
+        }
+
+        private async void MyReports_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new MyReports());
         }
     }
 }

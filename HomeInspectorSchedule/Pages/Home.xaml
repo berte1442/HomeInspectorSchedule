@@ -13,16 +13,19 @@
                        HorizontalOptions="Center"/>
                 <Button x:Name="ViewSchedule"
                         Text="View Schedule"
-                        HorizontalOptions="Center"
                         Clicked="ViewSchedule_Clicked"/>     
                 <Button x:Name="Metrics"
                         Text="Metrics"
-                        HorizontalOptions="Center"
                         Clicked="Metrics_Clicked"/>
                 <Button x:Name="BookInspection"
                         Text="Book Inspection"
-                        HorizontalOptions="Center"
                         Clicked="BookInspection_Clicked"/>
+                <Button x:Name="SearchInspections"
+                        Text="Search Inspections"
+                        Clicked="SearchInspections_Clicked"/>
+                <Button x:Name="MyReports"
+                        Text="My Reports"
+                        Clicked="MyReports_Clicked"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
