@@ -12,7 +12,11 @@ namespace HomeInspectorSchedule
 {
     public class ScheduleLayout
     {
-        Grid GridView = new Grid();
+        Grid GridView = new Grid
+        {
+            Padding = 10
+        };
+
         bool loggedInAdmin = false;
 
         public async Task<List<Appointment>> GetTodaysAppointments(Inspector inspector, DateTime dateTime)
@@ -71,6 +75,7 @@ namespace HomeInspectorSchedule
                 rowDefinitions.Add(rowDefinition);
             }
             Grid newGrid = new Grid {
+                Padding = 10,
                 HorizontalOptions = LayoutOptions.Fill,
 
                 RowDefinitions = rowDefinitions,
@@ -289,31 +294,38 @@ namespace HomeInspectorSchedule
             };
             Label sunday = new Label
             {
-                Text = "Sun"
+                Text = "Sun",
+                FontSize = 20
             };
             Label monday = new Label
             {
-                Text = "Mon"
+                Text = "Mon",
+                FontSize = 20
             };
             Label tuesday = new Label
             {
-                Text = "Tue"
+                Text = "Tue",
+                FontSize = 20
             };
             Label wednesday = new Label
             {
-                Text = "Wed"
+                Text = "Wed",
+                FontSize = 20
             };
             Label thursday = new Label
             {
-                Text = "Thu"
+                Text = "Thu",
+                FontSize = 20
             };
             Label friday = new Label
             {
-                Text = "Fri"
+                Text = "Fri",
+                FontSize = 20
             };
             Label saturday = new Label
             {
-                Text = "Sat"
+                Text = "Sat",
+                FontSize = 20
             };
             weekGrid.Children.Add(sunday, 0, 0);
             weekGrid.Children.Add(monday, 1, 0);
@@ -441,31 +453,38 @@ namespace HomeInspectorSchedule
 
             Label sunday = new Label
             {
-                Text = "Sun"
+                Text = "Sun",
+                FontSize = 20
             };
             Label monday = new Label
             {
-                Text = "Mon"
+                Text = "Mon",
+                FontSize = 20
             };
             Label tuesday = new Label
             {
-                Text = "Tue"
+                Text = "Tue",
+                FontSize = 20
             };
             Label wednesday = new Label
             {
-                Text = "Wed"
+                Text = "Wed",
+                FontSize = 20
             };
             Label thursday = new Label
             {
-                Text = "Thu"
+                Text = "Thu",
+                FontSize = 20
             };
             Label friday = new Label
             {
-                Text = "Fri"
+                Text = "Fri",
+                FontSize = 20
             };
             Label saturday = new Label
             {
-                Text = "Sat"
+                Text = "Sat",
+                FontSize = 20
             };
             monthGrid.Children.Add(sunday, 0, 0);
             monthGrid.Children.Add(monday, 1, 0);
@@ -682,6 +701,7 @@ namespace HomeInspectorSchedule
 
             var inspectors = await App.Database.GetInspectorsAsync();
             int i = 1;
+            Inspector appInspector = new Inspector();
             while(i <= inspectors.Count)
             {
 
@@ -689,7 +709,7 @@ namespace HomeInspectorSchedule
                 {
                     if (i == n.ID)
                     {
-                        inspector = n;
+                        appInspector = n;
                     }
                 }
 
@@ -699,7 +719,7 @@ namespace HomeInspectorSchedule
                     string address = null;
                     DateTime startTime;
                     double duration = 0;
-                    if (a.InspectorID == inspector.ID)
+                    if (a.InspectorID == appInspector.ID)
                     {
                         duration = a.Duration;
                         startTime = DateTime.Parse(a.StartTime.ToShortTimeString());
@@ -726,7 +746,7 @@ namespace HomeInspectorSchedule
                         };
                         Appointment.Clicked += async (sender, args) => await Application.Current.MainPage.Navigation.PushAsync(new AppointmentInfo(a, inspector));
 
-                        Appointment.BackgroundColor = Metrics.GetInspectorColor(inspector);
+                        Appointment.BackgroundColor = Metrics.GetInspectorColor(appInspector);
 
                         if (a.Approved == false)
                         {
@@ -751,7 +771,7 @@ namespace HomeInspectorSchedule
                             }
                             if (loggedInAdmin && element != null && type == "Xamarin.Forms.Label")
                             {
-                                row = inspector.ID;
+                                row = appInspector.ID;  // verify this is correct inspector.ID
                             }
                         }
                         int column = startTime.Hour - 7;

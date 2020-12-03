@@ -37,6 +37,8 @@
                             Clicked="DateBackButton_Clicked"/>
                     <Label x:Name="DayWeekMonthLabel"
                            HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center"
                            Grid.Column="1"/>
                     <Button x:Name="DateForwardButton"
                             Text="Next"
@@ -45,7 +47,8 @@
                 </Grid>
                 
                 
-                <StackLayout x:Name="ScheduleLayout">
+                <StackLayout x:Name="ScheduleLayout"
+                             Padding="10,0,10,0">
                     
                 </StackLayout>
 

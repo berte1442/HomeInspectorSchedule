@@ -41,10 +41,10 @@ namespace HomeInspectorSchedule.Pages {
         private global::Xamarin.Forms.Entry ClientEmailEntry;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
-        private global::Xamarin.Forms.Button SelectRealtorBtn;
+        private global::Xamarin.Forms.Picker RealtorPicker;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
-        private global::Xamarin.Forms.Picker RealtorPicker;
+        private global::Xamarin.Forms.Button SelectRealtorBtn;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Forms.Build.Tasks.XamlG", "2.0.0.0")]
         private global::Xamarin.Forms.Entry RealtorNameEntry;
@@ -114,8 +114,8 @@ namespace HomeInspectorSchedule.Pages {
             ClientNameEntry = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Entry>(this, "ClientNameEntry");
             ClientPhoneEntry = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Entry>(this, "ClientPhoneEntry");
             ClientEmailEntry = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Entry>(this, "ClientEmailEntry");
-            SelectRealtorBtn = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Button>(this, "SelectRealtorBtn");
             RealtorPicker = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Picker>(this, "RealtorPicker");
+            SelectRealtorBtn = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Button>(this, "SelectRealtorBtn");
             RealtorNameEntry = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Entry>(this, "RealtorNameEntry");
             RealtorPhoneEntry = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Entry>(this, "RealtorPhoneEntry");
             RealtorEmailEntry = global::Xamarin.Forms.NameScopeExtensions.FindByName<global::Xamarin.Forms.Entry>(this, "RealtorEmailEntry");

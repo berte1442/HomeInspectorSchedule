@@ -12,12 +12,15 @@ namespace HomeInspectorSchedule.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AppointmentInfo : ContentPage
     {
+        InspectionServices services = new InspectionServices();
         Inspector user = new Inspector();
         Appointment app = new Appointment();
         Address address = new Address();
         Client client = new Client();
         Inspector inspector = new Inspector();
         Realtor realtor = new Realtor();
+
+        string inspectionTypeIDs = null;
 
         bool canceled = false;
         bool approved = false;
@@ -104,12 +107,7 @@ namespace HomeInspectorSchedule.Pages
             CityEntry.Text = address.City;
             ZipEntry.Text = address.Zip;
 
-            var inspectionTypes = await App.Database.GetInspectionTypesAsync();
-            foreach(var i in inspectionTypes)
-            {
-                InspectionTypePicker.Items.Add(i.Name);
-            }
-
+            inspectionTypeIDs = app.InspectionTypeIDs;
             string insIDs = app.InspectionTypeIDs;
             int index = insIDs.LastIndexOf(", ");
             int length = insIDs.Length;
@@ -126,17 +124,32 @@ namespace HomeInspectorSchedule.Pages
                 idNum = idNum.Trim();
                 var inspectionType = await App.Database.GetInspectionTypeAsync(int.Parse(idNum));
 
-                InspectionTypeLabel.Text += inspectionType.Name + "\n";
-                                    
+                InspectionTypeLabel.Text = inspectionType.Name + " - " + "\t $" + inspectionType.Price.ToString();
+
                 index = nextUp.LastIndexOf(",");
                 length = insIDs.Length;
             }
             if(index == -1 && length != 0)
             {
                 var inspectionType = await App.Database.GetInspectionTypeAsync(int.Parse(insIDs));
-                InspectionTypeLabel.Text += inspectionType.Name;
+                InspectionTypeLabel.Text += "\n" + inspectionType.Name + " - " + "\t $" + inspectionType.Price.ToString();
             }
-            PriceTotalLabel.Text = app.PriceTotal.ToString("C2");
+
+            var inspectionTypes = await App.Database.GetInspectionTypesAsync();
+            if(InspectionTypeLabel.Text != null)
+            {
+                var inspectionName = InspectionTypeLabel.Text;
+                foreach (var i in inspectionTypes)
+                {
+                    if (!inspectionName.Contains(i.Name))
+                    {
+                        InspectionTypePicker.Items.Add(i.Name);
+                    }
+                }
+            }
+
+            //PriceTotalLabel.Text = app.PriceTotal.ToString("C2");
+            PriceTotalEntry.Text = app.PriceTotal.ToString();
 
             StartTimeLabel.Text = "Inspection Date: " + app.StartTime.ToShortDateString();
 
@@ -144,6 +157,7 @@ namespace HomeInspectorSchedule.Pages
 
             StartTimePicker.Time = app.StartTime.TimeOfDay;
 
+            DurationLabel.Text = app.Duration.ToString();
             DurationEntry.Text = app.Duration.ToString();
 
             if (app.Paid)
@@ -223,107 +237,131 @@ namespace HomeInspectorSchedule.Pages
             }   
         }
 
-        private void AddServicesBtn_Clicked(object sender, EventArgs e)
+        private async void AddServicesBtn_Clicked(object sender, EventArgs e)
         {
-            
-
-
+            inspectionTypeIDs = await services.SetServices(InspectionTypePicker, PriceTotalEntry, InspectionTypeLabel, DurationLabel, inspectionTypeIDs);
+            DurationEntry.Text = DurationLabel.Text;
         }
 
-        private void RemoveServiceBtn_Clicked(object sender, EventArgs e)
+        private async void RemoveServiceBtn_Clicked(object sender, EventArgs e)
         {
-
+            inspectionTypeIDs = await services.UndoServices(InspectionTypePicker, PriceTotalEntry, InspectionTypeLabel, DurationLabel, inspectionTypeIDs);
+            DurationEntry.Text = DurationLabel.Text;
         }
 
         private async void SaveBtn_Clicked(object sender, EventArgs e)
         {
+            var phoneC = Validate.Phone_Syntax(ClientPhoneEntry.Text);
+            var cPhone = Validate.Phone_Validate(phoneC);
+            var phoneR = Validate.Phone_Syntax(RealtorPhoneEntry.Text);
+            var rPhone = Validate.Phone_Validate(phoneR);
+            var cEmail = Validate.Email_Validate(ClientEmailEntry.Text);
+            var rEmail = Validate.Email_Validate(RealtorEmailEntry.Text);
+            var aZip = Validate.Zip_Syntax(ZipEntry.Text);
+
+            if (cPhone && rPhone && cEmail && rEmail && aZip)
+            {
+                client.Name = ClientNameEntry.Text;
+                client.Phone = phoneC;
+                client.Email = ClientEmailEntry.Text;
+
+                address.StreetAddress = StreeAddressEntry.Text;
+                address.City = CityEntry.Text;
+                address.Zip = ZipEntry.Text;
+
+                realtor.Name = RealtorNameEntry.Text;
+                realtor.Phone = phoneR;
+                realtor.Email = RealtorEmailEntry.Text;
+
+
+                var selectedInspector = await App.Database.GetInspectorAsync(InspectorPicker.SelectedItem.ToString());
+
+                //inspection type ids
+                var typeNames = InspectionTypeLabel.Text;
+
+                string inspectionTypes = null;
+
+                if (typeNames.ToLower().Contains("residential"))
+                {
+                    var inspectionType = await App.Database.GetInspectionTypeAsync("Residential");
+                    inspectionTypes += inspectionType.ID.ToString() + ", ";
+                }
+                if (typeNames.ToLower().Contains("commercial"))
+                {
+                    var inspectionType = await App.Database.GetInspectionTypeAsync("Commercial");
+                    inspectionTypes += inspectionType.ID.ToString() + ", ";
+                } 
+                if (typeNames.ToLower().Contains("radon"))
+                {
+                    var inspectionType = await App.Database.GetInspectionTypeAsync("Radon");
+                    inspectionTypes += inspectionType.ID.ToString() + ", ";
+                }    
+                if (typeNames.ToLower().Contains("mold"))
+                {
+                    var inspectionType = await App.Database.GetInspectionTypeAsync("Mold");
+                    inspectionTypes += inspectionType.ID.ToString() + ", ";
+                }
+
+                var types = inspectionTypes.Substring(0, inspectionTypes.Length - 2);
+
+                //string price = PriceTotalEntry.Text.Substring(1, PriceTotalEntry.Text.Length - 1);
+
+                app.InspectorID = selectedInspector.ID;
+                app.ClientID = client.ID;
+                app.RealtorID = realtor.ID;
+                app.AddressID = address.ID;
+                app.InspectionTypeIDs = types.Trim();
+                app.PriceTotal = Convert.ToDouble(PriceTotalEntry.Text);
+                app.StartTime = StartDatePicker.Date + StartTimePicker.Time;
+                app.Duration = Convert.ToDouble(DurationEntry.Text);
+                if (PaidCheckBox.IsChecked)
+                {
+                    app.Paid = true;
+                }
+                else
+                {
+                    app.Paid = false;
+                }
+                if(NotesEditor.Text != null)
+                {
+                    app.Notes = NotesEditor.Text;
+                }
+
+                app.Canceled = canceled;
+                if (user.Admin)
+                {
+                    app.Approved = approved;
+                }
+                else
+                {
+                    app.Approved = false;
+                }
             
-            client.Name = ClientNameEntry.Text;
-            client.Phone = ClientPhoneEntry.Text;
-            client.Email = ClientEmailEntry.Text;
+                await App.Database.SaveAppointmentAsync(app);
+                await client.SavePersonAsync(client);
+                await App.Database.SaveAddressAsync(address);
+                await realtor.SavePersonAsync(realtor);
 
-            address.StreetAddress = StreeAddressEntry.Text;
-            address.City = CityEntry.Text;
-            address.Zip = ZipEntry.Text;
+                await DisplayAlert("Saved", "Appointment details saved.", "OK");
 
-            realtor.Name = RealtorNameEntry.Text;
-            realtor.Phone = RealtorPhoneEntry.Text;
-            realtor.Email = RealtorEmailEntry.Text;
-
-
-            var selectedInspector = await App.Database.GetInspectorAsync(InspectorPicker.SelectedItem.ToString());
-
-            //inspection type ids
-            var typeNames = InspectionTypeLabel.Text;
-
-            string inspectionTypes = null;
-
-            if (typeNames.ToLower().Contains("residential"))
-            {
-                var inspectionType = await App.Database.GetInspectionTypeAsync("Residential");
-                inspectionTypes += inspectionType.ID.ToString() + ", ";
-            }
-            if (typeNames.ToLower().Contains("commercial"))
-            {
-                var inspectionType = await App.Database.GetInspectionTypeAsync("Commercial");
-                inspectionTypes += inspectionType.ID.ToString() + ", ";
-            } 
-            if (typeNames.ToLower().Contains("radon"))
-            {
-                var inspectionType = await App.Database.GetInspectionTypeAsync("Radon");
-                inspectionTypes += inspectionType.ID.ToString() + ", ";
-            }    
-            if (typeNames.ToLower().Contains("mold"))
-            {
-                var inspectionType = await App.Database.GetInspectionTypeAsync("Mold");
-                inspectionTypes += inspectionType.ID.ToString() + ", ";
-            }
-
-            var types = inspectionTypes.Substring(0, inspectionTypes.Length - 2);
-
-            string price = PriceTotalLabel.Text.Substring(1, PriceTotalLabel.Text.Length - 1);
-
-            app.InspectorID = selectedInspector.ID;
-            app.ClientID = client.ID;
-            app.RealtorID = realtor.ID;
-            app.AddressID = address.ID;
-            app.InspectionTypeIDs = types.Trim();
-            app.PriceTotal = Convert.ToDouble(price);
-            app.StartTime = StartDatePicker.Date + StartTimePicker.Time;
-            app.Duration = Convert.ToDouble(DurationEntry.Text);
-            if (PaidCheckBox.IsChecked)
-            {
-                app.Paid = true;
+                await Application.Current.MainPage.Navigation.PopAsync();
             }
             else
             {
-                app.Paid = false;
+                string alert = "";
+                if (aZip == false)
+                    alert = "Invalid zip code entry for address\n";
+                if (cPhone == false)
+                    alert += "Invalid Client Phone Number\n";
+                if (rPhone == false)
+                    alert += "Invalid Realtor Phone Numner\n";
+                if (cEmail == false)
+                    alert += "Invalid Client Email Address\n";
+                if (rEmail == false)
+                    alert += "Invalid Realtor Email Address";
+
+                await DisplayAlert("Error", alert, "OK");
             }
-            if(NotesEditor.Text != null)
-            {
-                app.Notes = NotesEditor.Text;
-            }
-
-            app.Canceled = canceled;
-            if (user.Admin)
-            {
-                app.Approved = approved;
-
-            }
-            else
-            {
-                app.Approved = false;
-            }
-            
-            await App.Database.SaveAppointmentAsync(app);
-            await client.SavePersonAsync(client);
-            await App.Database.SaveAddressAsync(address);
-            await realtor.SavePersonAsync(realtor);
-
-            await DisplayAlert("Saved", "Appointment details saved.", "OK");
-
-            await Application.Current.MainPage.Navigation.PopAsync();
-
         }
 
         private async void UnCancelBtn_Clicked(object sender, EventArgs e)
@@ -349,6 +387,15 @@ namespace HomeInspectorSchedule.Pages
             {
                 await App.Database.DeleteAppointmentAsync(app);
                 await Application.Current.MainPage.Navigation.PopAsync();
+            }
+        }
+
+        private void ClientNameEntry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ClientNameEntry.Text.Length >= 2)
+            {
+                var input = ClientNameEntry.Text;
+                ClientNameEntry.Text = Validate.Capitalize_Name(input);
             }
         }
     }

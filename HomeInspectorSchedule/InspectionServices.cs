@@ -38,7 +38,7 @@ namespace HomeInspectorSchedule
             return typeIDs;
         }
 
-        public async Task<string> UndoServices(Picker servicePicker, Label totalLabel, Label durationLabel, Entry totalEntry, string typeIDs)
+        public async Task<string> UndoServices(Picker servicePicker, Entry totalEntry, Label totalLabel, Label durationLabel, string typeIDs)
         {
             if (totalLabel.Text != "" && totalLabel.Text != null)
             {

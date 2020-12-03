@@ -9,15 +9,21 @@
         <ScrollView>
             <StackLayout x:Name="MainLayout">
                 <Label Text="Book Inspection"
+                       FontSize="Large"
                        HorizontalOptions="Center"/>
                 <Label x:Name="WelcomeLabel"
                        Text="Welcome "
                        HorizontalOptions="Center"/>
+
+                <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
+
                 <StackLayout x:Name="SelectInspector">
                     <Label x:Name="SelectInspectorLabel"
-                           Text="Select Inspector"
+                           Text="Assign Inspector"
+                           FontSize="Large"
                            HorizontalOptions="Center"/>
                     <Picker x:Name="InspectorPicker"
+                            Title="Select Inspector"
                             HorizontalOptions="Center"
                             WidthRequest="200"                            
                             SelectedIndexChanged="InspectorPicker_SelectedIndexChanged"/>
@@ -26,54 +32,75 @@
                 <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
 
                 <Label Text="Client Information"
+                       FontSize="Large"
                        HorizontalOptions="Center"/>
                 <Grid>
-                    <Label Text="Name"/>
+                    <Label Text="Name"
+                           HorizontalOptions="Center"
+                           VerticalTextAlignment="Center"/>
                     <Entry x:Name="ClientNameEntry"
-                        Grid.Column="1"/>
+                           Keyboard="Text"                          
+                           TextChanged="ClientNameEntry_TextChanged"
+                           Grid.Column="1"/>
                     <Label Text="Phone"
+                           HorizontalOptions="Center"
+                           VerticalTextAlignment="Center"
                            Grid.Row="1"/>
-                    <Entry x:Name="ClientPhoneEntry"
+                    <Entry x:Name="ClientPhoneEntry"      
+                           Keyboard="Telephone"
                         Grid.Row="1"
                            Grid.Column="1"/>
                     <Label Text="Email"
+                           HorizontalOptions="Center"
+                           VerticalTextAlignment="Center"
                            Grid.Row="2"/>
                     <Entry x:Name="ClientEmailEntry"
+                           Keyboard="Email"
                         Grid.Row="2"
-                           Grid.Column="1"/>
+                           Grid.Column="1"
+                           TextChanged="ClientEmailEntry_TextChanged"/>
                 </Grid>
 
                 <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
 
+
+                <Label Text="Realtor Information"
+                       FontSize="Large"
+                       HorizontalOptions="Center"/>
+                <Label Text="Select a realtor for use/edit or enter new realtor info"
+                       FontSize="Micro"
+                       HorizontalOptions="Center"/>
+                <Picker x:Name="RealtorPicker"
+                        Title="Select Realtor"
+                        HorizontalOptions="Center"
+                        WidthRequest="200"                            
+                        SelectedIndexChanged="RealtorPicker_SelectedIndexChanged"/>
                 <Button x:Name="SelectRealtorBtn"
-                        Text="Select Realtor"
+                        Text="Use this Realtor"
                         BackgroundColor="Blue"
                         TextColor="White"
                         IsVisible="false"
                         Clicked="SelectRealtorBtn_Clicked"/>
-                <Label Text="Realtor Information"
-                       HorizontalOptions="Center"/>
-                <Picker x:Name="RealtorPicker"
-                        HorizontalOptions="Center"
-                        WidthRequest="200"                            
-                        SelectedIndexChanged="RealtorPicker_SelectedIndexChanged"/>
-                <Label Text="Edit selected realtor or enter new realtor"
-                       HorizontalOptions="Center"/>
                 <Grid>
-                    <Label Text="Name"/>
+                    <Label Text="Name"
+                          HorizontalOptions="Center"
+                           VerticalTextAlignment="Center"/>
                     <Entry x:Name="RealtorNameEntry"
                            Keyboard="Text"
                         Grid.Column="1"
-                           Placeholder="Begin Typing Name To Search"
-                           
+                           Placeholder="Type To Search"                           
                            TextChanged="RealtorNameEntry_TextChanged"/>
                     <Label Text="Phone"
+                           HorizontalOptions="Center"
+                           VerticalTextAlignment="Center"
                            Grid.Row="1"/>
                     <Entry  x:Name="RealtorPhoneEntry"
                             Keyboard="Telephone"
                         Grid.Row="1"
                            Grid.Column="1"/>
-                    <Label Text="Email"
+                    <Label Text="Email"                           
+                           HorizontalOptions="Center"
+                           VerticalTextAlignment="Center"
                            Grid.Row="2"/>
                     <Entry x:Name="RealtorEmailEntry"
                            Keyboard="Email"
@@ -82,8 +109,10 @@
                 </Grid>
                 <Grid x:Name="SaveEditGrid"
                     IsVisible="False">
-                    <CheckBox x:Name="SaveEditCheckbox"/>
+                    <CheckBox x:Name="SaveEditCheckbox"
+                              HorizontalOptions="End"/>
                     <Label Text="Save Edit"
+                           VerticalTextAlignment="Center"
                            Grid.Column="1"/>
                 </Grid>
                 <Button x:Name="ClearRealtorBtn"
@@ -95,19 +124,29 @@
                 <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
 
                 <Label Text="Inspection Address"
+                       FontSize="Large"
                        HorizontalOptions="Center"/>
                 <Grid>
-                    <Label Text="Street Address"/>
+                    <Label Text="Street Address"
+                           HorizontalOptions="Center"
+                           VerticalTextAlignment="Center"/>
                     <Entry x:Name="StreetEntry"
+                           Keyboard="Text"
                         Grid.Column="1"/>
-                    <Label Text="City"
+                    <Label Text="City"                   
+                           HorizontalOptions="Center"
+                           VerticalTextAlignment="Center"
                            Grid.Row="1"/>
                     <Entry x:Name="CityEntry"
+                           Keyboard="Text"
                         Grid.Row="1"
                            Grid.Column="1"/>
-                    <Label Text="Zip"
+                    <Label Text="Zip"       
+                           HorizontalOptions="Center"
+                           VerticalTextAlignment="Center"
                            Grid.Row="2"/>
                     <Entry x:Name="ZipEntry"
+                           Keyboard="Numeric"
                         Grid.Row="2"
                            Grid.Column="1"/>
                 </Grid>
@@ -115,14 +154,16 @@
                 <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
 
                 <Label Text="Inspection Services"
+                       FontSize="Large"
                        HorizontalOptions="Center"/>
                 <Picker x:Name="ServicesPicker"
+                        Title="Select Service"
                         HorizontalOptions="Center"
-                        WidthRequest="100"/>
+                        WidthRequest="200"    />
                 <Grid>
                     <Button x:Name="UndoServiceBtn"
                             BackgroundColor="Yellow"
-                            Text="Undo"
+                            Text="Remove"
                             TextColor="Black"
                             Clicked="UndoServiceBtn_Clicked"/>
                     <Button x:Name="AddServiceBtn"
@@ -154,17 +195,25 @@
                             HorizontalOptions="Center"/>
                 <TimePicker x:Name="InspectionTimePicker"
                             HorizontalOptions="Center"/>
+
+                <BoxView Color="Black" WidthRequest="100" HeightRequest="2"/>
+                <Label Text="Payment Status"
+                       HorizontalOptions="Center"
+                       FontSize="Large"/>
                 <Grid>
-                    <Label Text="Paid"/>
-                    <CheckBox x:Name="PaidCheckbox"
-                              Grid.Column="1"
-                              CheckedChanged="PaidCheckbox_CheckedChanged"/>
+                    <CheckBox x:Name="PaidCheckbox"                             
+                              CheckedChanged="PaidCheckbox_CheckedChanged"
+                              HorizontalOptions="End"/>
+                    <Label Text="Paid"
+                           Grid.Column="1"
+                           VerticalTextAlignment="Center"/>
                 </Grid>
                 <Button x:Name="ScheduleBtn"
+                        Margin="0,20,0,0"
+                        WidthRequest="100"
                         BackgroundColor="Blue"
                         Text="Schedule"
                         TextColor="White"
-                        HorizontalOptions="Center"
                         Clicked="ScheduleBtn_Clicked"/>
             </StackLayout>
         </ScrollView>
