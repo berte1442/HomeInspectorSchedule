@@ -248,7 +248,6 @@ namespace HomeInspectorSchedule.Pages
 
                     if (realtorCheck != null && realtorCheck.Name != realtor.Name && realtorCheck.Phone != realtor.Phone && realtorCheck.Email != realtor.Email)
                     {
-                        //await App.Database.SaveRealtorAsync(realtor);
                         await realtor.SavePersonAsync(realtor);
                     }
                     else if (realtorCheck != null && (realtorCheck.Name != realtor.Name || realtorCheck.Phone != realtor.Phone || realtorCheck.Email != realtor.Email))
@@ -257,7 +256,6 @@ namespace HomeInspectorSchedule.Pages
                              " information or create a new realtor?", "Update Existing Realtor", "Create New Realtor");
                         if (save == false)
                         {
-                            //await App.Database.SaveRealtorAsync(realtor);
                             await realtor.SavePersonAsync(realtor);
                         }
                         else
@@ -266,13 +264,11 @@ namespace HomeInspectorSchedule.Pages
                             realtorUpdate.Name = RealtorNameEntry.Text;
                             realtorUpdate.Phone = RealtorPhoneEntry.Text;
                             realtorUpdate.Email = RealtorEmailEntry.Text;
-                            //await App.Database.SaveRealtorAsync(realtorUpdate);
                             await realtorUpdate.SavePersonAsync(realtorUpdate);
                         }
                     }
                     else if (realtorCheck == null && realtor.Name != null)
                     {
-                        //await App.Database.SaveRealtorAsync(realtor);
                         await realtor.SavePersonAsync(realtor);
                     }
                     else if (realtorCheck != null && realtor.Name != null)

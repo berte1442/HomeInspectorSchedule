@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace HomeInspectorSchedule
 {
     static public class InspectionLogTools
     {
-        static public async Task<List<string>> SearchAppointments(string search)
+        static public async Task<List<string>> SearchAppointments(string search, Inspector user)
         {
             search = search.ToLower();
 
@@ -112,9 +113,78 @@ namespace HomeInspectorSchedule
                 var ins = await App.Database.GetInspectorAsync(s.InspectorID);
                 var client = await App.Database.GetClientAsync(s.ClientID);
                 string item = "#" + s.ID.ToString() + " - " + ins.Name + " - " + s.StartTime.ToShortDateString() + " - " + client.Name;
-                searchDisplay.Add(item);
+
+                if (user.Admin)
+                {
+                    searchDisplay.Add(item);
+                }
+                else
+                {
+                    if(ins.ID == user.ID)
+                    {
+                        searchDisplay.Add(item);
+                    }
+                }
             }
             return searchDisplay;
         }
+
+        static public async Task<List<string>> SearchReports(string search, List<string> list)
+        {
+            List<string> searchList = new List<string>();
+            foreach(var l in list)
+            {
+                if (l.Contains(search))
+                {
+                    searchList.Add(l);
+                }
+            }
+
+            return searchList;
+        }
+
+        static public async Task<string> BuildReport(Appointment appointment)
+        {
+            string text = null;
+
+            var inspector = await App.Database.GetInspectorAsync(appointment.InspectorID);
+            var realtor = await App.Database.GetRealtorAsync(appointment.RealtorID);
+            var client = await App.Database.GetClientAsync(appointment.ClientID);
+            var address = await App.Database.GetAddressAsync(appointment.AddressID);
+
+            string services = "Services: \n";
+            string variableStr = appointment.InspectionTypeIDs;
+            int index = variableStr.LastIndexOf(",");
+           // List<string> types = new List<string>();
+            while (index != -1)
+            {
+                var length = variableStr.Length;
+                var index2 = length - index;
+                var id = variableStr.Substring(index + 1 , index2 - 1);
+                variableStr = variableStr.Substring(0, index);
+                id = id.Trim();
+                var type = await App.Database.GetInspectionTypeAsync(Convert.ToInt32(id));
+                services += type.Name + " - $" + type.Price + " / ";
+
+                index = variableStr.LastIndexOf(",");
+                //types.Add(type.Name);
+            }
+            if(index == -1)
+            {
+                var type = await App.Database.GetInspectionTypeAsync(Convert.ToInt32(variableStr));
+                services += type.Name + " - " + type.Price;
+            }
+
+            text = appointment.StartTime.ToShortDateString() + " - " + 
+                   appointment.StartTime.ToShortTimeString() + "\n\n" +
+                "Inspector: \n" + inspector.Name + "\n\n" + 
+                "Client:\n" + client.Name + " / " + client.Phone + " / " + client.Email + "\n\n" + 
+                "Realtor:\n" + realtor.Name + " / " + realtor.Phone + " / " + realtor.Email + "\n\n" +
+                services + "\n" + 
+                "Total: $" + appointment.PriceTotal + "\n\n" + "________________________" + "\n\n";
+
+
+            return text;
+        } 
     }
 }

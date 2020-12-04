@@ -24,11 +24,11 @@ namespace HomeInspectorSchedule.Pages
         private async void searchBar_SearchButtonPressed(object sender, EventArgs e)
         {
             string search = searchBar.Text;
-            searchAppointments = await InspectionLogTools.SearchAppointments(search);
+            searchAppointments = await InspectionLogTools.SearchAppointments(search, currentUser);
 
             SearchListView.ItemsSource = searchAppointments;
             if(searchAppointments.Count > 0)
-            {
+            { 
                 SaveReportBtn.IsVisible = true;
             }
             else
@@ -53,6 +53,7 @@ namespace HomeInspectorSchedule.Pages
         private async void SaveReportBtn_Clicked(object sender, EventArgs e)
         {
             Report report = new Report();
+            report.InspectorID = currentUser.ID; 
             var fileName = await DisplayPromptAsync("Name File", "Name this inspection report file.", "Save", "Cancel", "Report Name", 12, Keyboard.Default);
             fileName += ".txt";
             var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), fileName);
@@ -60,9 +61,13 @@ namespace HomeInspectorSchedule.Pages
             string text = null;
             foreach (var s in searchAppointments)
             {
-                text += s + "\n";
+                int index = s.IndexOf(" ");
+                string idStr = s.Substring(1, index - 1);
+                var appointment = await App.Database.GetAppointmentAsync(Convert.ToInt32(idStr.Trim()));
+                text += await InspectionLogTools.BuildReport(appointment);
             }
-
+            string creater = "Report created by " + currentUser.Name + "\n\n";
+            text = creater + text;
             if (!File.Exists(filePath))
             {
                 File.WriteAllText(filePath, text);

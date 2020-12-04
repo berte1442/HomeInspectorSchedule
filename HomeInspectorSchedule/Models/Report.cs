@@ -15,5 +15,7 @@ namespace HomeInspectorSchedule
         public DateTime timeStamp { get; set; }
         [NotNull]
         public string FileName { get; set; }
+        [NotNull]
+        public int InspectorID { get; set; }
     }
 }

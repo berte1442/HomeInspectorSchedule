@@ -14,14 +14,17 @@ namespace HomeInspectorSchedule.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MyReports : ContentPage
     {
-        public MyReports()
+        List<string> reportsDisplay = new List<string>();
+        Inspector user = new Inspector();
+        public MyReports(Inspector inspector)
         {
+            user = inspector;
             InitializeComponent();
         }
 
-        private void SearchReports_SearchButtonPressed(object sender, EventArgs e)
+        private async void SearchReports_SearchButtonPressed(object sender, EventArgs e)
         {
-
+            ReportListView.ItemsSource = await InspectionLogTools.SearchReports(SearchReports.Text, reportsDisplay);
         }
 
         private async void ReportListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -44,11 +47,17 @@ namespace HomeInspectorSchedule.Pages
             base.OnAppearing();
 
             List<Report> reports = await App.Database.GetReportsAsync();
-            List<string> reportsDisplay = new List<string>();
             foreach(var r in reports)
             {
                 string display = r.timeStamp.ToString() + " - " + r.FileName;
-                reportsDisplay.Add(display);
+                if (user.Admin)
+                {
+                    reportsDisplay.Add(display);
+                }
+                else if(r.InspectorID == user.ID)
+                {
+                    reportsDisplay.Add(display);
+                }
             }
             ReportListView.ItemsSource = reportsDisplay;
         }

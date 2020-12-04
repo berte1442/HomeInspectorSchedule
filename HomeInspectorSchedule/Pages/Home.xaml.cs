@@ -47,7 +47,7 @@ namespace HomeInspectorSchedule.Pages
 
         private async void MyReports_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MyReports());
+            await Navigation.PushAsync(new MyReports(currentUser));
         }
     }
 }
