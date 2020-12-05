@@ -7,7 +7,7 @@
              x:Class="HomeInspectorSchedule.Pages.MyReports">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="My Reports"
+            <Label Text="Inspection Reports"
                    FontSize="Large"
                    VerticalOptions="CenterAndExpand" 
                    HorizontalOptions="CenterAndExpand" />

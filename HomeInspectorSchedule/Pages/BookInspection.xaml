@@ -25,7 +25,7 @@
                     <Picker x:Name="InspectorPicker"
                             Title="Select Inspector"
                             HorizontalOptions="Center"
-                            WidthRequest="200"                            
+                            WidthRequest="200"                          
                             SelectedIndexChanged="InspectorPicker_SelectedIndexChanged"/>
                 </StackLayout>
 
@@ -48,6 +48,7 @@
                            Grid.Row="1"/>
                     <Entry x:Name="ClientPhoneEntry"      
                            Keyboard="Telephone"
+                           TextChanged="ClientPhoneEntry_TextChanged"
                         Grid.Row="1"
                            Grid.Column="1"/>
                     <Label Text="Email"
@@ -96,6 +97,7 @@
                            Grid.Row="1"/>
                     <Entry  x:Name="RealtorPhoneEntry"
                             Keyboard="Telephone"
+                            TextChanged="RealtorPhoneEntry_TextChanged"
                         Grid.Row="1"
                            Grid.Column="1"/>
                     <Label Text="Email"                           

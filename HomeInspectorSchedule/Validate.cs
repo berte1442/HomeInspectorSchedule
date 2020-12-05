@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace HomeInspectorSchedule
 {
@@ -34,7 +36,9 @@ namespace HomeInspectorSchedule
             phone = phone.Replace(")", "");
             phone = phone.Replace("-", "");
 
-            bool result = phone.Any(x => char.IsLetter(x));
+            //bool result = phone.Any(x => char.IsLetter(x));
+            //bool result2 = phone.Any(x => char.IsControl(x));
+            bool result = phone.Any(x => !char.IsNumber(x));
             if ((phone.Length != 10 && phone.Length != 7) || result)
             {
                 return false;
@@ -59,15 +63,21 @@ namespace HomeInspectorSchedule
 
         public static string Phone_Syntax(string phone)
         {
+
+            phone = phone.Trim();
+            phone = phone.Replace("(", "");
+            phone = phone.Replace(")", "");
+            phone = phone.Replace("-", "");
+
             var length = phone.Length;
 
-            if(length == 10)
+            if (length == 10)
             {
                 phone = phone.Insert(6, "-");
                 phone = phone.Insert(3, ")");
                 phone = phone.Insert(0, "(");
             }
-            if(length == 7)
+            else if (length == 7)
             {
                 phone = phone.Insert(3, "-");
             }
@@ -116,6 +126,57 @@ namespace HomeInspectorSchedule
                 return input;
             }
             
+        }
+        public static bool BackSpace(string search, string lastSearch)
+        {
+            bool backspace = false;
+            if (lastSearch != null && lastSearch != "")
+            {
+                int length = lastSearch.Length;
+                string compare = lastSearch.Substring(0, length - 1);
+                if (search == compare)
+                {
+                    backspace = true;
+                }
+            }
+            return backspace;
+        }
+
+        static public string PhoneInput(Entry entry, string lastText)
+        {
+            const int charMax = 13;
+            string text = entry.Text;
+
+            if (text.Length > 8 && text.Length < charMax)
+            {
+                char check1 = text[0];
+                if (check1 != '(')
+                {
+                    if(!text.Contains("("))
+                        text = text.Insert(0, "(");
+                }
+                char check2 = text[4];
+                if (check2 != ')')
+                {
+                    if(!text.Contains(")"))
+                        text = text.Insert(4, ")");
+                }
+                char check3 = text[8];
+                if (check3 != '-')
+                {
+                    if (!text.Contains("-"))
+                        text = text.Insert(8, "-");
+                }
+            }
+
+            else if (text.Length > charMax)
+            {
+                text = lastText;
+            }
+
+            entry.Text = text;
+            lastText = text;
+            return lastText;
         }
     }
 }

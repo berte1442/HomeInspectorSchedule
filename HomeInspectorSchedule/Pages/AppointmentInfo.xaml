@@ -10,6 +10,7 @@
             <StackLayout>
                 <Label x:Name="AppointmentLabel" 
                        Text="Appointment Details"
+                       FontSize="Large"
                        HorizontalOptions="Center"/>
                 <Label x:Name="InspectorNameLabel"
                        HorizontalOptions="Center"/>
@@ -30,7 +31,8 @@
                         <Label Text="Client Phone"
                                FontSize="Micro"/>
                         <Entry x:Name="ClientPhoneEntry"
-                               Keyboard="Telephone"/>
+                               Keyboard="Telephone"
+                               TextChanged="ClientPhoneEntry_TextChanged"/>
                         <Label Text="Client Email"
                                FontSize="Micro"/>
                         <Entry x:Name="ClientEmailEntry"
@@ -95,7 +97,9 @@
                         <Entry x:Name="RealtorNameEntry"/>
                         <Label Text="Realtor Phone"
                                FontSize="Micro"/>
-                        <Entry x:Name="RealtorPhoneEntry"/>
+                        <Entry x:Name="RealtorPhoneEntry"
+                               Keyboard="Telephone"
+                               TextChanged="RealtorPhoneEntry_TextChanged"/>
                         <Label Text="Realtor Email"
                                FontSize="Micro"/>
                         <Entry x:Name="RealtorEmailEntry"/>

@@ -18,6 +18,8 @@ namespace HomeInspectorSchedule.Pages
         bool paid = false;
         string search = null;
         bool realtorSelected = false;
+        string clientLastPhoneText;
+        string realtorLastPhoneText;
 
         Inspector currentUser = new Inspector();
 
@@ -28,20 +30,7 @@ namespace HomeInspectorSchedule.Pages
             InitializeComponent();
             OnStart();
         }
-        private bool BackSpace(string search, string lastSearch)
-        {
-            bool backspace = false;
-            if (lastSearch != null && lastSearch != "")
-            {
-                int length = lastSearch.Length;
-                string compare = lastSearch.Substring(0, length - 1);
-                if (search == compare)
-                {
-                    backspace = true;
-                }
-            }
-            return backspace;
-        }
+
         private async void RealtorNameEntry_TextChanged(object sender, TextChangedEventArgs e)
         {
             if(realtorSelected == false)
@@ -50,7 +39,7 @@ namespace HomeInspectorSchedule.Pages
                 search = RealtorNameEntry.Text;
                 if (search.Length >= 3)
                 {
-                    bool backspace = BackSpace(search, lastSearch);
+                    bool backspace = Validate.BackSpace(search, lastSearch);
                     if (backspace == false)
                     {
                         var realtors = await App.Database.GetRealtorsAsync();
@@ -66,7 +55,19 @@ namespace HomeInspectorSchedule.Pages
 
                     }
                 }
-            }    
+            }
+            try
+            {
+                // sets first letter to uppercase for each new word 
+                if (RealtorNameEntry.Text.Length >= 2 && search != null && search != "")
+                {
+                    RealtorNameEntry.Text = Validate.Capitalize_Name(search);
+                }
+            }
+            catch
+            {
+                //continues as search 
+            }
         }
         private void RealtorPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -201,147 +202,180 @@ namespace HomeInspectorSchedule.Pages
 
         private async void ScheduleBtn_Clicked(object sender, EventArgs e)
         {
-            var phoneC = Validate.Phone_Syntax(ClientPhoneEntry.Text);
-            var cPhone = Validate.Phone_Validate(phoneC);
-            var phoneR = Validate.Phone_Syntax(RealtorPhoneEntry.Text);
-            var rPhone = Validate.Phone_Validate(phoneR);
-            var cEmail = Validate.Email_Validate(ClientEmailEntry.Text);
-            var rEmail = Validate.Email_Validate(RealtorEmailEntry.Text);
-            var aZip = Validate.Zip_Syntax(ZipEntry.Text);
-
-            if(cPhone && rPhone && cEmail && rEmail && aZip)
+            try
             {
-                Client client = new Client
+                bool cPhone = true;
+                bool rPhone = true;
+                bool cEmail = true;
+                bool rEmail = true;
+                string phoneC = null;
+                string phoneR = null;
+                if (ClientPhoneEntry.Text.Length > 0)
                 {
-                    Name = ClientNameEntry.Text,
-                    Phone = phoneC,
-                    Email = ClientEmailEntry.Text
-                };
-                Realtor realtor = new Realtor
-                {
-                    Name = RealtorNameEntry.Text,
-                    Phone = phoneR,
-                    Email = RealtorEmailEntry.Text
-                };
-                Address address = new Address
-                {
-                    StreetAddress = StreetEntry.Text,
-                    City = CityEntry.Text,
-                    Zip = ZipEntry.Text
-                };
-
-                //await App.Database.SaveClientAsync(client);
-                await client.SavePersonAsync(client);
-
-                if (SaveEditCheckbox.IsChecked)
-                {
-                    var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
-                    realtorUpdate.Name = RealtorNameEntry.Text;
-                    realtorUpdate.Phone = RealtorPhoneEntry.Text;
-                    realtorUpdate.Email = RealtorEmailEntry.Text;
-                    //await App.Database.SaveRealtorAsync(realtorUpdate);
-                    await realtorUpdate.SavePersonAsync(realtorUpdate);
+                    phoneC = Validate.Phone_Syntax(ClientPhoneEntry.Text);
+                    cPhone = Validate.Phone_Validate(phoneC);
                 }
-                else
+                if (RealtorPhoneEntry.Text.Length > 0)
                 {
-                    var realtorCheck = await App.Database.GetRealtorAsync(realtor.Name);
+                    phoneR = Validate.Phone_Syntax(RealtorPhoneEntry.Text);
+                    rPhone = Validate.Phone_Validate(phoneR);
+                }
+                if (ClientEmailEntry.Text.Length > 0)
+                {
+                    cEmail = Validate.Email_Validate(ClientEmailEntry.Text);
+                }
+                if (RealtorEmailEntry.Text.Length > 0)
+                {
+                    rEmail = Validate.Email_Validate(RealtorEmailEntry.Text);
+                }
+                var aZip = Validate.Zip_Syntax(ZipEntry.Text);
 
-                    if (realtorCheck != null && realtorCheck.Name != realtor.Name && realtorCheck.Phone != realtor.Phone && realtorCheck.Email != realtor.Email)
+                if (cPhone && rPhone && cEmail && rEmail && aZip)
+                {
+                    var clientPhone = Validate.Phone_Syntax(phoneC);
+                    Client client = new Client
                     {
-                        await realtor.SavePersonAsync(realtor);
+                        Name = ClientNameEntry.Text,
+                        Email = ClientEmailEntry.Text
+                    };
+                    if(clientPhone != null)
+                    {
+                        client.Phone = clientPhone;
                     }
-                    else if (realtorCheck != null && (realtorCheck.Name != realtor.Name || realtorCheck.Phone != realtor.Phone || realtorCheck.Email != realtor.Email))
+                    var realtorPhone = Validate.Phone_Syntax(phoneR);
+                    Realtor realtor = new Realtor
                     {
-                        var save = await DisplayAlert("Conflict", "There is a conflict in the realtor database, did you intend to update this realtor's" +
-                             " information or create a new realtor?", "Update Existing Realtor", "Create New Realtor");
-                        if (save == false)
+                        Name = RealtorNameEntry.Text,
+                        Email = RealtorEmailEntry.Text
+                    };
+                    if(realtorPhone != null)
+                    {
+                        realtor.Phone = realtorPhone;
+                    }
+                    Address address = new Address
+                    {
+                        StreetAddress = StreetEntry.Text,
+                        City = CityEntry.Text,
+                        Zip = ZipEntry.Text
+                    };
+
+                    //await App.Database.SaveClientAsync(client);
+                    await client.SavePersonAsync(client);
+
+                    if (SaveEditCheckbox.IsChecked)
+                    {
+                        var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
+                        realtorUpdate.Name = RealtorNameEntry.Text;
+                        realtorUpdate.Phone = RealtorPhoneEntry.Text;
+                        realtorUpdate.Email = RealtorEmailEntry.Text;
+                        //await App.Database.SaveRealtorAsync(realtorUpdate);
+                        await realtorUpdate.SavePersonAsync(realtorUpdate);
+                    }
+                    else
+                    {
+                        var realtorCheck = await App.Database.GetRealtorAsync(realtor.Name);
+
+                        if (realtorCheck != null && realtorCheck.Name != realtor.Name && realtorCheck.Phone != realtor.Phone && realtorCheck.Email != realtor.Email)
                         {
                             await realtor.SavePersonAsync(realtor);
                         }
-                        else
+                        else if (realtorCheck != null && (realtorCheck.Name != realtor.Name || realtorCheck.Phone != realtor.Phone || realtorCheck.Email != realtor.Email))
                         {
-                            var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
-                            realtorUpdate.Name = RealtorNameEntry.Text;
-                            realtorUpdate.Phone = RealtorPhoneEntry.Text;
-                            realtorUpdate.Email = RealtorEmailEntry.Text;
-                            await realtorUpdate.SavePersonAsync(realtorUpdate);
+                            var save = await DisplayAlert("Conflict", "There is a conflict in the realtor database, did you intend to update this realtor's" +
+                                 " information or create a new realtor?", "Update Existing Realtor", "Create New Realtor");
+                            if (save == false)
+                            {
+                                await realtor.SavePersonAsync(realtor);
+                            }
+                            else
+                            {
+                                var realtorUpdate = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
+                                realtorUpdate.Name = RealtorNameEntry.Text;
+                                realtorUpdate.Phone = RealtorPhoneEntry.Text;
+                                realtorUpdate.Email = RealtorEmailEntry.Text;
+                                await realtorUpdate.SavePersonAsync(realtorUpdate);
+                            }
+                        }
+                        else if (realtorCheck == null && realtor.Name != null)
+                        {
+                            await realtor.SavePersonAsync(realtor);
+                        }
+                        else if (realtorCheck != null && realtor.Name != null)
+                        {
+                            realtor = realtorCheck;
                         }
                     }
-                    else if (realtorCheck == null && realtor.Name != null)
+
+                    await App.Database.SaveAddressAsync(address);
+
+                    DateTime startDate = InspectionDatePicker.Date;
+                    TimeSpan startTime = InspectionTimePicker.Time;
+
+                    DateTime startDateAndTime = startDate + startTime;
+
+                    Appointment appointment = new Appointment
                     {
-                        await realtor.SavePersonAsync(realtor);
+                        InspectorID = inspectorID,
+                        ClientID = client.ID,
+                        RealtorID = realtor.ID,
+                        InspectionTypeIDs = inspectionTypeIDs,
+                        PriceTotal = double.Parse(PriceTotalEntry.Text),
+                        StartTime = startDateAndTime,
+                        Duration = double.Parse(DurationTimeLabel.Text),
+                        Paid = paid,
+                        AddressID = address.ID,
+                    };
+                    if (currentUser.Admin)
+                    {
+                        appointment.Approved = true;
                     }
-                    else if (realtorCheck != null && realtor.Name != null)
+
+                    var appointments = await App.Database.GetAppointmentsAsync();
+                    bool schedule = true;
+                    foreach (var a in appointments)
                     {
-                        realtor = realtorCheck;
-                    }
-                }
-
-                await App.Database.SaveAddressAsync(address);
-
-                DateTime startDate = InspectionDatePicker.Date;
-                TimeSpan startTime = InspectionTimePicker.Time;
-
-                DateTime startDateAndTime = startDate + startTime;
-
-                Appointment appointment = new Appointment
-                {
-                    InspectorID = inspectorID,
-                    ClientID = client.ID,
-                    RealtorID = realtor.ID,
-                    InspectionTypeIDs = inspectionTypeIDs,
-                    PriceTotal = double.Parse(PriceTotalEntry.Text),
-                    StartTime = startDateAndTime,
-                    Duration = double.Parse(DurationTimeLabel.Text),
-                    Paid = paid,
-                    AddressID = address.ID,
-                };
-                if (currentUser.Admin)
-                {
-                    appointment.Approved = true;
-                }
-
-                var appointments = await App.Database.GetAppointmentsAsync();
-                bool schedule = true;
-                foreach (var a in appointments)
-                {
-                    if ((a.InspectorID == appointment.InspectorID) && ((appointment.StartTime >= a.StartTime && appointment.StartTime <= a.StartTime.AddHours(a.Duration)) ||
-                            (a.StartTime >= appointment.StartTime && a.StartTime <= appointment.StartTime.AddHours(appointment.Duration))))
-                    {
-                        var save = await DisplayAlert("Conflict", "There is a schedule conflict. Do you still wish to schedule this appointment?", "Yes, Schedule", "No, Don't Schedule");
-                        if (save)
+                        if ((a.InspectorID == appointment.InspectorID) && ((appointment.StartTime >= a.StartTime && appointment.StartTime <= a.StartTime.AddHours(a.Duration)) ||
+                                (a.StartTime >= appointment.StartTime && a.StartTime <= appointment.StartTime.AddHours(appointment.Duration))))
                         {
-                            await App.Database.SaveAppointmentAsync(appointment);
-                            schedule = false;
-                            break;
-                        }
-                        else
-                        {
-                            schedule = false;
+                            var save = await DisplayAlert("Conflict", "There is a schedule conflict. Do you still wish to schedule this appointment?", "Yes, Schedule", "No, Don't Schedule");
+                            if (save)
+                            {
+                                await App.Database.SaveAppointmentAsync(appointment);
+                                schedule = false;
+                                break;
+                            }
+                            else
+                            {
+                                schedule = false;
+                            }
                         }
                     }
+                    if (schedule)
+                    {
+                        await App.Database.SaveAppointmentAsync(appointment);
+                    }
+                    await Application.Current.MainPage.Navigation.PopAsync();
                 }
-                if (schedule)
+                else
                 {
-                    await App.Database.SaveAppointmentAsync(appointment);
+                    string alert = "";
+                    if (aZip == false)
+                        alert = "Invalid zip code entry for address\n";
+                    if (cPhone == false)
+                        alert += "Invalid Client Phone Number\n";
+                    if (rPhone == false)
+                        alert += "Invalid Realtor Phone Number\n";
+                    if (cEmail == false)
+                        alert += "Invalid Client Email Address\n";
+                    if (rEmail == false)
+                        alert += "Invalid Realtor Email Address";
+
+                    await DisplayAlert("Error", alert, "OK");
                 }
-                await Application.Current.MainPage.Navigation.PopAsync();
             }
-            else
+            catch (Exception ex)
             {
-                string alert = "";
-                if (aZip == false)
-                    alert = "Invalid zip code entry for address\n";
-                if (cPhone == false)
-                    alert += "Invalid Client Phone Number\n";
-                if(rPhone == false)
-                    alert += "Invalid Realtor Phone Numner\n";
-                if (cEmail == false)
-                    alert += "Invalid Client Email Address\n";
-                if (rEmail == false)
-                    alert += "Invalid Realtor Email Address";
-
-                await DisplayAlert("Error", alert, "OK");
+                await DisplayAlert("Error", ex.Message, "OK");
             }
         }
 
@@ -407,5 +441,16 @@ namespace HomeInspectorSchedule.Pages
                 ClientNameEntry.Text = Validate.Capitalize_Name(input);
             }
         }
+
+        private void ClientPhoneEntry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            clientLastPhoneText = Validate.PhoneInput(ClientPhoneEntry, clientLastPhoneText);
+        }
+
+        private void RealtorPhoneEntry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            realtorLastPhoneText = Validate.PhoneInput(RealtorPhoneEntry, realtorLastPhoneText);
+        }
+
     }
 }

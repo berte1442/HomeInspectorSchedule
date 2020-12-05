@@ -21,12 +21,16 @@ namespace HomeInspectorSchedule.Pages
         {
             Inspector user = await LogInValidation.ValidateLogin(UsernameEntry.Text, Password.Text);
 
-            if (user.UserName != null) // correct if statement - user will never be null
+            if (user.UserName != null)
             {
+                UsernameEntry.Text = "";
+                Password.Text = "";
                 await Navigation.PushAsync(new Home(user));
             }
             else
             {
+                UsernameEntry.Text = "";
+                Password.Text = "";
                 await DisplayAlert("Incorrect", "Incorrect username or password", "OK");
             }
         }

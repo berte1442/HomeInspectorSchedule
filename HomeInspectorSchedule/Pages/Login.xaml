@@ -8,18 +8,24 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
-                <Label Text="Log In"
+                <Label Text="Home Inspection Scheduler"
+                       FontSize="Large"
                        HorizontalOptions="Center"/>
-                <StackLayout VerticalOptions="Center">
+                <Label Text="Log In"
+                       FontSize="Large"
+                       HorizontalOptions="Center"
+                       Margin="0,40,0,0"/>
+                <StackLayout VerticalOptions="Center"
+                             Margin="0,30,0,0">
                     <Label Text="Username"
                            HorizontalOptions="Center"/>
                     <Entry x:Name="UsernameEntry"
-                           WidthRequest="100"
+                           WidthRequest="150"
                            HorizontalOptions="Center"/>
                     <Label Text="Password"
                            HorizontalOptions="Center"/>
                     <Entry x:Name="Password"
-                           WidthRequest="100"
+                           WidthRequest="150"
                            IsPassword="True"
                            HorizontalOptions="Center"/>
                     <Button x:Name="LoginBtn"
