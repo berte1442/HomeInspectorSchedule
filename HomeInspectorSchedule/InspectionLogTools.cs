@@ -148,7 +148,11 @@ namespace HomeInspectorSchedule
             string text = null;
 
             var inspector = await App.Database.GetInspectorAsync(appointment.InspectorID);
-            var realtor = await App.Database.GetRealtorAsync(appointment.RealtorID);
+            Realtor realtor = new Realtor();
+            if(appointment.RealtorID != 0)
+            {
+                realtor = await App.Database.GetRealtorAsync(appointment.RealtorID);
+            }
             var client = await App.Database.GetClientAsync(appointment.ClientID);
             var address = await App.Database.GetAddressAsync(appointment.AddressID);
 
@@ -175,11 +179,22 @@ namespace HomeInspectorSchedule
                 services += type.Name + " - " + type.Price;
             }
 
+            string realtorData = null;
+
+            if(realtor.ID != 0)
+            {
+                realtorData = "Realtor:\n" + realtor.Name + " / " + realtor.Phone + " / " + realtor.Email + "\n\n";
+            }
+            else
+            {
+                realtorData = "No realtor\n\n";
+            }
+
             text = appointment.StartTime.ToShortDateString() + " - " + 
                    appointment.StartTime.ToShortTimeString() + "\n\n" +
                 "Inspector: \n" + inspector.Name + "\n\n" + 
                 "Client:\n" + client.Name + " / " + client.Phone + " / " + client.Email + "\n\n" + 
-                "Realtor:\n" + realtor.Name + " / " + realtor.Phone + " / " + realtor.Email + "\n\n" +
+                realtorData +
                 services + "\n" + 
                 "Total: $" + appointment.PriceTotal + "\n\n" + "________________________" + "\n\n";
 

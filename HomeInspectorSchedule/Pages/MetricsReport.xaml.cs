@@ -39,6 +39,7 @@ namespace HomeInspectorSchedule.Pages
                     double priceTotal = 0;
                     var realtor = await App.Database.GetRealtorAsync(metricsReport[i, 0]);
                     var appointments = await App.Database.GetAppointmentsAsync();
+                    appointments = await Metrics.RemoveNonRealtorApps(appointments);
                     foreach (var a in appointments)
                     {
                         if (a.RealtorID == realtor.ID && a.StartTime.Year == Metrics.year)

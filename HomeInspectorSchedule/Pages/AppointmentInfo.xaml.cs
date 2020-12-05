@@ -387,9 +387,9 @@ namespace HomeInspectorSchedule.Pages
                     await DisplayAlert("Error", alert, "OK");
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                await DisplayAlert("Error", ex.Message, "OK");
+                await DisplayAlert("Error", "Missing information. Ensure all required fields a complete", "OK");
             }
         }
 

@@ -134,6 +134,7 @@
                            VerticalTextAlignment="Center"/>
                     <Entry x:Name="StreetEntry"
                            Keyboard="Text"
+                           TextChanged="StreetEntry_TextChanged"
                         Grid.Column="1"/>
                     <Label Text="City"                   
                            HorizontalOptions="Center"
@@ -141,6 +142,7 @@
                            Grid.Row="1"/>
                     <Entry x:Name="CityEntry"
                            Keyboard="Text"
+                           TextChanged="CityEntry_TextChanged"
                         Grid.Row="1"
                            Grid.Column="1"/>
                     <Label Text="Zip"       
@@ -149,6 +151,7 @@
                            Grid.Row="2"/>
                     <Entry x:Name="ZipEntry"
                            Keyboard="Numeric"
+                           TextChanged="ZipEntry_TextChanged"
                         Grid.Row="2"
                            Grid.Column="1"/>
                 </Grid>
@@ -161,7 +164,8 @@
                 <Picker x:Name="ServicesPicker"
                         Title="Select Service"
                         HorizontalOptions="Center"
-                        WidthRequest="200"    />
+                        WidthRequest="200" 
+                        SelectedIndexChanged="ServicesPicker_SelectedIndexChanged"/>
                 <Grid>
                     <Button x:Name="UndoServiceBtn"
                             BackgroundColor="Yellow"

@@ -17,7 +17,8 @@ namespace HomeInspectorSchedule
 
         public async Task<string[,]> RealtorMetrics()
         {
-            var appointments = await App.Database.GetAppointmentsAsync();
+            var allAppointments = await App.Database.GetAppointmentsAsync();
+            var appointments = await RemoveNonRealtorApps(allAppointments);
             List<int> realtorIds = new List<int>();
 
             foreach (var a in appointments)
@@ -318,6 +319,17 @@ namespace HomeInspectorSchedule
             }
 
             return useColor;
+        }
+
+        static async public Task<List<Appointment>> RemoveNonRealtorApps(List<Appointment> allAppointments)
+        {
+            List<Appointment> appointments = new List<Appointment>();
+            foreach(var a in allAppointments)
+            {
+                if (a.RealtorID != 0)
+                    appointments.Add(a);
+            }
+            return appointments;
         }
     }
 }

@@ -37,7 +37,6 @@ namespace HomeInspectorSchedule
             phone = phone.Replace("-", "");
 
             //bool result = phone.Any(x => char.IsLetter(x));
-            //bool result2 = phone.Any(x => char.IsControl(x));
             bool result = phone.Any(x => !char.IsNumber(x));
             if ((phone.Length != 10 && phone.Length != 7) || result)
             {

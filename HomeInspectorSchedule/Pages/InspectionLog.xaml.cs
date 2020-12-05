@@ -68,7 +68,7 @@ namespace HomeInspectorSchedule.Pages
             }
             string creater = "Report created by " + currentUser.Name + "\n\n";
             text = creater + text;
-            if (!File.Exists(filePath))
+            if (!File.Exists(filePath) && !filePath.Contains(" "))
             {
                 File.WriteAllText(filePath, text);
                 report.FilePath = filePath;
@@ -79,7 +79,11 @@ namespace HomeInspectorSchedule.Pages
             }
             else
             {
-                await DisplayAlert("Conflict", "A file already exist by that name.", "OK");
+                if(File.Exists(filePath))
+                    await DisplayAlert("Conflict", "A file already exist by that name.", "OK");
+
+                else if(filePath.Contains(" "))
+                    await DisplayAlert("Naming Error", "File name cannot contain spaces.", "OK");
             }
         }                    
     }
