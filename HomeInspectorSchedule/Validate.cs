@@ -177,5 +177,14 @@ namespace HomeInspectorSchedule
             lastText = text;
             return lastText;
         }
+
+        static public string ZipLength(string zip)
+        {
+            if (zip.Length > 5)
+            {
+                zip = zip.Substring(0, 5);
+            }
+            return zip;
+        }
     }
 }

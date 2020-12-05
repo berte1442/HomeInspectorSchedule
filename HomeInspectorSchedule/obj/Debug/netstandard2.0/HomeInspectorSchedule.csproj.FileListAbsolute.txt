@@ -22,3 +22,4 @@ C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debu
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\MetricsMenu.xaml.g.cs
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\InspectionLog.xaml.g.cs
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\MyReports.xaml.g.cs
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.csprojAssemblyReference.cache

@@ -507,6 +507,8 @@ namespace HomeInspectorSchedule.Pages
         {
             if (ZipEntry.Text != null & ZipEntry.Text != "")
                 ZipEntry.BackgroundColor = default;
+
+            ZipEntry.Text = Validate.ZipLength(ZipEntry.Text);
         }
 
         private void ServicesPicker_SelectedIndexChanged(object sender, EventArgs e)

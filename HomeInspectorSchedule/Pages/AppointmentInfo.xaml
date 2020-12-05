@@ -53,7 +53,8 @@
                         <Label Text="Zip Code"
                                FontSize="Micro"/>
                         <Entry x:Name="ZipEntry"
-                               Keyboard="Numeric"/>
+                               Keyboard="Numeric"
+                               TextChanged="ZipEntry_TextChanged"/>
                         <Label Text="Inspection Services"
                                FontSize="Micro"/>
                         <Picker x:Name="InspectionTypePicker"/>

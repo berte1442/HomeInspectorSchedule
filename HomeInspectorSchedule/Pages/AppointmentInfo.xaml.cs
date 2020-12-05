@@ -437,5 +437,10 @@ namespace HomeInspectorSchedule.Pages
         {
             clientLastPhoneText = Validate.PhoneInput(ClientPhoneEntry, clientLastPhoneText);
         }
+
+        private void ZipEntry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ZipEntry.Text = Validate.ZipLength(ZipEntry.Text);
+        }
     }
 }
