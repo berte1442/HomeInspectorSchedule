@@ -83,16 +83,7 @@ namespace HomeInspectorSchedule.Pages
                 SaveEditGrid.IsVisible = false;
             }
         }
-        //private async void RealtorNameEntry_Completed(object sender, EventArgs e)
-        //{
-        //    if (RealtorPicker.SelectedIndex != -1)
-        //    {
-        //        var realtor = await App.Database.GetRealtorAsync(RealtorPicker.SelectedItem.ToString());
-        //        RealtorNameEntry.Text = realtor.Name;
-        //        RealtorPhoneEntry.Text = realtor.Phone;
-        //        RealtorEmailEntry.Text = realtor.Email;
-        //    }
-        //}
+
         private async void OnStart()
         {
 
@@ -129,75 +120,11 @@ namespace HomeInspectorSchedule.Pages
         private async void AddServiceBtn_Clicked(object sender, EventArgs e)
         {
             inspectionTypeIDs = await services.SetServices(ServicesPicker, PriceTotalEntry, RunningTotal, DurationTimeLabel, inspectionTypeIDs);
-            //if (ServicesPicker.SelectedIndex != -1)
-            //{
-            //    double total = double.Parse(PriceTotalEntry.Text);
-            //    var inspectionType = await App.Database.GetInspectionTypeAsync(ServicesPicker.SelectedItem.ToString());
-            //    if (inspectionTypeIDs == null)
-            //    {
-            //        inspectionTypeIDs = inspectionType.ID.ToString();
-            //        RunningTotal.Text = "\n" + inspectionType.Name + " - " + "\t $" + inspectionType.Price.ToString();
-            //        total = inspectionType.Price;
-            //        DurationTimeLabel.Text = inspectionType.DurationHours.ToString();
-            //    }
-            //    else
-            //    {
-            //        double duration = double.Parse(DurationTimeLabel.Text);
-            //        inspectionTypeIDs += ", " + inspectionType.ID.ToString();
-            //        RunningTotal.Text += "\n" + inspectionType.Name + " - " + "\t $" + inspectionType.Price.ToString();
-            //        total += inspectionType.Price;
-            //        DurationTimeLabel.Text = (duration + inspectionType.DurationHours).ToString();
-            //    }
-
-            //    ServicesPicker.Items.Remove(inspectionType.Name);
-            //    ServicesPicker.SelectedIndex = -1;
-            //    PriceTotalEntry.Text = total.ToString();
-            //}
         }
 
         private async void UndoServiceBtn_Clicked(object sender, EventArgs e)
         {
-            //InspectionServices services = new InspectionServices();
             inspectionTypeIDs = await services.UndoServices(ServicesPicker, PriceTotalEntry, RunningTotal, DurationTimeLabel, inspectionTypeIDs);
-            //if (RunningTotal.Text != "" && RunningTotal.Text != null)
-            //{
-            //    // remove last selected item price from UI display
-            //    string allAdded = RunningTotal.Text;
-            //    int index = allAdded.LastIndexOf("\n");
-            //    string undoLast = allAdded.Substring(0, index);
-            //    RunningTotal.Text = undoLast;
-
-            //    // add inspection type back to picker
-            //    int index2 = allAdded.LastIndexOf("-") - 1;
-            //    var length = index2 - index;
-            //    string service = allAdded.Substring(index, length);
-            //    service = service.Trim();
-            //    ServicesPicker.Items.Add(service);
-
-            //    // removes inspection type ID from InspectionTypeIDs
-            //    string insIDs = inspectionTypeIDs;
-            //    int index3;
-            //    if (RunningTotal.Text != "")
-            //    {
-            //        index3 = insIDs.LastIndexOf(",");
-            //        string removeLast = insIDs.Substring(0, index3);
-            //        inspectionTypeIDs = removeLast;
-            //    }
-            //    else
-            //    {
-            //        inspectionTypeIDs = null;
-            //    }
-
-            //    // subtracts removed service price from total price
-            //    double priceTotal = double.Parse(PriceTotalEntry.Text);
-            //    var inspectionType = await App.Database.GetInspectionTypeAsync(service);
-            //    PriceTotalEntry.Text = (priceTotal - inspectionType.Price).ToString();
-
-            //    // subtracts last service duration hours from total inspection estimated duration time
-            //    double subtractDuration = inspectionType.DurationHours;
-            //    double totalDuration = double.Parse(DurationTimeLabel.Text);
-            //    DurationTimeLabel.Text = (totalDuration - subtractDuration).ToString();
-            //}
         }
 
         private async void ScheduleBtn_Clicked(object sender, EventArgs e)
@@ -245,8 +172,6 @@ namespace HomeInspectorSchedule.Pages
                         var clientPhone = Validate.Phone_Syntax(phoneC);
                         client.Phone = clientPhone;
                     }
-
-                    
 
                     Realtor realtor = new Realtor();
                     if (RealtorNameEntry.Text != null & RealtorNameEntry.Text != "")

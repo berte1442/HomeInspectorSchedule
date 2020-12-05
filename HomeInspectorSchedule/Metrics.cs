@@ -331,5 +331,182 @@ namespace HomeInspectorSchedule
             }
             return appointments;
         }
+
+        public async Task DisplaySet(string[,] metricsReport, Grid grid, Grid grid2, List<Appointment> appointments, Label label)
+        {
+            var fullReport = InspectorReportList();
+            grid2.Children.Clear();
+            RowDefinitionCollection rowDefinitions = new RowDefinitionCollection
+            {
+                new RowDefinition { Height = 40 },
+                new RowDefinition { Height = 1 }
+            };
+            grid2.RowDefinitions = rowDefinitions;
+            var count = fullReport.Count;
+            string[,,] report = new string[count, count, count];
+            for (int i = 0; i < count; i++)
+            {
+                double priceTotal = 0;
+                var inspector = await App.Database.GetInspectorAsync(metricsReport[i, 0]);
+                //var appointments = await App.Database.GetAppointmentsAsync();
+                foreach (var a in appointments)
+                {
+                    if (a.InspectorID == inspector.ID && a.StartTime.Year == Metrics.year)
+                    {
+                        priceTotal += a.PriceTotal;
+                    }
+                }
+                report[i, 0, 0] = metricsReport[i, 0];
+                report[i, 1, 0] = metricsReport[i, 1];
+                report[i, 1, 1] = priceTotal.ToString("C2");
+
+            }
+
+            report = OrganizeArray(report, count);
+            grid.Children.Clear();
+            //TopInspectorsLabel.IsVisible = true;
+            label.IsVisible = true;
+            Label firstInspectorLabel = new Label();
+            grid.Children.Add(firstInspectorLabel, 0, 0);
+            Label secondInspectorLabel = new Label();
+            grid.Children.Add(secondInspectorLabel, 0, 1);
+            Label thirdInspectorLabel = new Label();
+            grid.Children.Add(thirdInspectorLabel, 0, 2);
+
+            Label firstBarLabel2 = new Label
+            {
+                BackgroundColor = Color.Green,
+                HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center,
+                IsVisible = false
+            };
+            grid.Children.Add(firstBarLabel2, 1, 0);
+            Label secondBarLabel2 = new Label
+            {
+                BackgroundColor = Color.Green,
+                HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center,
+                IsVisible = false
+            };
+            grid.Children.Add(secondBarLabel2, 1, 1);
+            Label thirdBarLabel2 = new Label
+            {
+                BackgroundColor = Color.Green,
+                HorizontalTextAlignment = TextAlignment.Center,
+                VerticalTextAlignment = TextAlignment.Center,
+                IsVisible = false
+            };
+            grid.Children.Add(thirdBarLabel2, 1, 2);
+
+            if (count > 0 && report[0, 0, 0] != null)
+            {
+                firstInspectorLabel.Text = report[0, 0, 0];
+            }
+            if (count > 1 && report[1, 0, 0] != null)
+            {
+                secondInspectorLabel.Text = report[1, 0, 0];
+            }
+            if (count > 2 && report[2, 0, 0] != null)
+            {
+                thirdInspectorLabel.Text = report[2, 0, 0];
+            }
+
+            int first = 0;
+            int second = 0;
+            int third = 0;
+            if (count > 0 && report[0, 1, 0] != null)
+            {
+                first = int.Parse(report[0, 1, 0]);
+            }
+            if (count > 1 && report[1, 1, 0] != null)
+            {
+                second = int.Parse(report[1, 1, 0]);
+            }
+            if (count > 2 && report[2, 1, 0] != null)
+            {
+                third = int.Parse(report[2, 1, 0]);
+            }
+
+            ColumnDefinitionCollection columnDefinitions = new ColumnDefinitionCollection();
+            for (int i = 0; i < first; i++)
+            {
+                var def = new ColumnDefinition();
+                columnDefinitions.Add(def);
+            }
+
+            grid.ColumnDefinitions = columnDefinitions;
+
+            if (first > 0)
+            {
+                Grid.SetColumnSpan(firstBarLabel2, first);
+                firstBarLabel2.Text = first.ToString();
+                firstBarLabel2.IsVisible = true;
+            }
+            if (second > 0)
+            {
+                Grid.SetColumnSpan(secondBarLabel2, second);
+                secondBarLabel2.Text = second.ToString();
+                secondBarLabel2.IsVisible = true;
+            }
+            if (third > 0)
+            {
+                Grid.SetColumnSpan(thirdBarLabel2, third);
+                thirdBarLabel2.Text = third.ToString();
+                thirdBarLabel2.IsVisible = true;
+            }
+            Label insLabel = new Label
+            {
+                Text = "Inspector",
+                FontAttributes = FontAttributes.Bold,
+                HorizontalTextAlignment = TextAlignment.Center
+            };
+            Label countLabel = new Label
+            {
+                Text = "Total\nInspections",
+                FontAttributes = FontAttributes.Bold,
+                HorizontalTextAlignment = TextAlignment.Center
+            };
+            Label priceLabel = new Label
+            {
+                Text = "Generated\nRevenue",
+                FontAttributes = FontAttributes.Bold,
+                HorizontalTextAlignment = TextAlignment.Center
+            };
+
+            grid2.Children.Add(insLabel, 0, 0);
+            grid2.Children.Add(countLabel, 1, 0);
+            grid2.Children.Add(priceLabel, 2, 0);
+
+            BoxView line = new BoxView
+            {
+                Color = Color.Black,
+                WidthRequest = 100
+            };
+            grid2.Children.Add(line, 0, 1);
+
+            Grid.SetColumnSpan(line, 3);
+
+            
+            for (int i = 0; i < count; i++)
+            {
+                Label label1 = new Label();
+                label1.Text = report[i, 0, 0];
+                label1.HorizontalTextAlignment = TextAlignment.Center;
+                label1.VerticalTextAlignment = TextAlignment.Center;
+                Label label2 = new Label();
+                label2.Text = report[i, 1, 0];
+                label2.HorizontalTextAlignment = TextAlignment.Center;
+                label2.VerticalTextAlignment = TextAlignment.Center;
+                Label label3 = new Label();
+                label3.Text = report[i, 1, 1];
+                label3.HorizontalTextAlignment = TextAlignment.Center;
+                label3.VerticalTextAlignment = TextAlignment.Center;
+
+
+                grid2.Children.Add(label1, 0, i + 2);
+                grid2.Children.Add(label2, 1, i + 2);
+                grid2.Children.Add(label3, 2, i + 2);
+            }
+        }
     }
 }
