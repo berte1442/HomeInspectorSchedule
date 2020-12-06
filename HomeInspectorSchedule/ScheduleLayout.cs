@@ -94,6 +94,7 @@ namespace HomeInspectorSchedule
                     new ColumnDefinition { Width = 60 },
                     new ColumnDefinition { Width = 60 },
                     new ColumnDefinition { Width = 60 },
+                    new ColumnDefinition { Width = 60 },
                     new ColumnDefinition { Width = 60 }
                 }
             };
@@ -775,14 +776,43 @@ namespace HomeInspectorSchedule
                             }
                         }
                         int column = startTime.Hour - 7;
-                        if(column > 0)
+                        //if(column > 0 && column < 14)
+                        //{
+                        //    GridView.Children.Add(Appointment, column, row);
+                        //}
+                       /* else */if(column <= 0)
                         {
-                            GridView.Children.Add(Appointment, column, row);
+                            Appointment.Text = "EARLY START\n" + Appointment.Text;
+                            Appointment.TextColor = Color.Red;
+                            int variance = column - 1;
+                            duration += variance;
+                            column = 1;
+                            //GridView.Children.Add(Appointment, column, row);
                         }
-                        if(duration == 0)
+                        else if(column >= 13)
+                        {
+                            column = 13;
+                            //duration = 1;
+                            //GridView.Children.Add(Appointment, column, row);
+                        }
+                        if (column > 10)
+                        {
+                            Appointment.Text = "Late Start\n" + Appointment.Text;
+                        }
+
+
+                        int columnSpan = Convert.ToInt32(column + duration);
+                        if(columnSpan > 13)
+                        {
+                            var difference = 13 - columnSpan;
+                            duration += difference + 1;
+                        }
+                        if (duration <= 0)
                         {
                             duration = 1;
                         }
+                        GridView.Children.Add(Appointment, column, row);
+
                         Grid.SetColumnSpan(Appointment, Convert.ToInt32(duration));
                     }
                 }

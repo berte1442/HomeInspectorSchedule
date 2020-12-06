@@ -145,7 +145,7 @@ namespace HomeInspectorSchedule
 
         static public async Task<string> BuildReport(Appointment appointment)
         {
-            string text = null;
+            string text;
 
             var inspector = await App.Database.GetInspectorAsync(appointment.InspectorID);
             Realtor realtor = new Realtor();
@@ -179,7 +179,7 @@ namespace HomeInspectorSchedule
                 services += type.Name + " - " + type.Price;
             }
 
-            string realtorData = null;
+            string realtorData;
 
             if(realtor.ID != 0)
             {
@@ -194,6 +194,7 @@ namespace HomeInspectorSchedule
                    appointment.StartTime.ToShortTimeString() + "\n\n" +
                 "Inspector: \n" + inspector.Name + "\n\n" + 
                 "Client:\n" + client.Name + " / " + client.Phone + " / " + client.Email + "\n\n" + 
+                "Address:\n" + address.StreetAddress + " " + address.City + " AL, " + address.Zip + "\n\n" + 
                 realtorData +
                 services + "\n" + 
                 "Total: $" + appointment.PriceTotal + "\n\n" + "________________________" + "\n\n";

@@ -254,137 +254,147 @@ namespace HomeInspectorSchedule.Pages
         {
             try
             {
+                var workhours = Validate.CheckTime(StartTimePicker.Time);
+                var acceptedTime = true;
 
-                bool cPhone = true;
-                bool rPhone = true;
-                bool cEmail = true;
-                bool rEmail = true;
-                string phoneC = null;
-                string phoneR = null;
-                if (ClientPhoneEntry.Text.Length > 0)
+                if (workhours == false)
                 {
-                    phoneC = Validate.Phone_Syntax(ClientPhoneEntry.Text);
-                    cPhone = Validate.Phone_Validate(phoneC);
+                    acceptedTime = await DisplayAlert("Schedule Time", "The time selected is outside of normal work hours.  " +
+                        "Do you want to continue?", "Yes, save inspection", "No, don't save inspection");
                 }
-                if (RealtorPhoneEntry.Text.Length > 0)
+                if (acceptedTime)
                 {
-                    phoneR = Validate.Phone_Syntax(RealtorPhoneEntry.Text);
-                    rPhone = Validate.Phone_Validate(phoneR);
-                }
-                if (ClientEmailEntry.Text.Length > 0)
-                {
-                    cEmail = Validate.Email_Validate(ClientEmailEntry.Text);
-                }
-                if (RealtorEmailEntry.Text.Length > 0)
-                {
-                    rEmail = Validate.Email_Validate(RealtorEmailEntry.Text);
-                }
-                var aZip = Validate.Zip_Syntax(ZipEntry.Text);
-
-                if (cPhone && rPhone && cEmail && rEmail && aZip)
-                {
-                    client.Name = ClientNameEntry.Text;
-                    var clientPhone = Validate.Phone_Syntax(phoneC);
-                    client.Phone = clientPhone;
-                    client.Email = ClientEmailEntry.Text;
-
-                    address.StreetAddress = StreeAddressEntry.Text;
-                    address.City = CityEntry.Text;
-                    address.Zip = ZipEntry.Text;
-
-                    realtor.Name = RealtorNameEntry.Text;
-                    var realtorPhone = Validate.Phone_Syntax(phoneR);
-                    realtor.Phone = realtorPhone;
-                    realtor.Email = RealtorEmailEntry.Text;
-
-
-                    var selectedInspector = await App.Database.GetInspectorAsync(InspectorPicker.SelectedItem.ToString());
-
-                    //inspection type ids
-                    var typeNames = InspectionTypeLabel.Text;
-
-                    string inspectionTypes = null;
-
-                    if (typeNames.ToLower().Contains("residential"))
+                    bool cPhone = true;
+                    bool rPhone = true;
+                    bool cEmail = true;
+                    bool rEmail = true;
+                    string phoneC = null;
+                    string phoneR = null;
+                    if (ClientPhoneEntry.Text.Length > 0)
                     {
-                        var inspectionType = await App.Database.GetInspectionTypeAsync("Residential");
-                        inspectionTypes += inspectionType.ID.ToString() + ", ";
+                        phoneC = Validate.Phone_Syntax(ClientPhoneEntry.Text);
+                        cPhone = Validate.Phone_Validate(phoneC);
                     }
-                    if (typeNames.ToLower().Contains("commercial"))
+                    if (RealtorPhoneEntry.Text.Length > 0)
                     {
-                        var inspectionType = await App.Database.GetInspectionTypeAsync("Commercial");
-                        inspectionTypes += inspectionType.ID.ToString() + ", ";
+                        phoneR = Validate.Phone_Syntax(RealtorPhoneEntry.Text);
+                        rPhone = Validate.Phone_Validate(phoneR);
                     }
-                    if (typeNames.ToLower().Contains("radon"))
+                    if (ClientEmailEntry.Text.Length > 0)
                     {
-                        var inspectionType = await App.Database.GetInspectionTypeAsync("Radon");
-                        inspectionTypes += inspectionType.ID.ToString() + ", ";
+                        cEmail = Validate.Email_Validate(ClientEmailEntry.Text);
                     }
-                    if (typeNames.ToLower().Contains("mold"))
+                    if (RealtorEmailEntry.Text.Length > 0)
                     {
-                        var inspectionType = await App.Database.GetInspectionTypeAsync("Mold");
-                        inspectionTypes += inspectionType.ID.ToString() + ", ";
+                        rEmail = Validate.Email_Validate(RealtorEmailEntry.Text);
                     }
+                    var aZip = Validate.Zip_Syntax(ZipEntry.Text);
 
-                    var types = inspectionTypes.Substring(0, inspectionTypes.Length - 2);
-
-                    //string price = PriceTotalEntry.Text.Substring(1, PriceTotalEntry.Text.Length - 1);
-
-                    app.InspectorID = selectedInspector.ID;
-                    app.ClientID = client.ID;
-                    app.RealtorID = realtor.ID;
-                    app.AddressID = address.ID;
-                    app.InspectionTypeIDs = types.Trim();
-                    app.PriceTotal = Convert.ToDouble(PriceTotalEntry.Text);
-                    app.StartTime = StartDatePicker.Date + StartTimePicker.Time;
-                    app.Duration = Convert.ToDouble(DurationEntry.Text);
-                    if (PaidCheckBox.IsChecked)
+                    if (cPhone && rPhone && cEmail && rEmail && aZip)
                     {
-                        app.Paid = true;
+                        client.Name = ClientNameEntry.Text;
+                        var clientPhone = Validate.Phone_Syntax(phoneC);
+                        client.Phone = clientPhone;
+                        client.Email = ClientEmailEntry.Text;
+
+                        address.StreetAddress = StreeAddressEntry.Text;
+                        address.City = CityEntry.Text;
+                        address.Zip = ZipEntry.Text;
+
+                        realtor.Name = RealtorNameEntry.Text;
+                        var realtorPhone = Validate.Phone_Syntax(phoneR);
+                        realtor.Phone = realtorPhone;
+                        realtor.Email = RealtorEmailEntry.Text;
+
+
+                        var selectedInspector = await App.Database.GetInspectorAsync(InspectorPicker.SelectedItem.ToString());
+
+                        //inspection type ids
+                        var typeNames = InspectionTypeLabel.Text;
+
+                        string inspectionTypes = null;
+
+                        if (typeNames.ToLower().Contains("residential"))
+                        {
+                            var inspectionType = await App.Database.GetInspectionTypeAsync("Residential");
+                            inspectionTypes += inspectionType.ID.ToString() + ", ";
+                        }
+                        if (typeNames.ToLower().Contains("commercial"))
+                        {
+                            var inspectionType = await App.Database.GetInspectionTypeAsync("Commercial");
+                            inspectionTypes += inspectionType.ID.ToString() + ", ";
+                        }
+                        if (typeNames.ToLower().Contains("radon"))
+                        {
+                            var inspectionType = await App.Database.GetInspectionTypeAsync("Radon");
+                            inspectionTypes += inspectionType.ID.ToString() + ", ";
+                        }
+                        if (typeNames.ToLower().Contains("mold"))
+                        {
+                            var inspectionType = await App.Database.GetInspectionTypeAsync("Mold");
+                            inspectionTypes += inspectionType.ID.ToString() + ", ";
+                        }
+
+                        var types = inspectionTypes.Substring(0, inspectionTypes.Length - 2);
+
+                        //string price = PriceTotalEntry.Text.Substring(1, PriceTotalEntry.Text.Length - 1);
+
+                        app.InspectorID = selectedInspector.ID;
+                        app.ClientID = client.ID;
+                        app.RealtorID = realtor.ID;
+                        app.AddressID = address.ID;
+                        app.InspectionTypeIDs = types.Trim();
+                        app.PriceTotal = Convert.ToDouble(PriceTotalEntry.Text);
+                        app.StartTime = StartDatePicker.Date + StartTimePicker.Time;
+                        app.Duration = Convert.ToDouble(DurationEntry.Text);
+                        if (PaidCheckBox.IsChecked)
+                        {
+                            app.Paid = true;
+                        }
+                        else
+                        {
+                            app.Paid = false;
+                        }
+                        if (NotesEditor.Text != null)
+                        {
+                            app.Notes = NotesEditor.Text;
+                        }
+
+                        app.Canceled = canceled;
+                        if (user.Admin)
+                        {
+                            app.Approved = approved;
+                        }
+                        else
+                        {
+                            app.Approved = false;
+                        }
+
+                        await App.Database.SaveAppointmentAsync(app);
+                        await client.SavePersonAsync(client);
+                        await App.Database.SaveAddressAsync(address);
+                        await realtor.SavePersonAsync(realtor);
+
+                        await DisplayAlert("Saved", "Appointment details saved.", "OK");
+
+                        await Application.Current.MainPage.Navigation.PopAsync();
                     }
                     else
                     {
-                        app.Paid = false;
+                        string alert = "";
+                        if (aZip == false)
+                            alert = "Invalid zip code entry for address\n";
+                        if (cPhone == false)
+                            alert += "Invalid Client Phone Number\n";
+                        if (rPhone == false)
+                            alert += "Invalid Realtor Phone Numner\n";
+                        if (cEmail == false)
+                            alert += "Invalid Client Email Address\n";
+                        if (rEmail == false)
+                            alert += "Invalid Realtor Email Address";
+
+                        await DisplayAlert("Error", alert, "OK");
                     }
-                    if (NotesEditor.Text != null)
-                    {
-                        app.Notes = NotesEditor.Text;
-                    }
-
-                    app.Canceled = canceled;
-                    if (user.Admin)
-                    {
-                        app.Approved = approved;
-                    }
-                    else
-                    {
-                        app.Approved = false;
-                    }
-
-                    await App.Database.SaveAppointmentAsync(app);
-                    await client.SavePersonAsync(client);
-                    await App.Database.SaveAddressAsync(address);
-                    await realtor.SavePersonAsync(realtor);
-
-                    await DisplayAlert("Saved", "Appointment details saved.", "OK");
-
-                    await Application.Current.MainPage.Navigation.PopAsync();
-                }
-                else
-                {
-                    string alert = "";
-                    if (aZip == false)
-                        alert = "Invalid zip code entry for address\n";
-                    if (cPhone == false)
-                        alert += "Invalid Client Phone Number\n";
-                    if (rPhone == false)
-                        alert += "Invalid Realtor Phone Numner\n";
-                    if (cEmail == false)
-                        alert += "Invalid Client Email Address\n";
-                    if (rEmail == false)
-                        alert += "Invalid Realtor Email Address";
-
-                    await DisplayAlert("Error", alert, "OK");
                 }
             }
             catch

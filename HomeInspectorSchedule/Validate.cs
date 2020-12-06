@@ -186,5 +186,20 @@ namespace HomeInspectorSchedule
             }
             return zip;
         }
+
+        static public bool CheckTime(TimeSpan time)
+        {
+            bool workhours = true;
+            DateTime dateTime = DateTime.Parse("1/1/2020 8:00:00 AM");
+            TimeSpan early = dateTime.TimeOfDay;
+            DateTime dateTime2 = DateTime.Parse("1/1/2020 5:00:00 PM");
+            TimeSpan late = dateTime2.TimeOfDay;
+            
+            if(time < early || time > late)
+            {
+                workhours = false;
+            }
+            return workhours;
+        }
     }
 }

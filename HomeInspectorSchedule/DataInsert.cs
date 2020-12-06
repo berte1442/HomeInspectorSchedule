@@ -164,6 +164,7 @@ namespace HomeInspectorSchedule
             };
             //await App.Database.SaveClientAsync(lynn);
             await lynn.SavePersonAsync(lynn);
+
             // inspection types
 
             InspectionType residential = new InspectionType
@@ -262,7 +263,8 @@ namespace HomeInspectorSchedule
                 Duration = residential.DurationHours,
                 Paid = false,
                 AddressID = 1,
-                Notes = "Client will pay by check on site"
+                Notes = "Client will pay by check on site",
+                Approved = true
             };
             await App.Database.SaveAppointmentAsync(robMonMorn);
             
@@ -277,7 +279,8 @@ namespace HomeInspectorSchedule
                 Duration = residential.DurationHours + radon.DurationHours,
                 Paid = true,
                 AddressID = 2,
-                Notes = "Client paid via credit card"
+                Notes = "Client paid via credit card",
+                Approved = true
             };
             await App.Database.SaveAppointmentAsync(robMonAft);
 
@@ -292,7 +295,8 @@ namespace HomeInspectorSchedule
                 Duration = commercial.DurationHours,
                 Paid = false,
                 AddressID = 3,
-                Notes = "Large warehouse building.  Signs of roof leaks."
+                Notes = "Large warehouse building.  Signs of roof leaks.",
+                Approved = true
             };
             await App.Database.SaveAppointmentAsync(tedMonAft);
 
@@ -319,14 +323,274 @@ namespace HomeInspectorSchedule
                 ClientID = 5,
                 RealtorID = 5,
                 InspectionTypeIDs = "1, 4",
-                PriceTotal = residential.Price,
+                PriceTotal = residential.Price + mold.Price,
                 StartTime = DateTime.Parse("12/14/2020 1:00:00 PM"),
                 Duration = residential.DurationHours + mold.DurationHours,
                 Paid = false,
                 AddressID = 5,
                 Notes = "Client requested mold testing with inspection.",
+                Approved = true
             };
-            await App.Database.SaveAppointmentAsync(jayMonAft);
+            await App.Database.SaveAppointmentAsync(jayMonAft); 
+            
+            /// begin editing below here
+
+            Appointment new1 = new Appointment
+            {
+                InspectorID = 1,
+                ClientID = 1,
+                RealtorID = 1,
+                InspectionTypeIDs = "2, 3",
+                PriceTotal = commercial.Price + radon.Price,
+                StartTime = DateTime.Parse("12/8/2020 8:00:00 AM"),
+                Duration = commercial.DurationHours + radon.DurationHours,
+                Paid = true,
+                AddressID = 1,
+                Notes = "Commercial building with radon testing.",
+                Approved = true
+            };
+            await App.Database.SaveAppointmentAsync(new1);
+
+            Appointment new2 = new Appointment
+            {
+                InspectorID = 2,
+                ClientID = 2,
+                RealtorID = 2,
+                InspectionTypeIDs = "1",
+                PriceTotal = residential.Price,
+                StartTime = DateTime.Parse("12/8/2020 12:00:00 PM"),
+                Duration = residential.DurationHours,
+                Paid = false,
+                AddressID = 2,
+                Notes = "Client will attend at end of inspection.",
+                Approved = false
+            };
+            await App.Database.SaveAppointmentAsync(new2);
+
+            Appointment new3 = new Appointment
+            {
+                InspectorID = 2,
+                ClientID = 3,
+                RealtorID = 5,
+                InspectionTypeIDs = "1, 3",
+                PriceTotal = residential.Price + radon.Price,
+                StartTime = DateTime.Parse("12/8/2020 8:00:00 AM"),
+                Duration = residential.DurationHours + radon.DurationHours,
+                Paid = true,
+                AddressID = 3,
+                Notes = "Client mentioned stains in the master bedroom ceiling.",
+                Approved = true
+            };
+            await App.Database.SaveAppointmentAsync(new3);
+
+            Appointment new4 = new Appointment
+            {
+                InspectorID = 3,
+                ClientID = 3,
+                RealtorID = 4,
+                InspectionTypeIDs = "1",
+                PriceTotal = residential.Price,
+                StartTime = DateTime.Parse("12/14/2020 2:00:00 PM"),
+                Duration = residential.DurationHours,
+                Paid = false,
+                AddressID = 4,
+                Notes = "Client may add radon testing.",
+                Approved = false
+            };
+            await App.Database.SaveAppointmentAsync(new4);
+
+            Appointment new5 = new Appointment
+            {
+                InspectorID = 5,
+                ClientID = 4,
+                RealtorID = 5,
+                InspectionTypeIDs = "1",
+                PriceTotal = residential.Price,
+                StartTime = DateTime.Parse("12/19/2020 8:00:00 AM"),
+                Duration = residential.DurationHours,
+                Paid = false,
+                AddressID = 5,
+                Notes = "Client is moving from out of state and will not attend inspection.",
+                Approved = true
+            };
+            await App.Database.SaveAppointmentAsync(new5);
+
+            Appointment new6 = new Appointment
+            {
+                InspectorID = 1,
+                ClientID = 1,
+                RealtorID = 2,
+                InspectionTypeIDs = "1",
+                PriceTotal = residential.Price,
+                StartTime = DateTime.Parse("12/10/2020 8:00:00 AM"),
+                Duration = residential.DurationHours,
+                Paid = true,
+                AddressID = 1,
+                Notes = "Client specifically requested Robert as inspector.",
+                Approved = true
+            };
+            await App.Database.SaveAppointmentAsync(new6);
+
+            Appointment new7 = new Appointment
+            {
+                InspectorID = 2,
+                ClientID = 2,
+                RealtorID = 3,
+                InspectionTypeIDs = "3, 4",
+                PriceTotal = radon.Price + mold.Price,
+                StartTime = DateTime.Parse("12/11/2020 1:00:00 PM"),
+                Duration = radon.DurationHours + mold.DurationHours,
+                Paid = true,
+                AddressID = 2,
+                Notes = "Radon and mold testing only.",
+                Canceled = true
+            };
+            await App.Database.SaveAppointmentAsync(new7);
+
+            Appointment new8 = new Appointment
+            {
+                InspectorID = 3,
+                ClientID = 3,
+                RealtorID = 3,
+                InspectionTypeIDs = "1, 4",
+                PriceTotal = residential.Price + mold.Price,
+                StartTime = DateTime.Parse("12/11/2020 1:00:00 PM"),
+                Duration = residential.DurationHours + mold.DurationHours,
+                Paid = true,
+                AddressID = 3,
+                Notes = "Client is an out of sate realtor.",
+                Approved = false
+            };
+            await App.Database.SaveAppointmentAsync(new8);
+
+            Appointment new9 = new Appointment
+            {
+                InspectorID = 4,
+                ClientID = 4,
+                RealtorID = 4,
+                InspectionTypeIDs = "1",
+                PriceTotal = residential.Price,
+                StartTime = DateTime.Parse("12/11/2020 9:00:00 AM"),
+                Duration = residential.DurationHours,
+                Paid = false,
+                AddressID = 4,
+                Notes = "1500 sqft property with detached garage.",
+                Approved = true
+            };
+            await App.Database.SaveAppointmentAsync(new9);
+
+            Appointment new10 = new Appointment
+            {
+                InspectorID = 4,
+                ClientID = 5,
+                RealtorID = 1,
+                InspectionTypeIDs = "1",
+                PriceTotal = residential.Price,
+                StartTime = DateTime.Parse("12/11/2020 1:00:00 PM"),
+                Duration = residential.DurationHours,
+                Paid = false,
+                AddressID = 5,
+                Notes = "New construction.",
+                Approved = false
+            };
+            await App.Database.SaveAppointmentAsync(new10);
+
+            Appointment new11 = new Appointment
+            {
+                InspectorID = 5,
+                ClientID = 1,
+                RealtorID = 5,
+                InspectionTypeIDs = "1, 3",
+                PriceTotal = residential.Price + radon.Price,
+                StartTime = DateTime.Parse("12/11/2020 1:00:00 PM"),
+                Duration = residential.DurationHours + radon.DurationHours,
+                Paid = false,
+                AddressID = 1,
+                Notes = "1200 sqft home with radon testing.",
+                Approved = true
+            };
+            await App.Database.SaveAppointmentAsync(new11);
+
+            Appointment new12 = new Appointment
+            {
+                InspectorID = 1,
+                ClientID = 2,
+                RealtorID = 2,
+                InspectionTypeIDs = "1",
+                PriceTotal = residential.Price,
+                StartTime = DateTime.Parse("12/12/2020 10:00:00 AM"),
+                Duration = residential.DurationHours,
+                Paid = true,
+                AddressID = 2,
+                Notes = "Client is a property investor and only needs structure, electrical, plumbing, HVAC and roof evaluated.",
+                Approved = true
+            };
+            await App.Database.SaveAppointmentAsync(new12);
+
+            Appointment new13 = new Appointment
+            {
+                InspectorID = 1,
+                ClientID = 3,
+                RealtorID = 0,
+                InspectionTypeIDs = "1",
+                PriceTotal = radon.Price,
+                StartTime = DateTime.Parse("12/12/2020 2:00:00 PM"),
+                Duration = radon.DurationHours,
+                Paid = true,
+                AddressID = 3,
+                Notes = "Stand alone radon test.",
+                Approved = true
+            };
+            await App.Database.SaveAppointmentAsync(new13);
+
+            Appointment new14 = new Appointment
+            {
+                InspectorID = 2,
+                ClientID = 4,
+                RealtorID = 0,
+                InspectionTypeIDs = "1",
+                PriceTotal = residential.Price,
+                StartTime = DateTime.Parse("12/13/2020 8:00:00 AM"),
+                Duration = residential.DurationHours,
+                Paid = false,
+                AddressID = 4,
+                Notes = "For sale by owner FSBO.",
+                Approved = false
+            };
+            await App.Database.SaveAppointmentAsync(new14);
+
+            Appointment new15 = new Appointment
+            {
+                InspectorID = 3,
+                ClientID = 5,
+                RealtorID = 1,
+                InspectionTypeIDs = "2",
+                PriceTotal = commercial.Price,
+                StartTime = DateTime.Parse("12/15/2020 11:00:00 AM"),
+                Duration = commercial.DurationHours,
+                Paid = true,
+                AddressID = 5,
+                Notes = "Building is an old dentist office which will be converted into a counceling center.",
+                Approved = true
+            };
+            await App.Database.SaveAppointmentAsync(new15);
+
+            Appointment new16 = new Appointment
+            {
+                InspectorID = 4,
+                ClientID = 1,
+                RealtorID = 0,
+                InspectionTypeIDs = "1",
+                PriceTotal = residential.Price,
+                StartTime = DateTime.Parse("12/16/2020 1:00:00 PM"),
+                Duration = residential.DurationHours,
+                Paid = false,
+                AddressID = 1,
+                Notes = "FSBO.  Client stated HVAC and Roof appear to be beyond typical life expectancy.",
+                Approved = true
+            };
+            await App.Database.SaveAppointmentAsync(new16);
+
         }
     }
 }

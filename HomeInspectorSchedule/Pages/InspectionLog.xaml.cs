@@ -66,7 +66,7 @@ namespace HomeInspectorSchedule.Pages
                 var appointment = await App.Database.GetAppointmentAsync(Convert.ToInt32(idStr.Trim()));
                 text += await InspectionLogTools.BuildReport(appointment);
             }
-            string creater = "Report created by " + currentUser.Name + "\n\n";
+            string creater = "Report created by " + currentUser.Name +"\n" + "________________________" + "\n\n";
             text = creater + text;
             if (!File.Exists(filePath) && !filePath.Contains(" "))
             {
