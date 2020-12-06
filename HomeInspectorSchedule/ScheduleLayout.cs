@@ -775,31 +775,25 @@ namespace HomeInspectorSchedule
                                 row = appInspector.ID;  // verify this is correct inspector.ID
                             }
                         }
+
                         int column = startTime.Hour - 7;
-                        //if(column > 0 && column < 14)
-                        //{
-                        //    GridView.Children.Add(Appointment, column, row);
-                        //}
-                       /* else */if(column <= 0)
+                        
+                        if(column <= 0)
                         {
                             Appointment.Text = "EARLY START\n" + Appointment.Text;
                             Appointment.TextColor = Color.Red;
                             int variance = column - 1;
                             duration += variance;
                             column = 1;
-                            //GridView.Children.Add(Appointment, column, row);
                         }
                         else if(column >= 13)
                         {
                             column = 13;
-                            //duration = 1;
-                            //GridView.Children.Add(Appointment, column, row);
                         }
                         if (column > 10)
                         {
                             Appointment.Text = "Late Start\n" + Appointment.Text;
                         }
-
 
                         int columnSpan = Convert.ToInt32(column + duration);
                         if(columnSpan > 13)
