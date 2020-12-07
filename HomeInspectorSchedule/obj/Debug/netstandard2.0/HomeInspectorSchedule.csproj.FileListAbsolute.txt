@@ -7,7 +7,6 @@ C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\bin\Debu
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\bin\Debug\netstandard2.0\HomeInspectorSchedule.pdb
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\Home.xaml.g.cs
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\Login.xaml.g.cs
-C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\XamlC.stamp
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.dll
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\ref\HomeInspectorSchedule.dll
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.pdb
@@ -23,3 +22,4 @@ C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debu
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\InspectionLog.xaml.g.cs
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\Pages\MyReports.xaml.g.cs
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\HomeInspectorSchedule.csprojAssemblyReference.cache
+C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Debug\netstandard2.0\XamlC.stamp

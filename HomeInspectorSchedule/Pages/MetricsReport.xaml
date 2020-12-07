@@ -48,7 +48,10 @@
                     <Label Text="Full Report"
                            HorizontalOptions="Center"/>
                     <Grid x:Name="FullReportGrid">
-                    
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="1"/>
+                        </Grid.RowDefinitions>
                     </Grid>
 
                 </StackLayout>

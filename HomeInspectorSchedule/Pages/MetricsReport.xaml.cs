@@ -68,7 +68,7 @@ namespace HomeInspectorSchedule.Pages
                     var def = new ColumnDefinition();
                     columnDefinitions.Add(def);
                 }
-
+               
                 GraphGrid.ColumnDefinitions = columnDefinitions;
 
                 Grid.SetColumnSpan(firstBarLabel, first);
@@ -81,7 +81,37 @@ namespace HomeInspectorSchedule.Pages
                 secondBarLabel.IsVisible = true;
                 thirdBarLabel.Text = third.ToString();
                 thirdBarLabel.IsVisible = true;
+                Label insLabel = new Label
+                {
+                    Text = "Inspector",
+                    FontAttributes = FontAttributes.Bold,
+                    HorizontalTextAlignment = TextAlignment.Center
+                };
+                Label countLabel = new Label
+                {
+                    Text = "Total\nReferrals",
+                    FontAttributes = FontAttributes.Bold,
+                    HorizontalTextAlignment = TextAlignment.Center
+                };
+                Label priceLabel = new Label
+                {
+                    Text = "Generated\nRevenue",
+                    FontAttributes = FontAttributes.Bold,
+                    HorizontalTextAlignment = TextAlignment.Center
+                };
 
+                FullReportGrid.Children.Add(insLabel, 0, 0);
+                FullReportGrid.Children.Add(countLabel, 1, 0);
+                FullReportGrid.Children.Add(priceLabel, 2, 0);
+
+                BoxView line = new BoxView
+                {
+                    Color = Color.Black,
+                    WidthRequest = 100
+                };
+                FullReportGrid.Children.Add(line, 0, 1);
+
+                Grid.SetColumnSpan(line, 3);
                 for (int i = 0; i < count; i++)
                 {
                     Label label = new Label();
@@ -92,11 +122,12 @@ namespace HomeInspectorSchedule.Pages
                     label2.HorizontalTextAlignment = TextAlignment.Center;
                     Label label3 = new Label();
                     label3.Text = report[i, 1, 1];
+                    label3.HorizontalTextAlignment = TextAlignment.Center;
 
 
-                    FullReportGrid.Children.Add(label, 0, i);
-                    FullReportGrid.Children.Add(label2, 1, i);
-                    FullReportGrid.Children.Add(label3, 2, i);
+                    FullReportGrid.Children.Add(label, 0, i + 2);
+                    FullReportGrid.Children.Add(label2, 1, i + 2);
+                    FullReportGrid.Children.Add(label3, 2, i + 2);
                 }
             }                
             

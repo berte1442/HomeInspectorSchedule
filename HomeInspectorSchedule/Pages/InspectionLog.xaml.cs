@@ -72,7 +72,7 @@ namespace HomeInspectorSchedule.Pages
             {
                 File.WriteAllText(filePath, text);
                 report.FilePath = filePath;
-                report.timeStamp = File.GetLastWriteTime(filePath);
+                report.TimeStamp = File.GetLastWriteTime(filePath);
                 report.FileName = fileName;
                 await App.Database.SaveReportAsync(report);
                 await DisplayAlert("Saved", "Report has been saved.", "OK");

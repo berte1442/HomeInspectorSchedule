@@ -9,6 +9,7 @@
         <ScrollView>
             <StackLayout x:Name="MainLayout">
                 <Label Text="Schedule"
+                       FontSize="Large"
                        HorizontalOptions="Center"/>
                 <Label Text="Schedule View"
                        HorizontalOptions="Center"/>

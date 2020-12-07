@@ -134,7 +134,7 @@ namespace HomeInspectorSchedule
             List<string> searchList = new List<string>();
             foreach(var l in list)
             {
-                if (l.Contains(search))
+                if (l.ToLower().Contains(search.ToLower()))
                 {
                     searchList.Add(l);
                 }

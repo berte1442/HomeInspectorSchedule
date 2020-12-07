@@ -49,7 +49,7 @@ namespace HomeInspectorSchedule.Pages
             List<Report> reports = await App.Database.GetReportsAsync();
             foreach(var r in reports)
             {
-                string display = r.timeStamp.ToString() + " - " + r.FileName;
+                string display = r.TimeStamp.ToString() + " - " + r.FileName;
                 if (user.Admin)
                 {
                     reportsDisplay.Add(display);

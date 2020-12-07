@@ -8,6 +8,7 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Metrics"
+                   FontSize="Large"
                 HorizontalOptions="Center" />
 
             <Button x:Name="InspectionsBtn"

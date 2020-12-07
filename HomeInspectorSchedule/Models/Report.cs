@@ -12,7 +12,7 @@ namespace HomeInspectorSchedule
         [NotNull, Unique]
         public string FilePath { get; set; }
         [NotNull]
-        public DateTime timeStamp { get; set; }
+        public DateTime TimeStamp { get; set; }
         [NotNull]
         public string FileName { get; set; }
         [NotNull]
