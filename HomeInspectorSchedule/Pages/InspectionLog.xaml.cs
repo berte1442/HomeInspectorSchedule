@@ -85,6 +85,22 @@ namespace HomeInspectorSchedule.Pages
                 else if(filePath.Contains(" "))
                     await DisplayAlert("Naming Error", "File name cannot contain spaces.", "OK");
             }
-        }                    
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            searchAppointments = await InspectionLogTools.SearchAppointments("", currentUser);
+
+            SearchListView.ItemsSource = searchAppointments;
+            if (searchAppointments.Count > 0)
+            {
+                SaveReportBtn.IsVisible = true;
+            }
+            else
+            {
+                SaveReportBtn.IsVisible = false;
+            }
+        }
     }
 }
