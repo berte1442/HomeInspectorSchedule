@@ -84,21 +84,6 @@ namespace HomeInspectorSchedule
         {
             return database.Table<Client>().Where(i => i.Name == name).FirstOrDefaultAsync();
         }
-        //public Task<int> SaveClientAsync(Client client)
-        //{
-        //    if (client.ID != 0)
-        //    {
-        //        return database.UpdateAsync(client);
-        //    }
-        //    else
-        //    {
-        //        return database.InsertAsync(client);
-        //    }
-        //}
-        //public Task<int> DeleteClientAsync(Client client)
-        //{
-        //    return database.DeleteAsync(client);
-        //}
 
         //InspectionType
         public Task<List<InspectionType>> GetInspectionTypesAsync()
