@@ -31,7 +31,6 @@ namespace HomeInspectorSchedule
                 }
             }
 
-
             realtor.Name = nameCount + " " + realtor.Name.TrimStart();
             
             return realtor;
