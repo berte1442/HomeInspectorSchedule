@@ -19,7 +19,8 @@ namespace HomeInspectorSchedule
             var domainValidate = Domain_Check(domain);
 
             if (atIndex == -1 || dotIndex == -1 || dotIndex < atIndex || (dotIndex + 3) >= emailLength
-                || atIndex < 3 || (atIndex + 5) >= emailLength || !((dotIndex - atIndex) > 3) || domainValidate == false)
+                || atIndex < 3 || (atIndex + 5) >= emailLength || !((dotIndex - atIndex) > 3) 
+                || domainValidate == false || email.Contains(" "))
             {
                 return false;
             }
@@ -36,7 +37,6 @@ namespace HomeInspectorSchedule
             phone = phone.Replace(")", "");
             phone = phone.Replace("-", "");
 
-            //bool result = phone.Any(x => char.IsLetter(x));
             bool result = phone.Any(x => !char.IsNumber(x));
             if ((phone.Length != 10 && phone.Length != 7) || result)
             {

@@ -160,7 +160,7 @@ namespace HomeInspectorSchedule.Pages
                         phoneR = Validate.Phone_Syntax(RealtorPhoneEntry.Text);
                         rPhone = Validate.Phone_Validate(phoneR);
                     }
-                    if (ClientEmailEntry.Text != null && RealtorPhoneEntry.Text != "")
+                    if (ClientEmailEntry.Text != null && ClientEmailEntry.Text != "")
                     {
                         cEmail = Validate.Email_Validate(ClientEmailEntry.Text);
                     }
@@ -206,10 +206,15 @@ namespace HomeInspectorSchedule.Pages
                             Zip = ZipEntry.Text
                         };
 
-                        //await App.Database.SaveClientAsync(client);
-                        await client.SavePersonAsync(client);
+                        bool noName = false;
+                        if((RealtorNameEntry.Text == null || RealtorNameEntry.Text == "") && 
+                            (RealtorPhoneEntry.Text != null || RealtorPhoneEntry.Text != "" ||
+                            RealtorEmailEntry.Text != null || RealtorEmailEntry.Text != ""))
+                        {
+                            noName = true;
+                        }
 
-                        if (RealtorNameEntry.Text != null & RealtorNameEntry.Text != "")
+                        if (RealtorNameEntry.Text != null && RealtorNameEntry.Text != "" && noName == false)
                         {
                             if (SaveEditCheckbox.IsChecked)
                             {
@@ -219,6 +224,7 @@ namespace HomeInspectorSchedule.Pages
                                 realtorUpdate.Email = RealtorEmailEntry.Text;
                                 //await App.Database.SaveRealtorAsync(realtorUpdate);
                                 await realtorUpdate.SavePersonAsync(realtorUpdate);
+                                realtor = realtorUpdate;                           
                             }
                             else
                             {
@@ -234,6 +240,8 @@ namespace HomeInspectorSchedule.Pages
                                          " information or create a new realtor?", "Update Existing Realtor", "Create New Realtor");
                                     if (save == false)
                                     {
+                                        realtor = await RealtorTools.SameName(realtor);
+
                                         await realtor.SavePersonAsync(realtor);
                                     }
                                     else
@@ -255,57 +263,74 @@ namespace HomeInspectorSchedule.Pages
                                 }
                             }
                         }
-
-                        await App.Database.SaveAddressAsync(address);
-
-                        DateTime startDate = InspectionDatePicker.Date;
-                        TimeSpan startTime = InspectionTimePicker.Time;
-
-                        DateTime startDateAndTime = startDate + startTime;
-
-                        Appointment appointment = new Appointment
+                        if (noName == false)
                         {
-                            InspectorID = inspectorID,
-                            ClientID = client.ID,
-                            //RealtorID = realtor.ID,
-                            InspectionTypeIDs = inspectionTypeIDs,
-                            PriceTotal = double.Parse(PriceTotalEntry.Text),
-                            StartTime = startDateAndTime,
-                            Duration = double.Parse(DurationTimeLabel.Text),
-                            Paid = paid,
-                            AddressID = address.ID,
-                        };
-                        if (realtor.ID != 0)
-                            appointment.RealtorID = realtor.ID;
+                            await client.SavePersonAsync(client);
+                            await App.Database.SaveAddressAsync(address);
 
-                        if (currentUser.Admin)
-                            appointment.Approved = true;
+                            DateTime startDate = InspectionDatePicker.Date;
+                            TimeSpan startTime = InspectionTimePicker.Time;
 
-                        var appointments = await App.Database.GetAppointmentsAsync();
-                        bool schedule = true;
-                        foreach (var a in appointments)
-                        {
-                            if ((a.InspectorID == appointment.InspectorID) && ((appointment.StartTime >= a.StartTime && appointment.StartTime <= a.StartTime.AddHours(a.Duration)) ||
-                                    (a.StartTime >= appointment.StartTime && a.StartTime <= appointment.StartTime.AddHours(appointment.Duration))))
+                            DateTime startDateAndTime = startDate + startTime;
+
+                            Appointment appointment = new Appointment
                             {
-                                var save = await DisplayAlert("Conflict", "There is a schedule conflict. Do you still wish to schedule this appointment?", "Yes, Schedule", "No, Don't Schedule");
-                                if (save)
+                                InspectorID = inspectorID,
+                                ClientID = client.ID,
+                                //RealtorID = realtor.ID,
+                                InspectionTypeIDs = inspectionTypeIDs,
+                                PriceTotal = double.Parse(PriceTotalEntry.Text),
+                                StartTime = startDateAndTime,
+                                Duration = double.Parse(DurationTimeLabel.Text),
+                                Paid = paid,
+                                AddressID = address.ID,
+                            };
+                            if (realtor.ID != 0)
+                                appointment.RealtorID = realtor.ID;
+
+                            if (currentUser.Admin)
+                                appointment.Approved = true;
+
+                            var appointments = await App.Database.GetAppointmentsAsync();
+                            bool schedule = true;
+                            foreach (var a in appointments)
+                            {
+                                if ((a.InspectorID == appointment.InspectorID) && ((appointment.StartTime >= a.StartTime && appointment.StartTime <= a.StartTime.AddHours(a.Duration)) ||
+                                        (a.StartTime >= appointment.StartTime && a.StartTime <= appointment.StartTime.AddHours(appointment.Duration))))
                                 {
-                                    await App.Database.SaveAppointmentAsync(appointment);
-                                    schedule = false;
-                                    break;
-                                }
-                                else
-                                {
-                                    schedule = false;
+                                    var save = await DisplayAlert("Conflict", "There is a schedule conflict. Do you still wish to schedule this appointment?", "Yes, Schedule", "No, Don't Schedule");
+                                    if (save)
+                                    {
+                                        await App.Database.SaveAppointmentAsync(appointment);
+                                        schedule = false;
+                                        await Application.Current.MainPage.Navigation.PopAsync();
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        schedule = false;
+                                    }
                                 }
                             }
+                            if (schedule)
+                            {
+                                await App.Database.SaveAppointmentAsync(appointment);
+                                await Application.Current.MainPage.Navigation.PopAsync();
+
+                            }
                         }
-                        if (schedule)
+                        else
                         {
-                            await App.Database.SaveAppointmentAsync(appointment);
+                            var useRealtor = await DisplayAlert("No Realtor Name", "You did not provide a realtor name.", "Add Name", "Clear Realtor Input");
+                            if (useRealtor == false)
+                            {
+                                ClearRealtorBtn_Clicked(sender, e);
+                            }
+                            else
+                            {
+                                RealtorNameEntry.Focus();
+                            }
                         }
-                        await Application.Current.MainPage.Navigation.PopAsync();
                     }
                     else
                     {

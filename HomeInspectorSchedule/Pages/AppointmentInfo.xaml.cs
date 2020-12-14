@@ -270,21 +270,21 @@ namespace HomeInspectorSchedule.Pages
                     bool rEmail = true;
                     string phoneC = null;
                     string phoneR = null;
-                    if (ClientPhoneEntry.Text.Length > 0)
+                    if (ClientPhoneEntry.Text != null && ClientPhoneEntry.Text != "")
                     {
                         phoneC = Validate.Phone_Syntax(ClientPhoneEntry.Text);
                         cPhone = Validate.Phone_Validate(phoneC);
                     }
-                    if (RealtorPhoneEntry.Text.Length > 0)
+                    if (RealtorPhoneEntry.Text != null && RealtorPhoneEntry.Text != "")
                     {
                         phoneR = Validate.Phone_Syntax(RealtorPhoneEntry.Text);
                         rPhone = Validate.Phone_Validate(phoneR);
                     }
-                    if (ClientEmailEntry.Text.Length > 0)
+                    if (ClientEmailEntry.Text != null && ClientEmailEntry.Text != "")
                     {
                         cEmail = Validate.Email_Validate(ClientEmailEntry.Text);
                     }
-                    if (RealtorEmailEntry.Text.Length > 0)
+                    if (RealtorEmailEntry.Text != null && RealtorEmailEntry.Text != "")
                     {
                         rEmail = Validate.Email_Validate(RealtorEmailEntry.Text);
                     }
@@ -301,10 +301,21 @@ namespace HomeInspectorSchedule.Pages
                         address.City = CityEntry.Text;
                         address.Zip = ZipEntry.Text;
 
-                        realtor.Name = RealtorNameEntry.Text;
-                        var realtorPhone = Validate.Phone_Syntax(phoneR);
-                        realtor.Phone = realtorPhone;
-                        realtor.Email = RealtorEmailEntry.Text;
+                        if(RealtorNameEntry.Text != null && RealtorNameEntry.Text != "")
+                        {
+                            realtor.Name = RealtorNameEntry.Text;
+
+                            if(RealtorPhoneEntry.Text != null && RealtorPhoneEntry.Text != "")
+                            {
+                                var realtorPhone = Validate.Phone_Syntax(phoneR);
+                                realtor.Phone = realtorPhone;
+                            }
+                            if(RealtorEmailEntry.Text != null && RealtorPhoneEntry.Text != "")
+                            {
+                                realtor.Email = RealtorEmailEntry.Text;
+                            }
+                        }
+                        
 
 
                         var selectedInspector = await App.Database.GetInspectorAsync(InspectorPicker.SelectedItem.ToString());
@@ -341,7 +352,8 @@ namespace HomeInspectorSchedule.Pages
 
                         app.InspectorID = selectedInspector.ID;
                         app.ClientID = client.ID;
-                        app.RealtorID = realtor.ID;
+                        if(realtor != null)
+                            app.RealtorID = realtor.ID;
                         app.AddressID = address.ID;
                         app.InspectionTypeIDs = types.Trim();
                         app.PriceTotal = Convert.ToDouble(PriceTotalEntry.Text);
@@ -373,7 +385,8 @@ namespace HomeInspectorSchedule.Pages
                         await App.Database.SaveAppointmentAsync(app);
                         await client.SavePersonAsync(client);
                         await App.Database.SaveAddressAsync(address);
-                        await realtor.SavePersonAsync(realtor);
+                        if(realtor != null)
+                            await realtor.SavePersonAsync(realtor);
 
                         await DisplayAlert("Saved", "Appointment details saved.", "OK");
 
