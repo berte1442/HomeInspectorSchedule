@@ -693,7 +693,7 @@ namespace HomeInspectorSchedule
                 }
             }
             return monthAppointments;
-        }
+            }
         public async Task AddDayAppointments(Inspector inspector, DateTime dateTime)
         {
             var clients = await App.Database.GetClientsAsync();

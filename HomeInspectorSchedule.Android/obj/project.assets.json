@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    "MonoAndroid,Version=v9.0": {
+    "MonoAndroid,Version=v10.0": {
       "sqlite-net-pcl/1.7.335": {
         "type": "package",
         "dependencies": {
@@ -2159,7 +2159,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    "MonoAndroid,Version=v9.0": [
+    "MonoAndroid,Version=v10.0": [
       "HomeInspectorSchedule >= 1.0.0",
       "Xamarin.Essentials >= 1.3.1",
       "Xamarin.Forms >= 4.3.0.908675",
@@ -2189,14 +2189,14 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "monoandroid90"
+        "monoandroid10.0"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "monoandroid90": {
+        "monoandroid10.0": {
           "projectReferences": {
             "C:\\Users\\rchpi\\source\\repos\\HomeInspectorSchedule\\HomeInspectorSchedule\\HomeInspectorSchedule.csproj": {
               "projectPath": "C:\\Users\\rchpi\\source\\repos\\HomeInspectorSchedule\\HomeInspectorSchedule\\HomeInspectorSchedule.csproj"
@@ -2206,7 +2206,7 @@
       }
     },
     "frameworks": {
-      "monoandroid90": {
+      "monoandroid10.0": {
         "dependencies": {
           "Xamarin.Essentials": {
             "target": "Package",
