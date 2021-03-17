@@ -22,4 +22,3 @@ C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Rele
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Release\netstandard2.0\HomeInspectorSchedule.dll
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Release\netstandard2.0\ref\HomeInspectorSchedule.dll
 C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Release\netstandard2.0\HomeInspectorSchedule.pdb
-C:\Users\rchpi\source\repos\HomeInspectorSchedule\HomeInspectorSchedule\obj\Release\netstandard2.0\HomeInspectorSchedule.csprojAssemblyReference.cache
